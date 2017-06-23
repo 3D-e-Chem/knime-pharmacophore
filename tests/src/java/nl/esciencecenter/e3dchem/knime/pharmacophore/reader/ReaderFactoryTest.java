@@ -4,7 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-public class PharmacophoreReaderFactoryTest {
+public class ReaderFactoryTest {
 	
 	@Test
     public void testGetNrNodeViews() {
