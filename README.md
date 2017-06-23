@@ -1,6 +1,8 @@
-KNIME node skeleton with sample code as described [here](https://tech.knime.org/developer-guide).
+KNIME nodes to read/write pharmacophore files and align them.
 
 [![Build Status](https://travis-ci.org/3D-e-Chem/knime-pharmacophore.svg?branch=master)](https://travis-ci.org/3D-e-Chem/knime-pharmacophore)
+
+Currently only the phar file format used by the [Silicos IT align-it tool](http://silicos-it.be.s3-website-eu-west-1.amazonaws.com/software/align-it/1.0.4/align-it.html#pharmacophores) is supported.
 
 This project uses [Eclipse Tycho](https://www.eclipse.org/tycho/) to perform build steps.
 

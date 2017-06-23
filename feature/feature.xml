@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="nl.esciencecenter.e3dchem.knime.pharmacophore.feature"
-      label="nl.esciencecenter.e3dchem.knime.pharmacophore Feature"
+      label="Pharmacphore KNIME nodes"
       version="1.0.0.qualifier"
-      provider-name="[Enter provider name here.]">
+      provider-name="Netherlands eScience Center">
 
-  <description url="https://github.com/3D-e-Chem/knime-pharmacophore">
-     [Enter Feature Description here.]
-  </description>
+   <description url="https://github.com/3D-e-Chem/knime-pharmacophore">
+      KNIME nodes to read/write pharmacophore files and align them.
+   </description>
 
-  <copyright url="http://www.example.com/copyright">
-     [Enter Copyright Description here.]
-  </copyright>
+   <copyright url="">
+      Copyright Netherlands eScience Center 2017
+   </copyright>
 
    <license url="https://www.apache.org/licenses/LICENSE-2.0.txt">
       Apache License
@@ -202,7 +202,7 @@ http://www.apache.org/licenses/
       same &quot;printed page&quot; as the copyright notice for easier
       identification within third-party archives.
 
-   Copyright (c) 2012, 2013 The Nodeclipse Authors. All rights reserved.
+   Copyright Netherlands eScience Center 2017
 
    Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
    you may not use this file except in compliance with the License.
