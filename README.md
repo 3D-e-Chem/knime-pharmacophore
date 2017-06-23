@@ -1,7 +1,7 @@
 KNIME nodes to read/write pharmacophore files and align them.
 
 [![Travis-CI Build Status](https://travis-ci.org/3D-e-Chem/knime-pharmacophore.svg?branch=master)](https://travis-ci.org/3D-e-Chem/knime-pharmacophore)
-[![AppVeyor Build status](https://ci.appveyor.com/api/projects/status/0d27c4nhkjopy69r/branch/master?svg=true)](https://ci.appveyor.com/project/3D-e-Chem/knime-pharmacohore/branch/master)
+[![AppVeyor Build status](https://ci.appveyor.com/api/projects/status/0d27c4nhkjopy69r/branch/master?svg=true)](https://ci.appveyor.com/project/3D-e-Chem/knime-pharmacophore/branch/master)
 [![SonarCloud Gate](https://sonarcloud.io/api/badges/gate?key=nl.esciencecenter.e3dchem.knime.pharmacophore:nl.esciencecenter.e3dchem.knime.pharmacophore)](https://sonarcloud.io/dashboard?id=nl.esciencecenter.e3dchem.knime.pharmacophore:nl.esciencecenter.e3dchem.knime.pharmacophore)
 [![SonarCloud Coverage](https://sonarcloud.io/api/badges/measure?key=nl.esciencecenter.e3dchem.knime.pharmacophore:nl.esciencecenter.e3dchem.knime.pharmacophore&metric=coverage)](https://sonarcloud.io/component_measures/domain/Coverage?id=nl.esciencecenter.e3dchem.knime.pharmacophore:nl.esciencecenter.e3dchem.knime.pharmacophore)
 
