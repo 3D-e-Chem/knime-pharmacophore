@@ -1,8 +1,9 @@
 package nl.esciencecenter.e3dchem.knime.pharmacophore.align;
 
+import org.knime.core.data.StringValue;
 import org.knime.core.node.defaultnodesettings.DefaultNodeSettingsPane;
-import org.knime.core.node.defaultnodesettings.DialogComponentNumber;
-import org.knime.core.node.defaultnodesettings.SettingsModelIntegerBounded;
+import org.knime.core.node.defaultnodesettings.DialogComponentColumnNameSelection;
+import org.knime.core.node.defaultnodesettings.SettingsModelString;
 
 /**
  * <code>NodeDialog</code> for the "AlignmentTransform" Node.
@@ -19,15 +20,18 @@ public class AlignDialog extends DefaultNodeSettingsPane {
      * This is just a suggestion to demonstrate possible default dialog
      * components.
      */
-    protected AlignDialog() {
+    @SuppressWarnings("unchecked")
+	protected AlignDialog() {
         super();
+        
+        addDialogComponent(new DialogComponentColumnNameSelection(
+        		new SettingsModelString(AlignModel.CFGKEY_QUERY, ""), 
+        		"Query Pharmacophore column (table 1)", AlignModel.QUERY_PORT, StringValue.class
+        ));
 
-        addDialogComponent(new DialogComponentNumber(
-                new SettingsModelIntegerBounded(
-                    AlignModel.CFGKEY_COUNT,
-                    AlignModel.DEFAULT_COUNT,
-                    Integer.MIN_VALUE, Integer.MAX_VALUE),
-                    "Counter:", /*step*/ 1, /*componentwidth*/ 5));
-
+        addDialogComponent(new DialogComponentColumnNameSelection(
+        		new SettingsModelString(AlignModel.CFGKEY_REFERENCE, ""), 
+        		"Reference Pharmacophore column (table 2)", AlignModel.REFERENCE_PORT, StringValue.class
+        ));
     }
 }

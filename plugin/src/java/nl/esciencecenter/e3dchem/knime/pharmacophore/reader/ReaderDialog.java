@@ -26,7 +26,7 @@ public class ReaderDialog extends DefaultNodeSettingsPane {
         addDialogComponent(new DialogComponentFileChooser(
                 new SettingsModelString(
                     ReaderModel.CFGKEY_FILENAME, null
-                 ), "silicosit_phar_read", JFileChooser.OPEN_DIALOG, ".phar"
+                 ), "phar_read", JFileChooser.OPEN_DIALOG, ".phar"
         ));
 
     }
