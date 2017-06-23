@@ -1,4 +1,4 @@
-package nl.esciencecenter.e3dchem.knime.pharmacophore;
+package nl.esciencecenter.e3dchem.knime.pharmacophore.align;
 
 import org.knime.core.node.NodeDialogPane;
 import org.knime.core.node.NodeFactory;
@@ -8,15 +8,15 @@ import org.knime.core.node.NodeView;
  * <code>NodeFactory</code> for the "AlignmentTransform" Node.
  *
  */
-public class AlignmentTransformFactory
-        extends NodeFactory<AlignmentTransformModel> {
+public class AlignFactory
+        extends NodeFactory<AlignModel> {
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public AlignmentTransformModel createNodeModel() {
-        return new AlignmentTransformModel();
+    public AlignModel createNodeModel() {
+        return new AlignModel();
     }
 
     /**
@@ -24,16 +24,16 @@ public class AlignmentTransformFactory
      */
     @Override
     public int getNrNodeViews() {
-        return 1;
+        return 0;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public NodeView<AlignmentTransformModel> createNodeView(final int viewIndex,
-            final AlignmentTransformModel nodeModel) {
-        return new AlignmentTransformView(nodeModel);
+    public NodeView<AlignModel> createNodeView(final int viewIndex,
+            final AlignModel nodeModel) {
+        return null;
     }
 
     /**
@@ -49,7 +49,7 @@ public class AlignmentTransformFactory
      */
     @Override
     public NodeDialogPane createNodeDialogPane() {
-        return new AlignmentTransformDialog();
+        return new AlignDialog();
     }
 
 }

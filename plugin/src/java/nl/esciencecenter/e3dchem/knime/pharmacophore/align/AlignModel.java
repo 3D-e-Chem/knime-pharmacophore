@@ -1,4 +1,4 @@
-package nl.esciencecenter.e3dchem.knime.pharmacophore;
+package nl.esciencecenter.e3dchem.knime.pharmacophore.align;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,11 +30,10 @@ import org.knime.core.node.NodeSettingsWO;
  * This is the model implementation of AlignmentTransform.
  *
  */
-public class AlignmentTransformModel extends NodeModel {
-
+public class AlignModel extends NodeModel {
     // the logger instance
     private static final NodeLogger logger = NodeLogger
-            .getLogger(AlignmentTransformModel.class);
+            .getLogger(AlignModel.class);
 
     /** the settings key which is used to retrieve and
         store the settings (from the dialog or from a settings file)
@@ -48,18 +47,16 @@ public class AlignmentTransformModel extends NodeModel {
     // and used in the models execution method. The default components of the
     // dialog work with "SettingsModels".
     private final SettingsModelIntegerBounded m_count =
-        new SettingsModelIntegerBounded(AlignmentTransformModel.CFGKEY_COUNT,
-                    AlignmentTransformModel.DEFAULT_COUNT,
+        new SettingsModelIntegerBounded(AlignModel.CFGKEY_COUNT,
+                    AlignModel.DEFAULT_COUNT,
                     Integer.MIN_VALUE, Integer.MAX_VALUE);
 
 
     /**
      * Constructor for the node model.
      */
-    protected AlignmentTransformModel() {
-
-        // TODO one incoming port and one outgoing port is assumed
-        super(1, 1);
+    protected AlignModel() {
+        super(2, 1);
     }
 
     /**
@@ -71,7 +68,6 @@ public class AlignmentTransformModel extends NodeModel {
 
         // TODO do something here
         logger.info("Node Model Stub... this is not yet implemented !");
-
 
         // the data table spec of the single output table,
         // the table will have three columns:

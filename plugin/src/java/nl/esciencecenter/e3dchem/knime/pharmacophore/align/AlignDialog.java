@@ -1,4 +1,4 @@
-package nl.esciencecenter.e3dchem.knime.pharmacophore;
+package nl.esciencecenter.e3dchem.knime.pharmacophore.align;
 
 import org.knime.core.node.defaultnodesettings.DefaultNodeSettingsPane;
 import org.knime.core.node.defaultnodesettings.DialogComponentNumber;
@@ -12,20 +12,20 @@ import org.knime.core.node.defaultnodesettings.SettingsModelIntegerBounded;
  * complex dialog please derive directly from
  * {@link org.knime.core.node.NodeDialogPane}.
  */
-public class AlignmentTransformDialog extends DefaultNodeSettingsPane {
+public class AlignDialog extends DefaultNodeSettingsPane {
 
     /**
      * New pane for configuring AlignmentTransform node dialog.
      * This is just a suggestion to demonstrate possible default dialog
      * components.
      */
-    protected AlignmentTransformDialog() {
+    protected AlignDialog() {
         super();
 
         addDialogComponent(new DialogComponentNumber(
                 new SettingsModelIntegerBounded(
-                    AlignmentTransformModel.CFGKEY_COUNT,
-                    AlignmentTransformModel.DEFAULT_COUNT,
+                    AlignModel.CFGKEY_COUNT,
+                    AlignModel.DEFAULT_COUNT,
                     Integer.MIN_VALUE, Integer.MAX_VALUE),
                     "Counter:", /*step*/ 1, /*componentwidth*/ 5));
 
