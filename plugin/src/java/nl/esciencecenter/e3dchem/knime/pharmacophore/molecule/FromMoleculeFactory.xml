@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<knimeNode icon="../PharValue.png" type="Other" xmlns="http://knime.org/node/v2.8" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://knime.org/node/v2.10 http://knime.org/node/v2.10.xsd">
+    <name>Pharmacophore from Molecule</name>
+    
+    <shortDescription>
+        Generate pharmacophore from molecule 
+    </shortDescription>
+    
+    <fullDescription>
+        <intro>Generate pharmacophore from molecule by mapping atoms to pharmacophore points.
+        <b>The generate pharmacophore will not contain the alpha and normal information.</b>
+        </intro>
+        <option name="Molecule column">Column with molecules in SDF/Mol format</option>
+        <option name="Pharmacophore type 2 element mapping">Mapping of each pharmacophore type to an element.</option>
+    </fullDescription>
+    
+    <ports>
+        <outPort index="0" name="Molecules">Table with the molecules</outPort>
+        <outPort index="0" name="Molecules as Pharmacophores">Table with Molecule as pharmacophore as extra column</outPort>
+    </ports>    
+</knimeNode>

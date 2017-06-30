@@ -8,9 +8,12 @@ Bundle-Vendor: Netherlands eScience Center
 Require-Bundle: org.eclipse.core.runtime,
  org.knime.workbench.core;bundle-version="[3.3.0,4.0.0)",
  org.knime.workbench.repository;bundle-version="[3.3.0,4.0.0)",
+ org.knime.core;bundle-version="[3.3.0,4.0.0)",
  org.knime.base;bundle-version="[3.3.0,4.0.0)",
+ org.knime.chem.types;bundle-version="[3.3.0,4.0.0)",
  nl.esciencecenter.e3dchem.plugin
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
-Export-Package: nl.esciencecenter.e3dchem.knime.pharmacophore.align,
+Export-Package: nl.esciencecenter.e3dchem.knime.pharmacophore,
+ nl.esciencecenter.e3dchem.knime.pharmacophore.molecule,
  nl.esciencecenter.e3dchem.knime.pharmacophore.reader
