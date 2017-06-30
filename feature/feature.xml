@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="nl.esciencecenter.e3dchem.knime.pharmacophore.feature"
-      label="Pharmacphore KNIME nodes"
+      label="Pharmacophore KNIME nodes"
       version="1.0.0.qualifier"
       provider-name="Netherlands eScience Center">
 
