@@ -29,5 +29,15 @@
           </serializer>
        </DataType>
     </extension>
+    <extension
+          point="org.knime.core.DataValueRenderer">
+       <dataValue
+             valueClass="nl.esciencecenter.e3dchem.knime.pharmacophore.PharValue">
+          <renderer
+                rendererFactoryClass="nl.esciencecenter.e3dchem.knime.pharmacophore.PharValueRenderer"
+                suggestAsDefault="false">
+          </renderer>
+       </dataValue>
+    </extension>
 
 </plugin>
