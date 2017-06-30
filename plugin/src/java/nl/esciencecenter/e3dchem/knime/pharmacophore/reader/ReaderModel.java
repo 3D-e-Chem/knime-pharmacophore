@@ -14,8 +14,6 @@ import org.knime.core.data.DataRow;
 import org.knime.core.data.DataTableSpec;
 import org.knime.core.data.RowKey;
 import org.knime.core.data.def.DefaultRow;
-import org.knime.core.data.def.StringCell;
-import org.knime.core.data.def.StringCell.StringCellFactory;
 import org.knime.core.node.BufferedDataContainer;
 import org.knime.core.node.BufferedDataTable;
 import org.knime.core.node.CanceledExecutionException;
@@ -28,13 +26,15 @@ import org.knime.core.node.NodeSettingsWO;
 import org.knime.core.node.defaultnodesettings.SettingsModelString;
 import org.knime.core.util.FileUtil;
 
+import nl.esciencecenter.e3dchem.knime.pharmacophore.PharCell;
+
 /**
  * This is the model implementation of PharmacophoreReader.
  *
  */
 public class ReaderModel extends NodeModel {
 	public static final String CFGKEY_FILENAME = "phar_filename";
-	private static final DataColumnSpecCreator CREATOR = new DataColumnSpecCreator("Pharmacophore", StringCell.TYPE);
+	private static final DataColumnSpecCreator CREATOR = new DataColumnSpecCreator("Pharmacophore", PharCell.TYPE);
 	private static final DataTableSpec SPEC = new DataTableSpec(CREATOR.createSpec());
 
 	private final SettingsModelString pharFilename = new SettingsModelString(CFGKEY_FILENAME, null);
@@ -94,7 +94,7 @@ public class ReaderModel extends NodeModel {
 	}
 
 	private void addPharmacophore(String name, StringBuilder buf, BufferedDataContainer container) {
-		DataRow row = new DefaultRow(new RowKey(name), StringCellFactory.create(buf.toString()));
+		DataRow row = new DefaultRow(new RowKey(name), new PharCell(buf.toString()));
 		container.addRowToTable(row);
 	}
 

@@ -9,7 +9,6 @@ import java.net.URL;
 
 import org.knime.core.data.DataRow;
 import org.knime.core.data.DataTableSpec;
-import org.knime.core.data.StringValue;
 import org.knime.core.node.BufferedDataTable;
 import org.knime.core.node.CanceledExecutionException;
 import org.knime.core.node.ExecutionContext;
@@ -20,6 +19,8 @@ import org.knime.core.node.NodeSettingsRO;
 import org.knime.core.node.NodeSettingsWO;
 import org.knime.core.node.defaultnodesettings.SettingsModelString;
 import org.knime.core.util.FileUtil;
+
+import nl.esciencecenter.e3dchem.knime.pharmacophore.PharValue;
 
 public class WriterModel extends NodeModel {
 	public static final String CFGKEY_FILENAME = "phar_filename";
@@ -51,7 +52,7 @@ public class WriterModel extends NodeModel {
 	private void write(BufferedDataTable table, int index, PrintStream out) {
 		String phar;
 		for (DataRow row : table) {
-			phar = ((StringValue) row.getCell(index)).getStringValue();
+			phar = ((PharValue) row.getCell(index)).getStringValue();
 			out.print(phar);
 		}
 		out.flush();
