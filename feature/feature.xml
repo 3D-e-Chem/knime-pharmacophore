@@ -6,7 +6,7 @@
       provider-name="Netherlands eScience Center">
 
    <description url="https://github.com/3D-e-Chem/knime-pharmacophore">
-      KNIME nodes to read/write pharmacophore files and align them.
+      KNIME nodes to read/write pharmacophore files.
    </description>
 
    <copyright url="">
