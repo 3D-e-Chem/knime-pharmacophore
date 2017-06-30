@@ -1,13 +1,13 @@
 package nl.esciencecenter.e3dchem.knime.pharmacophore;
 
 import java.io.IOException;
-import java.util.Objects;
 
 import org.knime.core.data.DataCell;
 import org.knime.core.data.DataCellDataInput;
 import org.knime.core.data.DataCellDataOutput;
 import org.knime.core.data.DataCellSerializer;
 import org.knime.core.data.DataType;
+import org.knime.core.data.DataValue;
 
 public class PharCell extends DataCell implements PharValue {
 	private static final long serialVersionUID = -1611319590828877125L;
@@ -15,7 +15,9 @@ public class PharCell extends DataCell implements PharValue {
 	private String value;
 
 	public PharCell(String value) {
-		super();
+		if (value == null) {
+			throw new NullPointerException("Phar value must not be null.");
+		}
 		this.value = value;
 	}
 
@@ -35,8 +37,13 @@ public class PharCell extends DataCell implements PharValue {
 	}
 
 	@Override
+	protected boolean equalContent(DataValue otherValue) {
+		return PharValue.equalContent(this, (PharValue) otherValue);
+	}
+
+	@Override
 	public int hashCode() {
-		return Objects.hashCode(value);
+		return PharValue.hashCode(this);
 	}
 
 	class Serializer implements DataCellSerializer<PharCell> {

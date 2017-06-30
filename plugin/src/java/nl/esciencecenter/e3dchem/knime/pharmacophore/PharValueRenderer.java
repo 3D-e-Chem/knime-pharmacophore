@@ -1,12 +1,16 @@
 package nl.esciencecenter.e3dchem.knime.pharmacophore;
 
 import org.knime.core.data.AdapterValue;
+import org.knime.core.data.DataColumnSpec;
+import org.knime.core.data.renderer.AbstractDataValueRendererFactory;
+import org.knime.core.data.renderer.DataValueRenderer;
 import org.knime.core.data.renderer.MultiLineStringValueRenderer;
 
 @SuppressWarnings("serial")
 public class PharValueRenderer extends MultiLineStringValueRenderer {
-	public PharValueRenderer() {
-		super("Phar string");
+
+	public PharValueRenderer(String description) {
+		super(description);
 	}
 
 	@Override
@@ -20,4 +24,17 @@ public class PharValueRenderer extends MultiLineStringValueRenderer {
 		}
 	}
 
+	public static final class Factory extends AbstractDataValueRendererFactory {
+
+		@Override
+		public String getDescription() {
+			return "Phar string";
+		}
+
+		@Override
+		public DataValueRenderer createRenderer(DataColumnSpec colSpec) {
+			return new PharValueRenderer(getDescription());
+		}
+
+	}
 }
