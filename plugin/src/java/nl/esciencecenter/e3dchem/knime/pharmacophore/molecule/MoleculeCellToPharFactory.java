@@ -37,7 +37,8 @@ public class MoleculeCellToPharFactory extends SingleCellFactory {
 		for (int i = 4; i < lines.length; i++) {
 			String[] cols = lines[i].split("\\s+");
 			String element = elements.get(cols[3]);
-			buf.append(String.format(pharTpl, element, cols[0], cols[1], cols[2]));
+			buf.append(String.format(pharTpl, element, Float.parseFloat(cols[0]), Float.parseFloat(cols[1]),
+					Float.parseFloat(cols[2])));
 		}
 		buf.append("$$$$").append(sep);
 		return buf.toString();

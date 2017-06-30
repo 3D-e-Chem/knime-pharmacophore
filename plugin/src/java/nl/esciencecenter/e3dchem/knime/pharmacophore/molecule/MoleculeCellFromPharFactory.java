@@ -51,7 +51,8 @@ public class MoleculeCellFromPharFactory extends SingleCellFactory {
 					buf.append(sep);
 				} else {
 					// point -> atom
-					atoms.add(String.format(atomTpl, cols[1], cols[2], cols[3], elements.get(cols[0]), sep));
+					atoms.add(String.format(atomTpl, Float.parseFloat(cols[1]), Float.parseFloat(cols[2]),
+							Float.parseFloat(cols[3]), elements.get(cols[0]), sep));
 				}
 			}
 		}

@@ -2,7 +2,6 @@ package nl.esciencecenter.e3dchem.knime.pharmacophore.molecule;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.Test;
@@ -17,7 +16,7 @@ public class MoleculeCellFromPharFactoryTest {
 	public void phar2mol_nopoints_noatoms() {
 		String sep = System.getProperty("line.separator");
 		String pharBlock = String.join(sep, new String[] { "id1", "$$$$" });
-		Map<String, String> elements = new HashMap<>();
+		Map<String, String> elements = new PharMoleculeConfig().getPhar2elementMap();
 		DataColumnSpec spec = new DataColumnSpecCreator("Molecule as pharmacophore", PharCell.TYPE).createSpec();
 		MoleculeCellFromPharFactory fact = new MoleculeCellFromPharFactory(spec, 0, elements);
 
@@ -25,7 +24,24 @@ public class MoleculeCellFromPharFactoryTest {
 
 		String expected = String.join(sep, new String[] { "id1", "KNIME Pharmacophore 2 Molecule node", "",
 				"  0  0  0  0  0  0  0  0  0  0 V2000", "M END", "$$$$", "" });
-		assertEquals(result, expected);
+		assertEquals(expected, result);
+	}
+
+	@Test
+	public void phar2mol_singpointwithnormal_oneatom() {
+		String sep = System.getProperty("line.separator");
+		String pharBlock = String.join(sep,
+				new String[] { "id1", "HDON 4.007 23.939 25.299 1 1 3.6554 24.6168 24.6533", "$$$$" });
+		Map<String, String> elements = new PharMoleculeConfig().getPhar2elementMap();
+		DataColumnSpec spec = new DataColumnSpecCreator("Molecule as pharmacophore", PharCell.TYPE).createSpec();
+		MoleculeCellFromPharFactory fact = new MoleculeCellFromPharFactory(spec, 0, elements);
+
+		String result = fact.phar2mol(pharBlock);
+
+		String expected = String.join(sep,
+				new String[] { "id1", "KNIME Pharmacophore 2 Molecule node", "", "  1  0  0  0  0  0  0  0  0  0 V2000",
+						"    4.0070   23.9390   25.2990   N 0  0  0  0  0  0  0  0  0  0  0  0", "M END", "$$$$", "" });
+		assertEquals(expected, result);
 	}
 
 }
