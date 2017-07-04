@@ -35,8 +35,8 @@ public class MoleculeCellFromPharFactory extends SingleCellFactory {
 		StringBuilder buf = new StringBuilder(512);
 		String sep = System.getProperty("line.separator");
 		List<String> atoms = new ArrayList<>();
-		String atomTpl = "%10.4f%10.4f%10.4f %3s 0  0  0  0  0  0  0  0  0  0  0  0%s";
-		String countTpl = "%3s  0  0  0  0  0  0  0  0  0 V2000%s";
+		String atomTpl = "%10.4f%10.4f%10.4f %-3s 0  0  0  0  0  0  0  0  0  0  0  0%s";
+		String countTpl = "%3s  0  0  0  0  0  0  0  0  0999 V2000%s";
 		for (String line : pharBlock.split("\\r?\\n")) {
 			if (line.startsWith("$$$$")) {
 				break;
@@ -47,7 +47,7 @@ public class MoleculeCellFromPharFactory extends SingleCellFactory {
 				if (cols.length < 9) {
 					// pharmacophore name
 					buf.append(line).append(sep);
-					buf.append("KNIME Pharmacophore 2 Molecule node").append(sep);
+					buf.append(" KNIME Pharmacophore 2 Molecule node").append(sep);
 					buf.append(sep);
 				} else {
 					// point -> atom
@@ -60,7 +60,7 @@ public class MoleculeCellFromPharFactory extends SingleCellFactory {
 		for (String atom : atoms) {
 			buf.append(atom);
 		}
-		buf.append("M END").append(sep);
+		buf.append("M  END").append(sep);
 		buf.append("$$$$").append(sep);
 		return buf.toString();
 	}
