@@ -19,7 +19,7 @@
 <config key="values">
 <entry key="array-size" type="xint" value="2"/>
 <entry key="0" type="xstring" value="knime://knime.workflow/pharmacophore.phar"/>
-<entry key="1" type="xstring" value="knime://knime.workflow/pharmacophore.out.phar"/>
+<entry key="1" type="xstring" value="pharmacophore.out.phar"/>
 </config>
 <entry key="rowIdPrefix" type="xstring" value="Row"/>
 <entry key="rowIdSuffix" type="xstring" value=""/>
@@ -93,6 +93,6 @@
 </config>
 <config key="filestores">
 <entry key="file_store_location" type="xstring" isnull="true" value=""/>
-<entry key="file_store_id" type="xstring" value="ef4eddf5-9889-49b7-87d5-6ebab8311f40"/>
+<entry key="file_store_id" type="xstring" value="86997657-55ba-4705-85a9-e8643055de55"/>
 </config>
 </config>

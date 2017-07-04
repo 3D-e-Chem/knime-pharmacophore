@@ -22,8 +22,8 @@ public class MoleculeCellFromPharFactoryTest {
 
 		String result = fact.phar2mol(pharBlock);
 
-		String expected = String.join(sep, new String[] { "id1", "KNIME Pharmacophore 2 Molecule node", "",
-				"  0  0  0  0  0  0  0  0  0  0 V2000", "M END", "$$$$", "" });
+		String expected = String.join(sep, new String[] { "id1", " KNIME Pharmacophore 2 Molecule node", "",
+				"  0  0  0  0  0  0  0  0  0  0999 V2000", "M  END", "$$$$", "" });
 		assertEquals(expected, result);
 	}
 
@@ -39,7 +39,7 @@ public class MoleculeCellFromPharFactoryTest {
 		String result = fact.phar2mol(pharBlock);
 
 		String expected = String.join(sep,
-				new String[] { "id1", "KNIME Pharmacophore 2 Molecule node", "", "  1  0  0  0  0  0  0  0  0  0999 V2000",
+				new String[] { "id1", " KNIME Pharmacophore 2 Molecule node", "", "  1  0  0  0  0  0  0  0  0  0999 V2000",
 						"    4.0070   23.9390   25.2990 Y   0  0  0  0  0  0  0  0  0  0  0  0", "M  END", "$$$$", "" });
 		assertEquals(expected, result);
 	}

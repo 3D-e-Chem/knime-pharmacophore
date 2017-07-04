@@ -35,7 +35,7 @@
              valueClass="nl.esciencecenter.e3dchem.knime.pharmacophore.PharValue">
           <renderer
                 rendererFactoryClass="nl.esciencecenter.e3dchem.knime.pharmacophore.PharValueRenderer"
-                suggestAsDefault="false">
+                suggestAsDefault="true">
           </renderer>
        </dataValue>
     </extension>

@@ -3,6 +3,7 @@ package nl.esciencecenter.e3dchem.knime.pharmacophore.reader;
 import java.io.File;
 import java.io.IOException;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -27,6 +28,15 @@ public class WorkflowTest {
 	    runner = new TestFlowRunner(collector, runConfiguration);
 	}
 
+	@After
+	public void tearDown() {
+		// The workflow writes pharmacophore.out.phar to cwd, clear it
+		File file = new File("pharmacophore.out.phar");
+		if (file.exists()) {
+			file.delete();
+		}
+	}
+	
 	@Test
 	public void test_read_and_write() throws IOException, InvalidSettingsException, CanceledExecutionException,
 	        UnsupportedWorkflowVersionException, LockFailedException, InterruptedException {

@@ -8,8 +8,9 @@ import org.knime.core.data.DataCellDataOutput;
 import org.knime.core.data.DataCellSerializer;
 import org.knime.core.data.DataType;
 import org.knime.core.data.DataValue;
+import org.knime.core.data.StringValue;
 
-public class PharCell extends DataCell implements PharValue {
+public class PharCell extends DataCell implements PharValue, StringValue {
 	private static final long serialVersionUID = -1611319590828877125L;
 	public static final DataType TYPE = DataType.getType(PharCell.class);
 	private String value;
@@ -46,15 +47,15 @@ public class PharCell extends DataCell implements PharValue {
 		return PharValue.hashCode(this);
 	}
 
-	class Serializer implements DataCellSerializer<PharCell> {
+	public static class Serializer implements DataCellSerializer<PharCell> {
 
 		@Override
-		public void serialize(PharCell cell, DataCellDataOutput output) throws IOException {
+		public void serialize(final PharCell cell, final DataCellDataOutput output) throws IOException {
 			output.writeUTF(cell.getStringValue());
 		}
 
 		@Override
-		public PharCell deserialize(DataCellDataInput input) throws IOException {
+		public PharCell deserialize(final DataCellDataInput input) throws IOException {
 			return new PharCell(input.readUTF());
 		}
 	}

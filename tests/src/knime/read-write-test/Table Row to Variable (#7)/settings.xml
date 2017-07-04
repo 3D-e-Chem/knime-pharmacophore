@@ -30,7 +30,7 @@
 <entry key="type" type="xstring" value="variable"/>
 <entry key="name" type="xstring" value="outputfn"/>
 <entry key="class" type="xstring" value="STRING"/>
-<entry key="value" type="xstring" value="knime://knime.workflow/pharmacophore.out.phar"/>
+<entry key="value" type="xstring" value="pharmacophore.out.phar"/>
 </config>
 <config key="Variable_5">
 <entry key="type" type="xstring" value="variable"/>
@@ -107,6 +107,6 @@
 </config>
 <config key="filestores">
 <entry key="file_store_location" type="xstring" isnull="true" value=""/>
-<entry key="file_store_id" type="xstring" isnull="true" value=""/>
+<entry key="file_store_id" type="xstring" value="78afa321-c37d-478a-b2d9-d2a3cb75570b"/>
 </config>
 </config>

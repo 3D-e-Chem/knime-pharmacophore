@@ -37,16 +37,15 @@ public class WriterModel extends NodeModel {
 	protected BufferedDataTable[] execute(BufferedDataTable[] inData, ExecutionContext exec) throws Exception {
 		String filename = pharFilename.getStringValue();
 		File file = new File(filename);;
-		checkFile(file);
 		try {
 			URL url = new URL(filename);
 			if ("file".equals(url.getProtocol())) {
 				file = FileUtil.getFileFromURL(url);
-				checkFile(file);
 			}
 		} catch (MalformedURLException e) {
 			file = new File(filename);
 		}
+		checkFile(file);
 		int index = inData[0].getSpec().findColumnIndex(pharColumn.getStringValue());
 		PrintStream out = null;
 		try {

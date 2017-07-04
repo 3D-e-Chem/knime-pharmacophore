@@ -37,7 +37,7 @@
 <config key="0">
 <entry key="datacell" type="xstring" value="org.knime.core.data.def.StringCell"/>
 <config key="org.knime.core.data.def.StringCell">
-<entry key="StringCell" type="xstring" value="knime://knime.workflow/pharmacophore.out.phar"/>
+<entry key="StringCell" type="xstring" value="pharmacophore.out.phar"/>
 </config>
 </config>
 </config>

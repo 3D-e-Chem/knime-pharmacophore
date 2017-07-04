@@ -38,17 +38,21 @@
 <config key="styles"/>
 </config>
 <entry key="customDescription" type="xstring" isnull="true" value=""/>
-<entry key="state" type="xstring" value="CONFIGURED"/>
+<entry key="state" type="xstring" value="IDLE"/>
+<config key="nodecontainer_message">
+<entry key="type" type="xstring" value="WARNING"/>
+<entry key="message" type="xstring" value="File '/home/stefanv/Downloads/pharmacophore.out.phar' already exists."/>
+</config>
 <entry key="factory" type="xstring" value="nl.esciencecenter.e3dchem.knime.pharmacophore.writer.WriterFactory"/>
 <entry key="node-name" type="xstring" value="Pharmacophore writer"/>
 <entry key="node-bundle-name" type="xstring" value="KNIME nodes to read/write pharmacophore files and align them"/>
 <entry key="node-bundle-symbolic-name" type="xstring" value="nl.esciencecenter.e3dchem.knime.pharmacophore.plugin"/>
 <entry key="node-bundle-vendor" type="xstring" value="Netherlands eScience Center"/>
-<entry key="node-bundle-version" type="xstring" value="1.0.0.v201707041005"/>
+<entry key="node-bundle-version" type="xstring" value="1.0.0.v201707041233"/>
 <entry key="node-feature-name" type="xstring" value="Pharmacophore KNIME nodes"/>
 <entry key="node-feature-symbolic-name" type="xstring" value="nl.esciencecenter.e3dchem.knime.pharmacophore.feature.feature.group"/>
 <entry key="node-feature-vendor" type="xstring" value="Netherlands eScience Center"/>
-<entry key="node-feature-version" type="xstring" value="1.0.0.v201707041005"/>
+<entry key="node-feature-version" type="xstring" value="1.0.0.v201707041233"/>
 <config key="factory_settings"/>
 <entry key="name" type="xstring" value="Pharmacophore writer"/>
 <entry key="hasContent" type="xboolean" value="false"/>
