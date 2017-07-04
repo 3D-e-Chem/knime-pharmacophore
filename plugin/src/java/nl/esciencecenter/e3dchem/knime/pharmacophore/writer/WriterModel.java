@@ -103,9 +103,6 @@ public class WriterModel extends NodeModel {
 	}
 
 	private void checkFile(File f) throws InvalidSettingsException {
-		if (!f.isFile()) {
-			throw new InvalidSettingsException("The path '" + f.getAbsolutePath() + "' is not a file.");
-		}
 		if (f.exists()) {
 			throw new InvalidSettingsException("File '" + f.getAbsolutePath() + "' already exists.");
 		}
