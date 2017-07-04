@@ -34,7 +34,7 @@
        <dataValue
              valueClass="nl.esciencecenter.e3dchem.knime.pharmacophore.PharValue">
           <renderer
-                rendererFactoryClass="nl.esciencecenter.e3dchem.knime.pharmacophore.PharValueRenderer"
+                rendererFactoryClass="nl.esciencecenter.e3dchem.knime.pharmacophore.PharValueRenderer$Factory"
                 suggestAsDefault="true">
           </renderer>
        </dataValue>
