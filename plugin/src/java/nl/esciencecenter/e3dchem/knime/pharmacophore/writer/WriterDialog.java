@@ -18,6 +18,6 @@ public class WriterDialog extends DefaultNodeSettingsPane {
 				"Pharmacophore column", 0, PharValue.class));
 
 		addDialogComponent(new DialogComponentFileChooser(new SettingsModelString(WriterModel.CFGKEY_FILENAME, null),
-				"phar_write", JFileChooser.OPEN_DIALOG, ".phar"));
+				"phar_write", JFileChooser.SAVE_DIALOG, ".phar"));
 	}
 }
