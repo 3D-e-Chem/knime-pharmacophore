@@ -40,7 +40,7 @@ public class MoleculeCellFromPharFactoryTest {
 
 		String expected = String.join(sep,
 				new String[] { "id1", "KNIME Pharmacophore 2 Molecule node", "", "  1  0  0  0  0  0  0  0  0  0 V2000",
-						"    4.0070   23.9390   25.2990   N 0  0  0  0  0  0  0  0  0  0  0  0", "M END", "$$$$", "" });
+						"    4.0070   23.9390   25.2990   Y 0  0  0  0  0  0  0  0  0  0  0  0", "M END", "$$$$", "" });
 		assertEquals(expected, result);
 	}
 

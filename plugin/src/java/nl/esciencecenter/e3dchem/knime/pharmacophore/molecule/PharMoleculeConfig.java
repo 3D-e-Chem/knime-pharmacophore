@@ -11,14 +11,14 @@ import org.knime.core.node.NodeSettingsWO;
 import org.knime.core.node.defaultnodesettings.SettingsModelString;
 
 public class PharMoleculeConfig {
-	public static final List<String> ALLOWED_ELEMENTS = Arrays.asList("S", "N", "C", "F", "BR", "O", "P", "CL", "B");
+	public static final List<String> ALLOWED_ELEMENTS = Arrays.asList("As", "B", "Br", "C", "Cc", "F", "I", "N", "O", "P", "Ra", "S", "Y");
 
 	private SettingsModelString column = new SettingsModelString("Column", "");
 	private List<SettingsModelString> elements = Arrays.asList(new SettingsModelString("AROM", "S"),
-			new SettingsModelString("HDON", "N"), new SettingsModelString("HACC", "O"),
-			new SettingsModelString("LIPO", "C"), new SettingsModelString("POSC", "P"),
-			new SettingsModelString("NEGC", "F"), new SettingsModelString("HYBH", "CL"),
-			new SettingsModelString("HYBL", "BR"), new SettingsModelString("EXCL", "B"));
+			new SettingsModelString("HDON", "Y"), new SettingsModelString("HACC", "I"),
+			new SettingsModelString("LIPO", "Ra"), new SettingsModelString("POSC", "N"),
+			new SettingsModelString("NEGC", "O"), new SettingsModelString("HYBH", "As"),
+			new SettingsModelString("HYBL", "Cl"), new SettingsModelString("EXCL", "C"));
 
 	public void saveSettingsTo(NodeSettingsWO settings) {
 		column.saveSettingsTo(settings);

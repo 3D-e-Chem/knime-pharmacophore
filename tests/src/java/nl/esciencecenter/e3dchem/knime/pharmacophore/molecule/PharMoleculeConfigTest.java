@@ -17,14 +17,14 @@ public class PharMoleculeConfigTest {
 
 		Map<String, String> expected = new HashMap<>();
 		expected.put("AROM", "S");
-		expected.put("HYBH", "CL");
-		expected.put("HYBL", "BR");
-		expected.put("NEGC", "F");
-		expected.put("HACC", "O");
-		expected.put("HDON", "N");
-		expected.put("POSC", "P");
-		expected.put("EXCL", "B");
-		expected.put("LIPO", "C");
+		expected.put("HYBH", "As");
+		expected.put("HYBL", "Cl");
+		expected.put("NEGC", "O");
+		expected.put("HACC", "I");
+		expected.put("HDON", "Y");
+		expected.put("POSC", "N");
+		expected.put("EXCL", "C");
+		expected.put("LIPO", "Ra");
 
 		assertEquals(expected, actual);
 	}
