@@ -40,7 +40,7 @@ public class WriterModel extends NodeModel {
 		PrintStream out = null;
 		try {
 			out = new PrintStream(new FileOutputStream(filename));
-			write(inData[1], index, out);
+			write(inData[0], index, out);
 		} finally {
 			if (out != null) {
 				out.close();
