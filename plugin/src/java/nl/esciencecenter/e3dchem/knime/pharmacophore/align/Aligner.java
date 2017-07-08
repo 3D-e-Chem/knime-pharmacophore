@@ -10,7 +10,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.ejml.data.DMatrixRMaj;
-import org.ejml.data.Matrix;
 import org.ejml.simple.SimpleMatrix;
 import org.ejml.simple.SimpleSVD;
 
@@ -26,8 +25,10 @@ public class Aligner {
 	private boolean searchComplete;
 	private int cliqueCount;
 	private List<PointPair> bestClique;
+	private SimpleMatrix matrix;
+	private double rmsd;
 
-	public Aligner(String probe, String reference, double cutoff) throws NoOverlapFoundException {
+	public Aligner(String probe, String reference, double cutoff) {
 		Entry<List<String>, DMatrixRMaj> probeParsed = parse(probe);
 		probeTypes = probeParsed.getKey();
 		probePoints = probeParsed.getValue();
@@ -35,7 +36,6 @@ public class Aligner {
 		refTypes = refParsed.getKey();
 		refPoints = refParsed.getValue();
 		this.cutoff = cutoff;
-		transformation();
 	}
 
 	private Entry<List<String>, DMatrixRMaj> parse(String pharBlock) {
@@ -280,23 +280,30 @@ public class Aligner {
 
 	}
 
-	private SimpleMatrix filterPointsByBestClique(Matrix points) {
+	private SimpleMatrix filterPointsByBestClique(DMatrixRMaj points) {
 		DMatrixRMaj cliquePoints = new DMatrixRMaj(bestClique.size(), 3);
 		for (int i = 0; i < bestClique.size(); i++) {
-			cliquePoints.add(i, 0, refPoints.get(bestClique.get(i).first, 0));
-			cliquePoints.add(i, 1, refPoints.get(bestClique.get(i).first, 1));
-			cliquePoints.add(i, 2, refPoints.get(bestClique.get(i).first, 2));
+			cliquePoints.add(i, 0, points.get(bestClique.get(i).first, 0));
+			cliquePoints.add(i, 1, points.get(bestClique.get(i).first, 1));
+			cliquePoints.add(i, 2, points.get(bestClique.get(i).first, 2));
 		}
 		return SimpleMatrix.wrap(cliquePoints);
 	}
 
-	private SimpleMatrix getCentroid(SimpleMatrix points) {
+	SimpleMatrix getCentroid(SimpleMatrix points) {
 		DMatrixRMaj refSum = org.ejml.dense.row.CommonOps_DDRM.sumCols(points.matrix_F64(), null);
 		SimpleMatrix refCentroid = SimpleMatrix.wrap(refSum).divide(points.numRows());
 		return refCentroid;
 	}
 
-	private void transformation() throws NoOverlapFoundException {
+	SimpleMatrix move(SimpleMatrix points, SimpleMatrix offset) {
+		points.setColumn(0, 0, points.extractVector(false, 0).plus(offset.get(0, 0)).matrix_F64().getData());
+		points.setColumn(1, 0, points.extractVector(false, 1).plus(offset.get(0, 1)).matrix_F64().getData());
+		points.setColumn(2, 0, points.extractVector(false, 2).plus(offset.get(0, 2)).matrix_F64().getData());
+		return points;
+	}
+
+	public void transformation() throws NoOverlapFoundException {
 		candidatePairs();
 		getBestClique();
 
@@ -306,31 +313,60 @@ public class Aligner {
 
 		SimpleMatrix refCliquePoints = filterPointsByBestClique(refPoints);
 		SimpleMatrix probeCliquePoints = filterPointsByBestClique(probePoints);
-		SimpleMatrix refCentroid = getCentroid(refCliquePoints);
-		SimpleMatrix probeCentroid = getCentroid(probeCliquePoints);
-		SimpleMatrix refCentered = refCliquePoints.minus(refCentroid);
-		SimpleMatrix probeCentered = probeCliquePoints.minus(probeCentroid);
+
+		// KABSCH algorithm to translate+rotate probe points on to ref points
+
+		SimpleMatrix refPointsMatrix = SimpleMatrix.wrap(refPoints);
+		SimpleMatrix refCentroid = getCentroid(refPointsMatrix);
+		SimpleMatrix probePointsMatrix = SimpleMatrix.wrap(probePoints);
+		SimpleMatrix probeCentroid = getCentroid(probePointsMatrix);
+		SimpleMatrix refCentered = move(refCliquePoints, refCentroid.negative());
+		SimpleMatrix probeCentered = move(probeCliquePoints, probeCentroid.negative());
 
 		SimpleMatrix cov = refCentered.transpose().mult(probeCentered);
 		SimpleSVD<SimpleMatrix> svd = cov.svd();
-		boolean d = svd.getU().determinant() * svd.getW().determinant() < 0.0;
-		if (d) {
-			// not right handed, change it
-		}
-		SimpleMatrix translate = refCentroid.minus(probeCentroid);
-		SimpleMatrix probeAlignedPoints = probeCentered.mult(svd.getU()).plus(translate);
-		// TODO complete it
+
+		// 4x4 matrix
+		SimpleMatrix translate = refCentroid.minus(probeCentroid).transpose();
+		SimpleMatrix U = svd.getU();
+		matrix = SimpleMatrix.identity(4);
+		matrix.setColumn(3, 0, translate.matrix_F64().getData());
+		matrix.setRow(0, 0, U.extractVector(true, 0).matrix_F64().getData());
+		matrix.setRow(1, 0, U.extractVector(true, 1).matrix_F64().getData());
+		matrix.setRow(2, 0, U.extractVector(true, 2).matrix_F64().getData());
+
+		rmsd = svd.quality();
 	}
 
 	public double[] getMatrix() {
-		return new double[] {};
+		return matrix.matrix_F64().getData();
 	}
 
 	public double getRMSD() {
-		return 0;
+		return rmsd;
 	}
 
-	public String aligned() {
-		return "";
+	public String getAligned() {
+		SimpleMatrix probePointsMatrix = SimpleMatrix.wrap(probePoints);
+		SimpleMatrix alignedProbePoints = new SimpleMatrix(probePointsMatrix.numRows(), 3);
+		for (int i = 0; i < probePointsMatrix.numRows(); i++) {
+			double[] p = probePointsMatrix.extractVector(true, i).matrix_F64().getData();
+			double x = matrix.get(0, 0) * p[0] + matrix.get(0, 1) * p[1] + matrix.get(0, 2) * p[2] + matrix.get(0, 3);
+			double y = matrix.get(1, 0) * p[0] + matrix.get(1, 1) * p[1] + matrix.get(1, 2) * p[2] + matrix.get(1, 3);
+			double z = matrix.get(2, 0) * p[0] + matrix.get(2, 1) * p[1] + matrix.get(2, 2) * p[2] + matrix.get(2, 3);
+			alignedProbePoints.setRow(i, 0, x, y, z);
+		}
+
+		// TODO also transform normals when present
+		StringBuilder buf = new StringBuilder(512);
+		String sep = System.getProperty("line.separator");
+		String pharTpl = "%s %.4f %.4f %.4f 1 0 0 0 0" + sep;
+		buf.append("TODO store id").append(sep);
+		for (int i = 0; i < alignedProbePoints.numRows(); i++) {
+			double[] p = alignedProbePoints.extractVector(true, i).matrix_F64().getData();
+			buf.append(String.format(pharTpl, probeTypes.get(i), p[0], p[1], p[2]));
+		}
+		buf.append("$$$$").append(sep);
+		return buf.toString();
 	}
 }

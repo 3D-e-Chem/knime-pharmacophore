@@ -1,5 +1,9 @@
 package nl.esciencecenter.e3dchem.knime.pharmacophore.align;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import org.ejml.simple.SimpleMatrix;
 import org.junit.Test;
 
 public class AlignerTest {
@@ -50,7 +54,63 @@ public class AlignerTest {
 						"LIPO 29.4735 17.1238 15.8539 0 0 0 0 0 0", "LIPO 28.4358 15.3412 17.9075 0 0 0 0 0 0",
 						"LIPO 22.6927 21.2814 8.5115 0 0 0 0 0 0", "LIPO 20.6163 21.6970 6.7951 0 0 0 0 0 0", "$$$" });
 		Aligner aligner = new Aligner(probe, reference, 1.0);
+		aligner.transformation();
 
+		SimpleMatrix expectedMatrix = new SimpleMatrix(
+				new double[][] { { -0.470, 0.742, 0.478, 21.891 }, { -0.207, 0.434, -0.877, 16.653 },
+						{ -0.858, -0.511, -0.050, -11.795 }, { 0.000, 0.000, 0.000, 1.000 } });
+		SimpleMatrix matrix = new SimpleMatrix(4, 4, true, aligner.getMatrix());
+		assertTrue(expectedMatrix.isIdentical(matrix, 0.001));
+
+		double expectedRmsd = 8.0191315E-16;
+		assertEquals(expectedRmsd, aligner.getRMSD(), 1E-18);
+
+		String expectedAligned = String.join(sep,
+				new String[] { "TODO store id", "HACC 35.2416 -1.9208 -12.6333 1 0 0 0 0",
+						"HDON 36.1026 -1.0540 -15.2672 1 0 0 0 0", "HDON 26.2046 -3.0546 -14.0220 1 0 0 0 0",
+						"AROM 40.9051 -2.5887 -12.0375 1 0 0 0 0", "HDON 34.9967 -3.7449 -18.3703 1 0 0 0 0",
+						"NEGC 34.0493 -4.2675 -17.9353 1 0 0 0 0", "HDON 38.2088 -4.6742 -16.9226 1 0 0 0 0",
+						"NEGC 39.0338 -3.8505 -16.8934 1 0 0 0 0", "NEGC 38.1937 -5.4662 -16.0667 1 0 0 0 0",
+						"NEGC 36.5501 -3.9711 -17.2979 1 0 0 0 0", "LIPO 33.9152 -5.6305 -11.9242 1 0 0 0 0",
+						"LIPO 32.5431 -4.0503 -14.2047 1 0 0 0 0", "LIPO 33.6428 -4.3062 -12.9341 1 0 0 0 0",
+						"LIPO 34.0934 -5.3768 -10.2653 1 0 0 0 0", "LIPO 36.3069 -3.5776 -8.3478 1 0 0 0 0",
+						"LIPO 41.1317 -6.6472 -14.0921 1 0 0 0 0", "LIPO 38.1483 -7.4127 -11.5701 1 0 0 0 0",
+						"LIPO 38.2616 -6.3630 -14.2825 1 0 0 0 0", "LIPO 34.1376 -5.2011 -17.5440 1 0 0 0 0",
+						"LIPO 34.4138 -5.4192 -15.0233 1 0 0 0 0", "LIPO 33.3619 -6.0681 -19.2481 1 0 0 0 0",
+						"LIPO 24.3843 0.3894 -15.6301 1 0 0 0 0", "LIPO 32.1822 0.1274 -13.3046 1 0 0 0 0",
+						"LIPO 33.4794 -1.8340 -12.8098 1 0 0 0 0", "LIPO 32.0394 -2.8790 -19.9108 1 0 0 0 0",
+						"LIPO 38.3909 -8.8584 -9.5716 1 0 0 0 0", "HACC 25.3868 -0.2458 -13.5900 1 0 0 0 0",
+						"HDON 24.2359 3.0038 -13.2495 1 0 0 0 0", "LIPO 27.0139 1.4461 -13.1659 1 0 0 0 0",
+						"LIPO 28.2405 3.5172 -13.3154 1 0 0 0 0", "LIPO 30.1792 1.8258 -16.2141 1 0 0 0 0",
+						"LIPO 27.5059 -3.7104 -14.7049 1 0 0 0 0", "LIPO 28.9221 -2.9614 -15.2358 1 0 0 0 0",
+						"LIPO 25.7610 4.3784 -17.7539 1 0 0 0 0", "LIPO 29.2356 1.8076 -18.6820 1 0 0 0 0",
+						"LIPO 26.9056 1.3720 -18.0521 1 0 0 0 0", "LIPO 35.1812 -6.3570 -8.3338 1 0 0 0 0", "$$$$",
+						"" });
+
+		assertEquals(expectedAligned, aligner.getAligned());
+	}
+
+	@Test
+	public void test_move() {
+		Aligner aligner = new Aligner("", "", 1.0);
+		SimpleMatrix input = SimpleMatrix.identity(3);
+		SimpleMatrix offset = new SimpleMatrix(new double[][] { { 1, 2, 3 } });
+		SimpleMatrix expected = new SimpleMatrix(new double[][] { { 2, 2, 3 }, { 1, 3, 3 }, { 1, 2, 4 } });
+
+		SimpleMatrix output = aligner.move(input, offset);
+
+		assertTrue(expected.isIdentical(output, 0.00001));
+	}
+
+	@Test
+	public void test_centroid() {
+		Aligner aligner = new Aligner("", "", 1.0);
+		SimpleMatrix input = new SimpleMatrix(new double[][] { { 1, 2, 0 }, { 1, 3, 4 }, { 1, 4, -4 } });
+		SimpleMatrix expected = new SimpleMatrix(new double[][] { { 1, 3, 0 } });
+
+		SimpleMatrix output = aligner.getCentroid(input);
+
+		assertTrue(expected.isIdentical(output, 0.00001));
 	}
 
 }

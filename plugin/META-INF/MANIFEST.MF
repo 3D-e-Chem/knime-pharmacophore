@@ -20,4 +20,6 @@ Bundle-ClassPath: libs/ejml-v0.31-libs/ejml-core-0.31.jar,
 Export-Package: nl.esciencecenter.e3dchem.knime.pharmacophore,
  nl.esciencecenter.e3dchem.knime.pharmacophore.align,
  nl.esciencecenter.e3dchem.knime.pharmacophore.molecule,
- nl.esciencecenter.e3dchem.knime.pharmacophore.reader
+ nl.esciencecenter.e3dchem.knime.pharmacophore.reader,
+ org.ejml.data,
+ org.ejml.simple
