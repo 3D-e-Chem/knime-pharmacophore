@@ -1,23 +1,20 @@
 package nl.esciencecenter.e3dchem.knime.pharmacophore.align;
 
-import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
-import org.ejml.data.DMatrixRMaj;
 import org.ejml.simple.SimpleMatrix;
 import org.ejml.simple.SimpleSVD;
 
+import nl.esciencecenter.e3dchem.knime.pharmacophore.Pharmacophore;
+
 public class Aligner {
-	private List<String> probeTypes;
-	private List<String> refTypes;
-	private DMatrixRMaj probePoints;
-	private DMatrixRMaj refPoints;
+	private Pharmacophore probe;
+	private Pharmacophore reference;
 	private Map<PointPair, List<PointPair>> pairs = new HashMap<>();
 	private Set<PointPair> nodes = new HashSet<>();
 	private double cutoff = 1.0;
@@ -29,84 +26,31 @@ public class Aligner {
 	private double rmsd;
 
 	public Aligner(String probe, String reference, double cutoff) {
-		Entry<List<String>, DMatrixRMaj> probeParsed = parse(probe);
-		probeTypes = probeParsed.getKey();
-		probePoints = probeParsed.getValue();
-		Entry<List<String>, DMatrixRMaj> refParsed = parse(reference);
-		refTypes = refParsed.getKey();
-		refPoints = refParsed.getValue();
+		this.probe = new Pharmacophore(probe);
+		this.reference = new Pharmacophore(reference);
 		this.cutoff = cutoff;
 	}
 
-	private Entry<List<String>, DMatrixRMaj> parse(String pharBlock) {
-		List<String> types = new ArrayList<>();
-		List<Double> rawPointsX = new ArrayList<>();
-		List<Double> rawPointsY = new ArrayList<>();
-		List<Double> rawPointsZ = new ArrayList<>();
-		for (String line : pharBlock.split("\\r?\\n")) {
-			if (line.startsWith("$$$$")) {
-				break;
-			} else if (line.startsWith("#")) {
-				// Skip comments
-			} else {
-				String[] cols = line.split("\\s+");
-				if (cols.length < 9) {
-					// pharmacophore name
-				} else {
-					types.add(cols[0]);
-					rawPointsX.add((double) Float.parseFloat(cols[1]));
-					rawPointsY.add((double) Float.parseFloat(cols[2]));
-					rawPointsZ.add((double) Float.parseFloat(cols[3]));
-				}
-			}
-		}
-		DMatrixRMaj points = new DMatrixRMaj(rawPointsX.size(), 3);
-		for (int i = 0; i < rawPointsX.size(); i++) {
-			points.set(i, 0, rawPointsX.get(i));
-			points.set(i, 1, rawPointsY.get(i));
-			points.set(i, 2, rawPointsZ.get(i));
-		}
-		return new SimpleEntry<List<String>, DMatrixRMaj>(types, points);
-	}
-
-	private DMatrixRMaj computeDistances(DMatrixRMaj points) {
-		SimpleMatrix simplePoints = SimpleMatrix.wrap(points);
-		DMatrixRMaj distances = new DMatrixRMaj(points.getNumRows(), points.getNumRows());
-		int nrPoints = points.getNumRows();
-		for (int i = 0; i < nrPoints; i++) {
-			for (int j = 0; j < nrPoints; j++) {
-				if (i < j) {
-					double a = Math.sqrt(simplePoints.extractVector(true, i).elementPower(2).elementSum());
-					double b = Math.sqrt(simplePoints.extractVector(true, j).elementPower(2).elementSum());
-					double dist = Math.abs(a - b);
-					distances.set(i, j, dist);
-					distances.set(j, i, dist);
-				}
-			}
-		}
-		return distances;
-	}
-
 	private void candidatePairs() {
-		DMatrixRMaj probeDistances = computeDistances(probePoints);
-		DMatrixRMaj refDistances = computeDistances(refPoints);
+		SimpleMatrix probeDistances = probe.getDistancesBetweenPoints();
+		SimpleMatrix refDistances = reference.getDistancesBetweenPoints();
 
 		// IDENTIFY EACH PAIR IN PHARMACOPHORE A
-		for (int a = 0; a < refPoints.getNumRows() - 1; a++) {
-			for (int b = a + 1; b < probePoints.getNumRows(); b++) {
+		for (int a = 0; a < reference.size() - 1; a++) {
+			for (int b = a + 1; b < probe.size(); b++) {
 				// RECORD THE FEATURE TYPES AND THE DISTANCE BETWEEN THE
 				// FEATURES
-				String typeAA = refTypes.get(a);
-				String typeAB = probeTypes.get(b);
+				String typeAA = reference.get(a).type;
+				String typeAB = reference.get(b).type;
 				double distA = refDistances.get(a, b);
 				// CHECK WHETHER FEATURE PAIR IS SYMMETRICAL
 				boolean symmetrical = typeAA.equals(typeAB);
 
 				// IDENTIFY FIRST FEATURE FOR POSSIBLE PAIR IN PHARMACOPHORE B
-				for (int c = 0; c < probePoints.getNumRows() - 1; c++) {
+				for (int c = 0; c < probe.size() - 1; c++) {
 					// CHECK WHETHER THE FIRST FEATURE MATCHES EITHER OR BOTH
 					// OF THE PPHORE A FEATURE PAIR. CONTINUE IF NOT
-					String typeBA = probeTypes.get(c);
+					String typeBA = probe.get(c).type;
 					int matchA = 0;
 					if (typeBA.equals(typeAA)) {
 						matchA = 1;
@@ -117,12 +61,14 @@ public class Aligner {
 					}
 
 					// IDENITFY SECOND FEATURE FOR PPHORE B FEATURE PAIR
-					for (int d = c + 1; d < probePoints.getNumRows(); d++) {
+					for (int d = c + 1; d < probe.size(); d++) {
 						// CHECK WHETHER FEATURES MATCH THE FEATURE PAIR IN
 						// PHARMACOPHORE A
 						// IF NOT THEN CONTINUE
-						String typeBB = probeTypes.get(d);
-						if (!(((matchA == 1 && typeAB == typeBB) || (matchA == 2 && typeAA == typeBB)))) {
+						String typeBB = probe.get(d).type;
+						boolean pairMatch1 = ((matchA == 1) && (typeAB.equals(typeBB)));
+						boolean pairMatch2 = ((matchA == 2) && (typeAA.equals(typeBB)));
+						if (!(pairMatch1 || pairMatch2)) {
 							continue;
 						}
 
@@ -179,7 +125,7 @@ public class Aligner {
 		}
 	}
 
-	private void getBestClique() throws NoOverlapFoundException {
+	private void findBestClique() throws NoOverlapFoundException {
 		bestClique = new ArrayList<>();
 		searchComplete = false;
 		cliqueCount = 0;
@@ -218,8 +164,7 @@ public class Aligner {
 
 				// IF CLIQUE IS LARGER THAN HALF THE SIZE OF THE SMALLEST
 				// PHARMACOPHORE SET COMPLETE
-				if (!searchComplete && potential_clique
-						.size() >= (Math.min(refPoints.getNumRows(), probePoints.getNumRows()) / 2)) {
+				if (!searchComplete && potential_clique.size() >= (Math.min(reference.size(), probe.size()) / 2)) {
 					searchComplete = true;
 				}
 			}
@@ -280,20 +225,14 @@ public class Aligner {
 
 	}
 
-	private SimpleMatrix filterPointsByBestClique(DMatrixRMaj points) {
-		DMatrixRMaj cliquePoints = new DMatrixRMaj(bestClique.size(), 3);
-		for (int i = 0; i < bestClique.size(); i++) {
-			cliquePoints.add(i, 0, points.get(bestClique.get(i).first, 0));
-			cliquePoints.add(i, 1, points.get(bestClique.get(i).first, 1));
-			cliquePoints.add(i, 2, points.get(bestClique.get(i).first, 2));
-		}
-		return SimpleMatrix.wrap(cliquePoints);
+	private SimpleMatrix filterRefPointsByBestClique() {
+		int[] indexes = bestClique.stream().mapToInt(p -> p.first).toArray();
+		return reference.getFilteredPoints(indexes);
 	}
 
-	SimpleMatrix getCentroid(SimpleMatrix points) {
-		DMatrixRMaj refSum = org.ejml.dense.row.CommonOps_DDRM.sumCols(points.matrix_F64(), null);
-		SimpleMatrix refCentroid = SimpleMatrix.wrap(refSum).divide(points.numRows());
-		return refCentroid;
+	private SimpleMatrix filterProbePointsByBestClique() {
+		int[] indexes = bestClique.stream().mapToInt(p -> p.second).toArray();
+		return probe.getFilteredPoints(indexes);
 	}
 
 	SimpleMatrix move(SimpleMatrix points, SimpleMatrix offset) {
@@ -305,21 +244,20 @@ public class Aligner {
 
 	public void transformation() throws NoOverlapFoundException {
 		candidatePairs();
-		getBestClique();
+		findBestClique();
 
 		if (bestClique == null) {
 			throw new NoOverlapFoundException();
 		}
 
-		SimpleMatrix refCliquePoints = filterPointsByBestClique(refPoints);
-		SimpleMatrix probeCliquePoints = filterPointsByBestClique(probePoints);
+		SimpleMatrix refCliquePoints = filterRefPointsByBestClique();
+		SimpleMatrix probeCliquePoints = filterProbePointsByBestClique();
 
 		// KABSCH algorithm to translate+rotate probe points on to ref points
 
-		SimpleMatrix refPointsMatrix = SimpleMatrix.wrap(refPoints);
-		SimpleMatrix refCentroid = getCentroid(refPointsMatrix);
-		SimpleMatrix probePointsMatrix = SimpleMatrix.wrap(probePoints);
-		SimpleMatrix probeCentroid = getCentroid(probePointsMatrix);
+		SimpleMatrix refCentroid = reference.getCentroid();
+		SimpleMatrix probeCentroid = probe.getCentroid();
+
 		SimpleMatrix refCentered = move(refCliquePoints, refCentroid.negative());
 		SimpleMatrix probeCentered = move(probeCliquePoints, probeCentroid.negative());
 
@@ -328,6 +266,10 @@ public class Aligner {
 
 		// 4x4 matrix
 		SimpleMatrix translate = refCentroid.minus(probeCentroid).transpose();
+		System.out.println(svd.getU());
+		System.out.println(svd.getV());
+		System.out.println(svd.getW());
+		System.out.println(svd.getU().mult(svd.getV()));
 		SimpleMatrix U = svd.getU();
 		matrix = SimpleMatrix.identity(4);
 		matrix.setColumn(3, 0, translate.matrix_F64().getData());
@@ -347,26 +289,7 @@ public class Aligner {
 	}
 
 	public String getAligned() {
-		SimpleMatrix probePointsMatrix = SimpleMatrix.wrap(probePoints);
-		SimpleMatrix alignedProbePoints = new SimpleMatrix(probePointsMatrix.numRows(), 3);
-		for (int i = 0; i < probePointsMatrix.numRows(); i++) {
-			double[] p = probePointsMatrix.extractVector(true, i).matrix_F64().getData();
-			double x = matrix.get(0, 0) * p[0] + matrix.get(0, 1) * p[1] + matrix.get(0, 2) * p[2] + matrix.get(0, 3);
-			double y = matrix.get(1, 0) * p[0] + matrix.get(1, 1) * p[1] + matrix.get(1, 2) * p[2] + matrix.get(1, 3);
-			double z = matrix.get(2, 0) * p[0] + matrix.get(2, 1) * p[1] + matrix.get(2, 2) * p[2] + matrix.get(2, 3);
-			alignedProbePoints.setRow(i, 0, x, y, z);
-		}
-
-		// TODO also transform normals when present
-		StringBuilder buf = new StringBuilder(512);
-		String sep = System.getProperty("line.separator");
-		String pharTpl = "%s %.4f %.4f %.4f 1 0 0 0 0" + sep;
-		buf.append("TODO store id").append(sep);
-		for (int i = 0; i < alignedProbePoints.numRows(); i++) {
-			double[] p = alignedProbePoints.extractVector(true, i).matrix_F64().getData();
-			buf.append(String.format(pharTpl, probeTypes.get(i), p[0], p[1], p[2]));
-		}
-		buf.append("$$$$").append(sep);
-		return buf.toString();
+		Pharmacophore aligned = probe.transform(matrix);
+		return aligned.toString();
 	}
 }

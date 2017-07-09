@@ -56,14 +56,14 @@ public class AlignerTest {
 		Aligner aligner = new Aligner(probe, reference, 1.0);
 		aligner.transformation();
 
+		double expectedRmsd = 8.0191315E-16;
+		assertEquals(expectedRmsd, aligner.getRMSD(), 1E-18);
+
 		SimpleMatrix expectedMatrix = new SimpleMatrix(
 				new double[][] { { -0.470, 0.742, 0.478, 21.891 }, { -0.207, 0.434, -0.877, 16.653 },
 						{ -0.858, -0.511, -0.050, -11.795 }, { 0.000, 0.000, 0.000, 1.000 } });
 		SimpleMatrix matrix = new SimpleMatrix(4, 4, true, aligner.getMatrix());
 		assertTrue(expectedMatrix.isIdentical(matrix, 0.001));
-
-		double expectedRmsd = 8.0191315E-16;
-		assertEquals(expectedRmsd, aligner.getRMSD(), 1E-18);
 
 		String expectedAligned = String.join(sep,
 				new String[] { "TODO store id", "HACC 35.2416 -1.9208 -12.6333 1 0 0 0 0",
@@ -101,16 +101,4 @@ public class AlignerTest {
 
 		assertTrue(expected.isIdentical(output, 0.00001));
 	}
-
-	@Test
-	public void test_centroid() {
-		Aligner aligner = new Aligner("", "", 1.0);
-		SimpleMatrix input = new SimpleMatrix(new double[][] { { 1, 2, 0 }, { 1, 3, 4 }, { 1, 4, -4 } });
-		SimpleMatrix expected = new SimpleMatrix(new double[][] { { 1, 3, 0 } });
-
-		SimpleMatrix output = aligner.getCentroid(input);
-
-		assertTrue(expected.isIdentical(output, 0.00001));
-	}
-
 }
