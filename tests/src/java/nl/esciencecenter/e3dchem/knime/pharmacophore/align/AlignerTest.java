@@ -3,13 +3,18 @@ package nl.esciencecenter.e3dchem.knime.pharmacophore.align;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Arrays;
+
 import org.ejml.simple.SimpleMatrix;
 import org.junit.Test;
+
+import nl.esciencecenter.e3dchem.knime.pharmacophore.Pharmacophore;
+import nl.esciencecenter.e3dchem.knime.pharmacophore.PharmacophorePoint;
 
 public class AlignerTest {
 
 	@Test
-	public void test() throws NoOverlapFoundException {
+	public void test_reallive() throws NoOverlapFoundException {
 		String sep = System.getProperty("line.separator");
 		String probe = String.join(sep,
 				new String[] { "probid", "HACC -1.7076 2.2682 22.7126 0 0 0 0 0",
@@ -56,14 +61,14 @@ public class AlignerTest {
 		Aligner aligner = new Aligner(probe, reference, 1.0);
 		aligner.transformation();
 
-		double expectedRmsd = 8.0191315E-16;
-		assertEquals(expectedRmsd, aligner.getRMSD(), 1E-18);
-
 		SimpleMatrix expectedMatrix = new SimpleMatrix(
 				new double[][] { { -0.470, 0.742, 0.478, 21.891 }, { -0.207, 0.434, -0.877, 16.653 },
 						{ -0.858, -0.511, -0.050, -11.795 }, { 0.000, 0.000, 0.000, 1.000 } });
-		SimpleMatrix matrix = new SimpleMatrix(4, 4, true, aligner.getMatrix());
+		SimpleMatrix matrix = aligner.getMatrix();
 		assertTrue(expectedMatrix.isIdentical(matrix, 0.001));
+
+		double expectedRmsd = 8.0191315E-16;
+		assertEquals(expectedRmsd, aligner.getRMSD(), 1E-18);
 
 		String expectedAligned = String.join(sep,
 				new String[] { "TODO store id", "HACC 35.2416 -1.9208 -12.6333 1 0 0 0 0",
@@ -87,7 +92,7 @@ public class AlignerTest {
 						"LIPO 26.9056 1.3720 -18.0521 1 0 0 0 0", "LIPO 35.1812 -6.3570 -8.3338 1 0 0 0 0", "$$$$",
 						"" });
 
-		assertEquals(expectedAligned, aligner.getAligned());
+		assertEquals(expectedAligned, aligner.getAligned().toString());
 	}
 
 	@Test
@@ -100,5 +105,71 @@ public class AlignerTest {
 		SimpleMatrix output = aligner.move(input, offset);
 
 		assertTrue(expected.isIdentical(output, 0.00001));
+	}
+
+	@Test
+	public void test_probeSameAsRef() throws NoOverlapFoundException {
+		Pharmacophore reference = new Pharmacophore("someid",
+				Arrays.asList(new PharmacophorePoint("LIPO", 0.5, 0.5, 0.5, 1),
+						new PharmacophorePoint("AROM", 0.5, 0.0, 0.5, 1),
+						new PharmacophorePoint("HDON", 0.5, 0.5, 0.0, 1)));
+		Pharmacophore probe = new Pharmacophore("someid",
+				Arrays.asList(new PharmacophorePoint("LIPO", 0.5, 0.5, 0.5, 1),
+						new PharmacophorePoint("AROM", 0.5, 0.0, 0.5, 1),
+						new PharmacophorePoint("HDON", 0.5, 0.5, 0.0, 1)));
+		Aligner aligner = new Aligner(probe, reference, 1.0);
+		aligner.transformation();
+
+		SimpleMatrix actual = aligner.getMatrix();
+
+		SimpleMatrix expected = SimpleMatrix.identity(4);
+		assertTrue(expected.isIdentical(actual, 0.00001));
+	}
+
+	@Test
+	public void test_probeTranslated() throws NoOverlapFoundException {
+		Pharmacophore reference = new Pharmacophore("someid",
+				Arrays.asList(new PharmacophorePoint("LIPO", 0.5, 0.5, 0.5, 1),
+						new PharmacophorePoint("AROM", 0.5, 0.0, 0.5, 1),
+						new PharmacophorePoint("HDON", 0.5, 0.5, 0.0, 1)));
+		// probe has translated by x+1, y+0, z-2
+		Pharmacophore probe = new Pharmacophore("someid",
+				Arrays.asList(new PharmacophorePoint("LIPO", 1.5, 0.5, -1.5, 1),
+						new PharmacophorePoint("AROM", 1.5, 0.0, -1.5, 1),
+						new PharmacophorePoint("HDON", 1.5, 0.5, -2.0, 1)));
+		Aligner aligner = new Aligner(probe, reference, 1.0);
+		aligner.transformation();
+
+		SimpleMatrix actual = aligner.getMatrix();
+
+		SimpleMatrix expected = SimpleMatrix.identity(4);
+		expected.set(0, 3, -1);
+		expected.set(2, 3, 2);
+		assertTrue(actual.toString(), expected.isIdentical(actual, 0.00001));
+	}
+
+	@Test
+	public void test_probeRotatedRef() throws NoOverlapFoundException {
+		Pharmacophore reference = new Pharmacophore("someid",
+				Arrays.asList(new PharmacophorePoint("LIPO", 0.5, 0.5, 0.5, 1),
+						new PharmacophorePoint("AROM", 0.5, 0.0, 0.5, 1),
+						new PharmacophorePoint("HDON", 0.5, 0.5, 0.0, 1)));
+		// HDON is rotated along y axis 90 degrees
+		Pharmacophore probe = new Pharmacophore("someid",
+				Arrays.asList(new PharmacophorePoint("LIPO", 0.5, 0.5, 0.5, 1),
+						new PharmacophorePoint("AROM", 0.5, 0.0, 0.5, 1),
+						new PharmacophorePoint("HDON", 0.0, 0.5, 0.5, 1)));
+		Aligner aligner = new Aligner(probe, reference, 1.0);
+		aligner.transformation();
+
+		// System.out.println(reference.getPointsMatrix());
+		// System.out.println(aligner.getAligned().getPointsMatrix());
+
+		SimpleMatrix actual = aligner.getMatrix();
+
+		SimpleMatrix expected = SimpleMatrix.identity(4);
+		// System.out.println(actual);
+		assertTrue(expected.isIdentical(actual, 0.00001));
+
 	}
 }

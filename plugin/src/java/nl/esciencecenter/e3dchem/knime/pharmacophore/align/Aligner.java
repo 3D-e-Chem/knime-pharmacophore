@@ -31,6 +31,12 @@ public class Aligner {
 		this.cutoff = cutoff;
 	}
 
+	public Aligner(Pharmacophore probe, Pharmacophore reference, double cutoff) {
+		this.probe = probe;
+		this.reference = reference;
+		this.cutoff = cutoff;
+	}
+
 	private void candidatePairs() {
 		SimpleMatrix probeDistances = probe.getDistancesBetweenPoints();
 		SimpleMatrix refDistances = reference.getDistancesBetweenPoints();
@@ -258,38 +264,58 @@ public class Aligner {
 		SimpleMatrix refCentroid = reference.getCentroid();
 		SimpleMatrix probeCentroid = probe.getCentroid();
 
+		// System.out.println(refCliquePoints);
+		// System.out.println(refCentroid);
+		// System.out.println(probeCliquePoints);
+		// System.out.println(probeCentroid);
+
 		SimpleMatrix refCentered = move(refCliquePoints, refCentroid.negative());
 		SimpleMatrix probeCentered = move(probeCliquePoints, probeCentroid.negative());
+
+		// System.out.println(refCentered);
+		// System.out.println(probeCentered);
 
 		SimpleMatrix cov = refCentered.transpose().mult(probeCentered);
 		SimpleSVD<SimpleMatrix> svd = cov.svd();
 
+		double d = svd.getV().mult(svd.getU().transpose()).determinant();
+		if (d > 0) {
+			d = 1.0;
+		} else {
+			d = -1.0;
+		}
+		SimpleMatrix I = SimpleMatrix.identity(3);
+		I.set(2, 2, d);
+		SimpleMatrix R = svd.getV().mult(I).mult(svd.getU().transpose());
+		// System.out.println(R);
+
 		// 4x4 matrix
 		SimpleMatrix translate = refCentroid.minus(probeCentroid).transpose();
-		System.out.println(svd.getU());
-		System.out.println(svd.getV());
-		System.out.println(svd.getW());
-		System.out.println(svd.getU().mult(svd.getV()));
-		SimpleMatrix U = svd.getU();
+		// System.out.println(translate);
 		matrix = SimpleMatrix.identity(4);
 		matrix.setColumn(3, 0, translate.matrix_F64().getData());
-		matrix.setRow(0, 0, U.extractVector(true, 0).matrix_F64().getData());
-		matrix.setRow(1, 0, U.extractVector(true, 1).matrix_F64().getData());
-		matrix.setRow(2, 0, U.extractVector(true, 2).matrix_F64().getData());
+		matrix.setRow(0, 0, R.extractVector(true, 0).matrix_F64().getData());
+		matrix.setRow(1, 0, R.extractVector(true, 1).matrix_F64().getData());
+		matrix.setRow(2, 0, R.extractVector(true, 2).matrix_F64().getData());
+
+		// System.out.println(matrix);
 
 		rmsd = svd.quality();
 	}
 
-	public double[] getMatrix() {
+	public double[] getMatrixAsArray() {
 		return matrix.matrix_F64().getData();
+	}
+
+	public SimpleMatrix getMatrix() {
+		return matrix;
 	}
 
 	public double getRMSD() {
 		return rmsd;
 	}
 
-	public String getAligned() {
-		Pharmacophore aligned = probe.transform(matrix);
-		return aligned.toString();
+	public Pharmacophore getAligned() {
+		return probe.transform(matrix);
 	}
 }
