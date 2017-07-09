@@ -37,6 +37,10 @@ public class Aligner {
 		this.cutoff = cutoff;
 	}
 
+	/**
+	 * Code was copied from Kripo yasara plugin written by Dave Wood, August 8th
+	 * 2008 and was translated from Python to Java/ejml/oo
+	 */
 	private void candidatePairs() {
 		SimpleMatrix probeDistances = probe.getDistancesBetweenPoints();
 		SimpleMatrix refDistances = reference.getDistancesBetweenPoints();
@@ -241,7 +245,7 @@ public class Aligner {
 		return probe.getFilteredPoints(indexes);
 	}
 
-	SimpleMatrix move(SimpleMatrix points, SimpleMatrix offset) {
+	public static SimpleMatrix move(SimpleMatrix points, SimpleMatrix offset) {
 		points.setColumn(0, 0, points.extractVector(false, 0).plus(offset.get(0, 0)).matrix_F64().getData());
 		points.setColumn(1, 0, points.extractVector(false, 1).plus(offset.get(0, 1)).matrix_F64().getData());
 		points.setColumn(2, 0, points.extractVector(false, 2).plus(offset.get(0, 2)).matrix_F64().getData());
@@ -252,7 +256,7 @@ public class Aligner {
 		candidatePairs();
 		findBestClique();
 
-		if (bestClique == null) {
+		if (bestClique.isEmpty()) {
 			throw new NoOverlapFoundException();
 		}
 

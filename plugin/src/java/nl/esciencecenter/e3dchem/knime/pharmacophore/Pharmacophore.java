@@ -1,5 +1,9 @@
 package nl.esciencecenter.e3dchem.knime.pharmacophore;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +33,7 @@ public class Pharmacophore {
 
 	public Pharmacophore(String identifier, List<PharmacophorePoint> points) {
 		this.identifier = identifier;
-		this.points.addAll(points);
+		this.points = points;
 	}
 
 	public SimpleMatrix getPointsMatrix() {
@@ -103,5 +107,22 @@ public class Pharmacophore {
 
 	public List<PharmacophorePoint> getPoints() {
 		return points;
+	}
+
+	public static List<Pharmacophore> fromStream(InputStream input) throws IOException {
+		String sep = System.getProperty("line.separator");
+		List<Pharmacophore> out = new ArrayList<>();
+		String bsep = "$$$$";
+		String pharBlock = "";
+		BufferedReader in = new BufferedReader(new InputStreamReader(input));
+		String line;
+		while ((line = in.readLine()) != null) {
+			pharBlock += line + sep;
+			if (line.startsWith(bsep)) {
+				out.add(new Pharmacophore(pharBlock));
+				pharBlock = "";
+			}
+		}
+		return out;
 	}
 }

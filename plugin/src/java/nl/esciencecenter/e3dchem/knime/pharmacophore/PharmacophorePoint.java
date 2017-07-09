@@ -1,10 +1,16 @@
 package nl.esciencecenter.e3dchem.knime.pharmacophore;
 
+import java.text.DecimalFormat;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 import org.ejml.simple.SimpleMatrix;
 
 public class PharmacophorePoint {
+	public static final Set<String> VALID_TYPES = new HashSet<>(
+			Arrays.asList("AROM", "HDON", "HACC", "LIPO", "POSC", "NEGC", "HYBH", "HYBL", "EXCL"));
 	public String type;
 	public double cx;
 	public double cy;
@@ -16,19 +22,16 @@ public class PharmacophorePoint {
 	public double nz;
 
 	public PharmacophorePoint(String[] cols) {
-		this.type = cols[0];
-		this.cx = Double.parseDouble(cols[1]);
-		this.cy = Double.parseDouble(cols[2]);
-		this.cz = Double.parseDouble(cols[3]);
-		this.alpha = Double.parseDouble(cols[4]);
-		this.norm = cols[5];
-		this.nx = Double.parseDouble(cols[6]);
-		this.ny = Double.parseDouble(cols[7]);
-		this.nz = Double.parseDouble(cols[8]);
+		this(cols[0], Double.parseDouble(cols[1]), Double.parseDouble(cols[2]), Double.parseDouble(cols[3]),
+				Double.parseDouble(cols[4]), cols[5], Double.parseDouble(cols[6]), Double.parseDouble(cols[7]),
+				Double.parseDouble(cols[8]));
 	}
 
 	public PharmacophorePoint(String type, double cx, double cy, double cz, double alpha, String norm, double nx,
 			double ny, double nz) {
+		if (!VALID_TYPES.contains(type)) {
+			throw new IllegalArgumentException("Unknown type, should be one of " + String.join(",", VALID_TYPES));
+		}
 		this.type = type;
 		this.cx = cx;
 		this.cy = cy;
@@ -41,15 +44,7 @@ public class PharmacophorePoint {
 	}
 
 	public PharmacophorePoint(String type, double cx, double cy, double cz, double alpha) {
-		this.type = type;
-		this.cx = cx;
-		this.cy = cy;
-		this.cz = cz;
-		this.alpha = alpha;
-		this.norm = "0";
-		this.nx = 0;
-		this.ny = 0;
-		this.nz = 0;
+		this(type, cx, cy, cz, alpha, "0", 0, 0, 0);
 	}
 
 	public String toString() {
@@ -57,9 +52,9 @@ public class PharmacophorePoint {
 	}
 
 	private String[] toArray() {
-		return new String[] { type, String.format("%.4f", cx), String.format("%.4f", cy), String.format("%.4f", cz),
-				String.format("%.4f", alpha), norm, String.format("%.4f", nx), String.format("%.4f", ny),
-				String.format("%.4f", nz) };
+		DecimalFormat df = new DecimalFormat("0.####");
+		return new String[] { type, df.format(cx), df.format(cy), df.format(cz), df.format(alpha), norm, df.format(nx),
+				df.format(ny), df.format(nz) };
 	}
 
 	public SimpleMatrix getPointAsMatrix() {

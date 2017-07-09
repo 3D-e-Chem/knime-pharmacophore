@@ -18,7 +18,7 @@
 <entry key="x-coordinate" type="xint" value="103"/>
 <entry key="y-coordinate" type="xint" value="499"/>
 <entry key="width" type="xint" value="115"/>
-<entry key="height" type="xint" value="16"/>
+<entry key="height" type="xint" value="14"/>
 <entry key="alignment" type="xstring" value="CENTER"/>
 <entry key="borderSize" type="xint" value="0"/>
 <entry key="borderColor" type="xint" value="16777215"/>
@@ -33,11 +33,11 @@
 <entry key="node-bundle-name" type="xstring" value="KNIME nodes to read/write pharmacophore files and align them"/>
 <entry key="node-bundle-symbolic-name" type="xstring" value="nl.esciencecenter.e3dchem.knime.pharmacophore.plugin"/>
 <entry key="node-bundle-vendor" type="xstring" value="Netherlands eScience Center"/>
-<entry key="node-bundle-version" type="xstring" value="1.0.0.v201707041211"/>
+<entry key="node-bundle-version" type="xstring" value="1.0.0.v201707091922"/>
 <entry key="node-feature-name" type="xstring" value="Pharmacophore KNIME nodes"/>
 <entry key="node-feature-symbolic-name" type="xstring" value="nl.esciencecenter.e3dchem.knime.pharmacophore.feature.feature.group"/>
 <entry key="node-feature-vendor" type="xstring" value="Netherlands eScience Center"/>
-<entry key="node-feature-version" type="xstring" value="1.0.0.v201707041211"/>
+<entry key="node-feature-version" type="xstring" value="1.0.0.v201707091922"/>
 <config key="factory_settings"/>
 <entry key="name" type="xstring" value="Pharmacophore reader"/>
 <entry key="hasContent" type="xboolean" value="true"/>
@@ -53,6 +53,6 @@
 </config>
 <config key="filestores">
 <entry key="file_store_location" type="xstring" isnull="true" value=""/>
-<entry key="file_store_id" type="xstring" value="fcf528c7-3f00-4273-a9d4-e75310804d7b"/>
+<entry key="file_store_id" type="xstring" value="a0b419d1-4f8c-4667-b413-5bbc6e6483ff"/>
 </config>
 </config>

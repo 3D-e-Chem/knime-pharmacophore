@@ -1,19 +1,32 @@
-package nl.esciencecenter.e3dchem.knime.pharmacophore.align;
+package nl.esciencecenter.e3dchem.knime.pharmacophore;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.List;
 
 import org.ejml.simple.SimpleMatrix;
 import org.junit.Test;
 
-import nl.esciencecenter.e3dchem.knime.pharmacophore.Pharmacophore;
-import nl.esciencecenter.e3dchem.knime.pharmacophore.PharmacophorePoint;
-
 public class PharmacophoreTest {
 	private double precision = 0.001;
+
+	@Test
+	public void testPharmacophoreString() {
+		String sep = System.getProperty("line.separator");
+		String pharBlock = String.join(sep, new String[] { "someid", "HACC -1.7076 2.2682 22.7126 0 0 0 0 0", "$$$$" });
+
+		Pharmacophore actual = new Pharmacophore(pharBlock);
+
+		assertEquals("someid", actual.getIdentifier());
+		List<PharmacophorePoint> expected = Arrays.asList(new PharmacophorePoint("HACC", -1.7076, 2.2682, 22.7126, 0));
+		assertEquals(expected, actual.getPoints());
+	}
 
 	@Test
 	public void testPharmacophoreStringListOfPharmacophorePoint() {
@@ -98,6 +111,27 @@ public class PharmacophoreTest {
 
 		Pharmacophore actual = p.transform(matrix);
 		assertEquals(p.toString(), actual.toString());
+	}
+
+	@Test
+	public void test_fromStream() throws IOException {
+		String sep = System.getProperty("line.separator");
+		String pharBlocks = String.join(sep,
+				new String[] { "someid1", "HACC -1.7076 2.2682 22.7126 0 0 0 0 0", "$$$$", "someid2",
+						"HACC -1.7076 2.2682 22.7126 0 0 0 0 0", "$$$$", "someid3",
+						"HACC -1.7076 2.2682 22.7126 0 0 0 0 0", "$$$$" });
+		InputStream input = new ByteArrayInputStream(pharBlocks.getBytes(Charset.defaultCharset()));
+
+		List<Pharmacophore> actual = Pharmacophore.fromStream(input);
+
+		List<Pharmacophore> expected = Arrays.asList(
+				new Pharmacophore("someid1",
+						Arrays.asList(new PharmacophorePoint("HACC", -1.7076, 2.2682, 22.7126, 0))),
+				new Pharmacophore("someid2",
+						Arrays.asList(new PharmacophorePoint("HACC", -1.7076, 2.2682, 22.7126, 0))),
+				new Pharmacophore("someid3",
+						Arrays.asList(new PharmacophorePoint("HACC", -1.7076, 2.2682, 22.7126, 0))));
+		assertEquals(expected.toString(), actual.toString());
 	}
 
 }

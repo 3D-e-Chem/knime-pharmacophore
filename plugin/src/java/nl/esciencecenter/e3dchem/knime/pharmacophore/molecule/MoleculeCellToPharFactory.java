@@ -1,5 +1,6 @@
 package nl.esciencecenter.e3dchem.knime.pharmacophore.molecule;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 import org.knime.chem.types.SdfValue;
@@ -9,6 +10,8 @@ import org.knime.core.data.DataRow;
 import org.knime.core.data.container.SingleCellFactory;
 
 import nl.esciencecenter.e3dchem.knime.pharmacophore.PharCell;
+import nl.esciencecenter.e3dchem.knime.pharmacophore.Pharmacophore;
+import nl.esciencecenter.e3dchem.knime.pharmacophore.PharmacophorePoint;
 
 public class MoleculeCellToPharFactory extends SingleCellFactory {
 	private int colIndex;
@@ -28,20 +31,15 @@ public class MoleculeCellToPharFactory extends SingleCellFactory {
 	}
 
 	public String mol2phar(String molBlock) {
-		StringBuilder buf = new StringBuilder(512);
-		String sep = System.getProperty("line.separator");
-		String pharTpl = "%s %.4f %.4f %.4f 1 0 0 0 0" + sep;
-
 		String[] lines = molBlock.split("\\r?\\n");
-		buf.append(lines[0]).append(sep);
+		ArrayList<PharmacophorePoint> points = new ArrayList<>();
+		Pharmacophore phar = new Pharmacophore(lines[0], points);
 		for (int i = 4; i < lines.length - 2; i++) {
 			String[] cols = lines[i].trim().split("\\s+");
-			String element = elements.get(cols[3]);
-			buf.append(String.format(pharTpl, element, Float.parseFloat(cols[0]), Float.parseFloat(cols[1]),
-					Float.parseFloat(cols[2])));
+			String phartype = elements.get(cols[3]);
+			points.add(new PharmacophorePoint(phartype, Float.parseFloat(cols[0]), Float.parseFloat(cols[1]),
+					Float.parseFloat(cols[2]), 1.0));
 		}
-		buf.append("$$$$").append(sep);
-		return buf.toString();
+		return phar.toString();
 	}
-
 }

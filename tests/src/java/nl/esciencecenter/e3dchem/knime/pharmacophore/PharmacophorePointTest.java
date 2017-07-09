@@ -1,4 +1,4 @@
-package nl.esciencecenter.e3dchem.knime.pharmacophore.align;
+package nl.esciencecenter.e3dchem.knime.pharmacophore;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -7,12 +7,15 @@ import static org.junit.Assert.assertTrue;
 import org.ejml.simple.SimpleMatrix;
 import org.junit.Test;
 
-import nl.esciencecenter.e3dchem.knime.pharmacophore.PharmacophorePoint;
-
 public class PharmacophorePointTest {
 
 	private PharmacophorePoint aPoint() {
 		return new PharmacophorePoint("LIPO", 12.3971, 28.8415, 21.9387, 0, "0", 0, 0, 0);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testPharmaCophore_badtype() {
+		new PharmacophorePoint("FOOBAR", 12.3971, 28.8415, 21.9387, 0, "0", 0, 0, 0);
 	}
 
 	@Test
@@ -27,7 +30,7 @@ public class PharmacophorePointTest {
 	public void testToString() {
 		PharmacophorePoint p = aPoint();
 		String actual = p.toString();
-		String expected = "LIPO 12.3971 28.8415 21.9387 0.0000 0 0.0000 0.0000 0.0000";
+		String expected = "LIPO 12.3971 28.8415 21.9387 0 0 0 0 0";
 		assertEquals(expected, actual);
 	}
 

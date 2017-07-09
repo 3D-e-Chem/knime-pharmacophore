@@ -1,11 +1,9 @@
 package nl.esciencecenter.e3dchem.knime.pharmacophore.reader;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -27,6 +25,7 @@ import org.knime.core.node.defaultnodesettings.SettingsModelString;
 import org.knime.core.util.FileUtil;
 
 import nl.esciencecenter.e3dchem.knime.pharmacophore.PharCell;
+import nl.esciencecenter.e3dchem.knime.pharmacophore.Pharmacophore;
 
 /**
  * This is the model implementation of PharmacophoreReader.
@@ -63,27 +62,9 @@ public class ReaderModel extends NodeModel {
 			inStream = new FileInputStream(filename);
 		}
 
-		BufferedReader in = new BufferedReader(new InputStreamReader(inStream));
-		String line;
-		StringBuilder buf = new StringBuilder(4096);
-		String name = null;
-		String sep = System.getProperty("line.separator");
-		while ((line = in.readLine()) != null) {
+		for (Pharmacophore phar : Pharmacophore.fromStream(inStream)) {
 			exec.checkCanceled();
-
-			if (line.startsWith("$$$$")) {
-				buf.append(line).append(sep);
-				addPharmacophore(name, buf, container);
-				buf.setLength(0);
-			} else if (line.startsWith("#")) {
-				// Skip comments
-			} else {
-				if (line.split("\\s+").length < 9) {
-					// pharmacophore name
-					name = line;
-				}
-				buf.append(line).append(sep);
-			}
+			addPharmacophore(phar, container);
 		}
 
 		// once we are done, we close the container and return its table
@@ -93,8 +74,8 @@ public class ReaderModel extends NodeModel {
 		return new BufferedDataTable[] { out };
 	}
 
-	private void addPharmacophore(String name, StringBuilder buf, BufferedDataContainer container) {
-		DataRow row = new DefaultRow(new RowKey(name), new PharCell(buf.toString()));
+	private void addPharmacophore(Pharmacophore phar, BufferedDataContainer container) {
+		DataRow row = new DefaultRow(new RowKey(phar.getIdentifier()), new PharCell(phar.toString()));
 		container.addRowToTable(row);
 	}
 
