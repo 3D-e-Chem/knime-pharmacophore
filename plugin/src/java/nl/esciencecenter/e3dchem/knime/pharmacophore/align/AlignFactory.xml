@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<knimeNode icon="./default.png" type="Predictor" xmlns="http://knime.org/node/v2.8" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://knime.org/node/v2.10 http://knime.org/node/v2.10.xsd">
+    <name>Align pharmacophores</name>
+    
+    <shortDescription>
+        Align query pharmacophores to reference pharmacophore(s).
+    </shortDescription>
+    
+    <fullDescription>
+        <intro>Align the query pharmacophore to the reference pharmacophore.
+        This node computes the transformation matrix and the aligned query pharmacophore.
+        </intro>
+        
+        <option name="Query Pharmacophore column (table 1)">The input column of table 1 with Query Pharmacophores to be aligned.</option>
+        <option name="Reference Pharmacophore column (table 2)">The input column of table 2 with Reference Pharmacophore to base the alignment on.</option>
+    </fullDescription>
+    
+    <ports>
+        <inPort index="0" name="Query pharmacophores">The table with pharmacophores to be aligned.</inPort>
+        <inPort index="1" name="Reference pharmacophores">The table with the reference pharmacophore to base the alignment on.</inPort>
+        <outPort index="0" name="Out-Port name">Aligned pharmacophores</outPort>
+    </ports>    
+    <views>
+    </views>
+</knimeNode>
