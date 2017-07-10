@@ -25,16 +25,24 @@ public class Aligner {
 	private SimpleMatrix matrix;
 	private double rmsd;
 
-	public Aligner(String probe, String reference, double cutoff) {
-		this.probe = new Pharmacophore(probe);
-		this.reference = new Pharmacophore(reference);
-		this.cutoff = cutoff;
+	public Aligner(String probe, String reference, double cutoff, int cliqueBreak) throws NoOverlapFoundException {
+		this(new Pharmacophore(probe), new Pharmacophore(reference), cutoff, cliqueBreak);
 	}
 
-	public Aligner(Pharmacophore probe, Pharmacophore reference, double cutoff) {
+	public Aligner(Pharmacophore probe, Pharmacophore reference, double cutoff, int cliqueBreak) throws NoOverlapFoundException {
 		this.probe = probe;
 		this.reference = reference;
 		this.cutoff = cutoff;
+		this.cliqueBreak = cliqueBreak;
+		transformation();
+	}
+
+	public Aligner(Pharmacophore probe, Pharmacophore reference) throws NoOverlapFoundException {
+		this(probe, reference, 1.0, 3000);
+	}
+
+	public Aligner(String probe, String reference) throws NoOverlapFoundException {
+		this(new Pharmacophore(probe), new Pharmacophore(reference));
 	}
 
 	/**
@@ -252,7 +260,7 @@ public class Aligner {
 		return points;
 	}
 
-	public void transformation() throws NoOverlapFoundException {
+	private void transformation() throws NoOverlapFoundException {
 		candidatePairs();
 		findBestClique();
 

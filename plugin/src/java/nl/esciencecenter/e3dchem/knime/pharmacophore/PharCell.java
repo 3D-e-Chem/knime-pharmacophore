@@ -22,6 +22,10 @@ public class PharCell extends DataCell implements PharValue, StringValue {
 		this.value = value;
 	}
 
+	public PharCell(Pharmacophore phar) {
+		this.value = phar.toString();
+	}
+
 	@Override
 	public String getStringValue() {
 		return value;
@@ -58,5 +62,10 @@ public class PharCell extends DataCell implements PharValue, StringValue {
 		public PharCell deserialize(final DataCellDataInput input) throws IOException {
 			return new PharCell(input.readUTF());
 		}
+	}
+
+	@Override
+	public Pharmacophore getPharmacophoreValue() {
+		return new Pharmacophore(value);
 	}
 }

@@ -1,9 +1,13 @@
 package nl.esciencecenter.e3dchem.knime.pharmacophore.align;
 
-import org.knime.core.data.StringValue;
 import org.knime.core.node.defaultnodesettings.DefaultNodeSettingsPane;
 import org.knime.core.node.defaultnodesettings.DialogComponentColumnNameSelection;
+import org.knime.core.node.defaultnodesettings.DialogComponentNumber;
+import org.knime.core.node.defaultnodesettings.SettingsModelDoubleBounded;
+import org.knime.core.node.defaultnodesettings.SettingsModelIntegerBounded;
 import org.knime.core.node.defaultnodesettings.SettingsModelString;
+
+import nl.esciencecenter.e3dchem.knime.pharmacophore.PharValue;
 
 /**
  * <code>NodeDialog</code> for the "AlignmentTransform" Node.
@@ -15,23 +19,29 @@ import org.knime.core.node.defaultnodesettings.SettingsModelString;
  */
 public class AlignDialog extends DefaultNodeSettingsPane {
 
-    /**
-     * New pane for configuring AlignmentTransform node dialog.
-     * This is just a suggestion to demonstrate possible default dialog
-     * components.
-     */
-    @SuppressWarnings("unchecked")
+	/**
+	 * New pane for configuring AlignmentTransform node dialog. This is just a
+	 * suggestion to demonstrate possible default dialog components.
+	 */
+	@SuppressWarnings("unchecked")
 	protected AlignDialog() {
-        super();
-        
-        addDialogComponent(new DialogComponentColumnNameSelection(
-        		new SettingsModelString(AlignModel.CFGKEY_QUERY, ""), 
-        		"Query Pharmacophore column (table 1)", AlignModel.QUERY_PORT, StringValue.class
-        ));
+		super();
 
-        addDialogComponent(new DialogComponentColumnNameSelection(
-        		new SettingsModelString(AlignModel.CFGKEY_REFERENCE, ""), 
-        		"Reference Pharmacophore column (table 2)", AlignModel.REFERENCE_PORT, StringValue.class
-        ));
-    }
+		addDialogComponent(new DialogComponentColumnNameSelection(new SettingsModelString(AlignModel.CFGKEY_QUERY, ""),
+				"Query Pharmacophore column (table 1)", AlignModel.QUERY_PORT, PharValue.class));
+
+		addDialogComponent(
+				new DialogComponentColumnNameSelection(new SettingsModelString(AlignModel.CFGKEY_REFERENCE, ""),
+						"Reference Pharmacophore column (table 2)", AlignModel.REFERENCE_PORT, PharValue.class));
+
+		createNewTab("Advanced");
+
+		addDialogComponent(
+				new DialogComponentNumber(new SettingsModelDoubleBounded(AlignModel.CFGKEY_CUTOFF, 1.0, 0.0, 1000.0),
+						"Tolerance threshold for considering two distances to be equivalent", 0.1));
+
+		addDialogComponent(new DialogComponentNumber(
+				new SettingsModelIntegerBounded(AlignModel.CFGKEY_BREAKNUMCLIQUES, 3000, 0, 5000),
+				"Break when set number of cliques is found", 1));
+	}
 }

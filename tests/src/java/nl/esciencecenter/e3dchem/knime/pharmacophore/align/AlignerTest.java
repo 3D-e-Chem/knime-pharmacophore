@@ -58,8 +58,7 @@ public class AlignerTest {
 						"LIPO 22.5933 12.8494 6.5634 0 0 0 0 0 0", "LIPO 19.3598 20.0103 15.4982 0 0 0 0 0 0",
 						"LIPO 29.4735 17.1238 15.8539 0 0 0 0 0 0", "LIPO 28.4358 15.3412 17.9075 0 0 0 0 0 0",
 						"LIPO 22.6927 21.2814 8.5115 0 0 0 0 0 0", "LIPO 20.6163 21.6970 6.7951 0 0 0 0 0 0", "$$$$" });
-		Aligner aligner = new Aligner(probe, reference, 1.0);
-		aligner.transformation();
+		Aligner aligner = new Aligner(probe, reference);
 
 		SimpleMatrix expectedMatrix = new SimpleMatrix(new double[][] { { 0.525, 0.213, -0.824, 21.891 },
 				{ -0.655, 0.720, -0.231, 16.653 }, { 0.544, 0.661, 0.517, -11.795 }, { 0.000, 0.000, 0.000, 1.000 } });
@@ -113,8 +112,7 @@ public class AlignerTest {
 				Arrays.asList(new PharmacophorePoint("LIPO", 0.5, 0.5, 0.5, 1),
 						new PharmacophorePoint("AROM", 0.5, 0.0, 0.5, 1),
 						new PharmacophorePoint("HDON", 0.5, 0.5, 0.0, 1)));
-		Aligner aligner = new Aligner(probe, reference, 1.0);
-		aligner.transformation();
+		Aligner aligner = new Aligner(probe, reference);
 
 		SimpleMatrix actual = aligner.getMatrix();
 
@@ -133,8 +131,7 @@ public class AlignerTest {
 				Arrays.asList(new PharmacophorePoint("LIPO", 1.5, 0.5, -1.5, 1),
 						new PharmacophorePoint("AROM", 1.5, 0.0, -1.5, 1),
 						new PharmacophorePoint("HDON", 1.5, 0.5, -2.0, 1)));
-		Aligner aligner = new Aligner(probe, reference, 1.0);
-		aligner.transformation();
+		Aligner aligner = new Aligner(probe, reference);
 
 		SimpleMatrix actual = aligner.getMatrix();
 
@@ -155,8 +152,7 @@ public class AlignerTest {
 				Arrays.asList(new PharmacophorePoint("HDON", 0.0, 0.5, 0.5, 1),
 						new PharmacophorePoint("LIPO", 0.5, 0.0, 0.5, 1),
 						new PharmacophorePoint("AROM", 0.5, 0.5, 0.0, 1)));
-		Aligner aligner = new Aligner(probe, reference, 1.0);
-		aligner.transformation();
+		Aligner aligner = new Aligner(probe, reference);
 
 		// System.out.println(reference.getPointsMatrix());
 		// System.out.println(aligner.getAligned().getPointsMatrix());
@@ -179,8 +175,7 @@ public class AlignerTest {
 				Arrays.asList(new PharmacophorePoint("LIPO", 0.25, 0.0, 0.0, 1),
 						new PharmacophorePoint("AROM", 0.0, 0.0, 0.25, 1),
 						new PharmacophorePoint("HDON", -0.25, 0.0, -0.25, 1)));
-		Aligner aligner = new Aligner(probe, reference, 1.0);
-		aligner.transformation();
+		Aligner aligner = new Aligner(probe, reference);
 
 		SimpleMatrix actual = aligner.getMatrix();
 
@@ -198,8 +193,7 @@ public class AlignerTest {
 				Arrays.asList(new PharmacophorePoint("LIPO", 0.5, 0.5, 0.5, 1),
 						new PharmacophorePoint("AROM", 0.5, 0.0, 0.5, 1),
 						new PharmacophorePoint("HDON", 0.5, 0.5, 0.0, 1)));
-		Aligner aligner = new Aligner(probe, reference, 1.0);
-		aligner.transformation();
+		new Aligner(probe, reference);
 	}
 
 	@Test(expected = NoOverlapFoundException.class)
@@ -208,7 +202,6 @@ public class AlignerTest {
 				Arrays.asList(new PharmacophorePoint("LIPO", 0.5, 0.5, 0.5, 1)));
 		Pharmacophore probe = new Pharmacophore("someid",
 				Arrays.asList(new PharmacophorePoint("LIPO", 0.5, 0.5, 0.5, 1)));
-		Aligner aligner = new Aligner(probe, reference, 1.0);
-		aligner.transformation();
+		new Aligner(probe, reference);
 	}
 }
