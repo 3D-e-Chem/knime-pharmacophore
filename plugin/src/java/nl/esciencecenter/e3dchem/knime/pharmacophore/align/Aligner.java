@@ -12,6 +12,20 @@ import org.ejml.simple.SimpleSVD;
 
 import nl.esciencecenter.e3dchem.knime.pharmacophore.Pharmacophore;
 
+/**
+ * Align points of probe pharmacophore to points of reference pharmacophore
+ *
+ * Algorithm:
+ * <ol>
+ * <li>Find candidate pairs points between probe and reference</li>
+ * <li>Find biggest network of pairs, using <a href=
+ * "https://en.wikipedia.org/wiki/Bron%E2%80%93Kerbosch_algorithm">BronKerbosch
+ * clique detection algorithm</a></li>
+ * <li>Calculate optimal translation and rotation using
+ * <a href="https://en.wikipedia.org/wiki/Kabsch_algorithm">Kabsch algorithm
+ * </a>.</li>
+ * </ol>
+ */
 public class Aligner {
 	private Pharmacophore probe;
 	private Pharmacophore reference;
@@ -29,7 +43,8 @@ public class Aligner {
 		this(new Pharmacophore(probe), new Pharmacophore(reference), cutoff, cliqueBreak);
 	}
 
-	public Aligner(Pharmacophore probe, Pharmacophore reference, double cutoff, int cliqueBreak) throws NoOverlapFoundException {
+	public Aligner(Pharmacophore probe, Pharmacophore reference, double cutoff, int cliqueBreak)
+			throws NoOverlapFoundException {
 		this.probe = probe;
 		this.reference = reference;
 		this.cutoff = cutoff;
