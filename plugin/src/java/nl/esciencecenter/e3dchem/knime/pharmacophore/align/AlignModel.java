@@ -142,7 +142,7 @@ public class AlignModel extends NodeModel {
 		if (queryColumnSpec == null || !queryColumnSpec.getType().isCompatible(PharValue.class)) {
 			for (DataColumnSpec col : querySpec) {
 				if (col.getType().isCompatible(PharValue.class)) {
-					setWarningMessage("Column '" + queryColumnSpec.getName()
+					setWarningMessage("Column '" + col.getName()
 							+ "' automatically chosen as phar column as query pharmacophore");
 					queryColumn.setStringValue(col.getName());
 					break;
@@ -158,7 +158,7 @@ public class AlignModel extends NodeModel {
 		if (refColumnSpec == null || !refColumnSpec.getType().isCompatible(PharValue.class)) {
 			for (DataColumnSpec col : refSpec) {
 				if (col.getType().isCompatible(PharValue.class)) {
-					setWarningMessage("Column '" + refColumnSpec.getName()
+					setWarningMessage("Column '" + col.getName()
 							+ "' automatically chosen as phar column as reference pharmacophore");
 					referenceColumn.setStringValue(col.getName());
 					break;
