@@ -70,7 +70,7 @@ public class Aligner {
 
 		// IDENTIFY EACH PAIR IN PHARMACOPHORE A
 		for (int a = 0; a < reference.size() - 1; a++) {
-			for (int b = a + 1; b < probe.size(); b++) {
+			for (int b = a + 1; b < reference.size(); b++) {
 				// RECORD THE FEATURE TYPES AND THE DISTANCE BETWEEN THE
 				// FEATURES
 				String typeAA = reference.get(a).type;
