@@ -15,7 +15,7 @@ import org.knime.testing.core.TestrunConfiguration;
 
 import nl.esciencecenter.e3dchem.knime.testing.TestFlowRunner;
 
-public class WorkflowTest {
+public class MoleculeWorkflowTest {
 	@Rule
 	public ErrorCollector collector = new ErrorCollector();
 	private TestFlowRunner runner;
