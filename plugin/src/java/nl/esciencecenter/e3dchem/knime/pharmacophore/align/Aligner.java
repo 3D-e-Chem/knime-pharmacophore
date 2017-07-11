@@ -291,10 +291,10 @@ public class Aligner {
 		SimpleMatrix refCentroid = reference.getCentroid();
 		SimpleMatrix probeCentroid = probe.getCentroid();
 
-		// System.out.println(refCliquePoints);
-		// System.out.println(refCentroid);
-		// System.out.println(probeCliquePoints);
-		// System.out.println(probeCentroid);
+//		 System.out.println(refCliquePoints);
+		 System.out.println(refCentroid);
+//		 System.out.println(probeCliquePoints);
+		 System.out.println(probeCentroid);
 
 		SimpleMatrix refCentered = move(refCliquePoints, refCentroid.negative());
 		SimpleMatrix probeCentered = move(probeCliquePoints, probeCentroid.negative());
@@ -305,27 +305,26 @@ public class Aligner {
 		SimpleMatrix cov = refCentered.transpose().mult(probeCentered);
 		SimpleSVD<SimpleMatrix> svd = cov.svd();
 
-		double d = svd.getV().mult(svd.getU().transpose()).determinant();
-		if (d > 0) {
-			d = 1.0;
-		} else {
-			d = -1.0;
+		boolean d = (svd.getV().determinant() * svd.getU().determinant()) > 0.0;
+		System.out.println(d);
+		SimpleMatrix U = svd.getU();
+		if (d) {
+			U.setColumn(2, 0, U.extractVector(false, 2).negative().matrix_F64().getData());
 		}
-		SimpleMatrix I = SimpleMatrix.identity(3);
-		I.set(2, 2, d);
-		SimpleMatrix R = svd.getV().mult(I).mult(svd.getU().transpose());
-		// System.out.println(R);
+		
+		SimpleMatrix R = svd.getV().mult(U.transpose());
+//		 System.out.println(R);
 
 		// 4x4 matrix
 		SimpleMatrix translate = refCentroid.minus(probeCentroid).transpose();
-		// System.out.println(translate);
+//		 System.out.println(translate);
 		matrix = SimpleMatrix.identity(4);
 		matrix.setColumn(3, 0, translate.matrix_F64().getData());
 		matrix.setRow(0, 0, R.extractVector(true, 0).matrix_F64().getData());
 		matrix.setRow(1, 0, R.extractVector(true, 1).matrix_F64().getData());
 		matrix.setRow(2, 0, R.extractVector(true, 2).matrix_F64().getData());
 
-		// System.out.println(matrix);
+		 System.out.println(matrix);
 
 		rmsd = svd.quality();
 	}

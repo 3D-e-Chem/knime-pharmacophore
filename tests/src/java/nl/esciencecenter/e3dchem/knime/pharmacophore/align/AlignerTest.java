@@ -122,15 +122,17 @@ public class AlignerTest {
 
 	@Test
 	public void test_probeTranslated() throws NoOverlapFoundException {
-		Pharmacophore reference = new Pharmacophore("someid",
-				Arrays.asList(new PharmacophorePoint("LIPO", 0.5, 0.5, 0.5, 1),
-						new PharmacophorePoint("AROM", 0.5, 0.0, 0.5, 1),
-						new PharmacophorePoint("HDON", 0.5, 0.5, 0.0, 1)));
+		Pharmacophore reference = new Pharmacophore("someid",Arrays.asList(
+				new PharmacophorePoint("LIPO", 0.5, 0.5, 0.5, 1),
+				new PharmacophorePoint("AROM", 0.5, 0.0, 0.5, 1),
+				new PharmacophorePoint("HDON", 0.5, 0.5, 0.0, 1)
+		));
 		// probe has translated by x+1, y+0, z-2
-		Pharmacophore probe = new Pharmacophore("someid",
-				Arrays.asList(new PharmacophorePoint("LIPO", 1.5, 0.5, -1.5, 1),
-						new PharmacophorePoint("AROM", 1.5, 0.0, -1.5, 1),
-						new PharmacophorePoint("HDON", 1.5, 0.5, -2.0, 1)));
+		Pharmacophore probe = new Pharmacophore("someid", Arrays.asList(
+				new PharmacophorePoint("LIPO", 1.5, 0.5, -1.5, 1),
+				new PharmacophorePoint("AROM", 1.5, 0.0, -1.5, 1),
+				new PharmacophorePoint("HDON", 1.5, 0.5, -2.0, 1)
+		));
 		Aligner aligner = new Aligner(probe, reference);
 
 		SimpleMatrix actual = aligner.getMatrix();
@@ -139,32 +141,147 @@ public class AlignerTest {
 		expected.set(0, 3, -1);
 		expected.set(2, 3, 2);
 		assertTrue(actual.toString(), expected.isIdentical(actual, 0.00001));
+		
+		System.out.println(aligner.getAligned().getPointsMatrix());
 	}
 
 	@Test
-	public void test_probeRotatedRef() throws NoOverlapFoundException {
-		Pharmacophore reference = new Pharmacophore("someid",
-				Arrays.asList(new PharmacophorePoint("LIPO", 0.0, 0.5, 0.5, 1),
-						new PharmacophorePoint("AROM", 0.5, 0.0, 0.5, 1),
-						new PharmacophorePoint("HDON", 0.5, 0.5, 0.0, 1)));
-		// HDON is rotated along y axis 90 degrees
-		Pharmacophore probe = new Pharmacophore("someid",
-				Arrays.asList(new PharmacophorePoint("HDON", 0.0, 0.5, 0.5, 1),
-						new PharmacophorePoint("LIPO", 0.5, 0.0, 0.5, 1),
-						new PharmacophorePoint("AROM", 0.5, 0.5, 0.0, 1)));
+	public void test_probeRotatedXRef() throws NoOverlapFoundException {
+		Pharmacophore reference = new Pharmacophore("someid", Arrays.asList(
+				new PharmacophorePoint("HDON", 7.5, -0.5, 0.0, 1),
+				new PharmacophorePoint("LIPO", -6.5, -0.5, 0.0, 1),
+				new PharmacophorePoint("NEGC", -0.5, 3.5, 0.0, 1),
+				new PharmacophorePoint("AROM", -0.5, -2.5, 0.0, 1)
+		));
+		// NEGC+AROM is rotated along x axis 90 degrees
+		Pharmacophore probe = new Pharmacophore("someid", Arrays.asList(
+				new PharmacophorePoint("HDON", 7.5, 0.0, -0.5, 1),
+				new PharmacophorePoint("LIPO", -6.5, 0.0, -0.5, 1),
+				new PharmacophorePoint("NEGC", -0.5, 0.0, 3.5, 1),
+				new PharmacophorePoint("AROM", -0.5, 0.0, -2.5, 1)
+		));
+		Aligner aligner = new Aligner(probe, reference);
+
+		// System.out.println(reference.getPointsMatrix());
+		// System.out.println(aligner.getAligned().getPointsMatrix());
+		Pharmacophore aligned = aligner.getAligned();
+		System.out.println(aligned.getPointsMatrix());
+//		assertEquals(reference.toString(), aligned.toString());
+
+		SimpleMatrix actual = aligner.getMatrix();
+
+		SimpleMatrix expected = new SimpleMatrix(
+				new double[][] { { 1, 0, 0, 0 }, { 0, 0, 1, 0 }, { 0, 1, 0, 0 }, { 0, 0, 0, 1 }, });
+		// System.out.println(actual);
+		assertTrue(expected.isIdentical(actual, 0.00001));
+		
+		System.out.println(aligner.getAligned().getPointsMatrix());
+	}
+	
+	@Test
+	public void test_probeRotatedNegXRef() throws NoOverlapFoundException {
+		Pharmacophore reference = new Pharmacophore("someid", Arrays.asList(
+				new PharmacophorePoint("HDON", 7.5, -0.5, 0.0, 1),
+				new PharmacophorePoint("LIPO", -6.5, -0.5, 0.0, 1),
+				new PharmacophorePoint("NEGC", -0.5, 3.5, 0.0, 1),
+				new PharmacophorePoint("AROM", -0.5, -2.5, 0.0, 1)
+		));
+		// NEGC+AROM is rotated along x axis 90 degrees
+		Pharmacophore probe = new Pharmacophore("someid", Arrays.asList(
+				new PharmacophorePoint("HDON", 7.5, 0.0, 0.5, 1),
+				new PharmacophorePoint("LIPO", -6.5, 0.0, 0.5, 1),
+				new PharmacophorePoint("NEGC", -0.5, 0.0, -3.5, 1),
+				new PharmacophorePoint("AROM", -0.5, 0.0, 2.5, 1)
+		));
+		Aligner aligner = new Aligner(probe, reference);
+
+		// System.out.println(reference.getPointsMatrix());
+		// System.out.println(aligner.getAligned().getPointsMatrix());
+		Pharmacophore aligned = aligner.getAligned();
+		System.out.println(aligned.getPointsMatrix());
+//		assertEquals(reference.toString(), aligned.toString());
+
+		SimpleMatrix actual = aligner.getMatrix();
+
+		SimpleMatrix expected = new SimpleMatrix(
+				new double[][] { { 1, 0, 0, 0 }, { 0, 0, -1, 0 }, { 0, -1, 0, 0 }, { 0, 0, 0, 1 }, });
+		// System.out.println(actual);
+		assertTrue(expected.isIdentical(actual, 0.00001));
+		
+		System.out.println(aligner.getAligned().getPointsMatrix());
+	}
+
+	@Test
+	public void test_probeRotatedYRef() throws NoOverlapFoundException {
+		Pharmacophore reference = new Pharmacophore("someid", Arrays.asList(
+				new PharmacophorePoint("HDON", 7.5, -0.5, 0.0, 1),
+				new PharmacophorePoint("LIPO", -6.5, -0.5, 0.0, 1),
+				new PharmacophorePoint("NEGC", -0.5, 3.5, 0.0, 1),
+				new PharmacophorePoint("AROM", -0.5, -2.5, 0.0, 1)
+		));
+		// NEGC+AROM is rotated along y axis 90 degrees
+		Pharmacophore probe = new Pharmacophore("someid", Arrays.asList(
+				new PharmacophorePoint("HDON", 0.0, -0.5, -7.5, 1),
+				new PharmacophorePoint("LIPO", 0.0, -0.5, 6.5, 1),
+				new PharmacophorePoint("NEGC", 0.0, 3.5, 0.5, 1),
+				new PharmacophorePoint("AROM", 0.0, -2.5, 0.5, 1)
+		));
+		Aligner aligner = new Aligner(probe, reference);
+
+		// System.out.println(reference.getPointsMatrix());
+		// System.out.println(aligner.getAligned().getPointsMatrix());
+		Pharmacophore aligned = aligner.getAligned();
+		System.out.println(aligned.getPointsMatrix());
+//		assertEquals(reference.toString(), aligned.toString());
+		
+		SimpleMatrix actual = aligner.getMatrix();
+
+		SimpleMatrix expected = new SimpleMatrix(
+				new double[][] { { 0, 0, 1, 0 }, { 0, 1, 0, 0 }, { -1, 0, 0, 0 }, { 0, 0, 0, 1 }, });
+		// System.out.println(actual);
+		assertTrue(expected.isIdentical(actual, 0.00001));
+		
+		System.out.println(aligner.getAligned().getPointsMatrix());
+	}
+	
+	@Test
+	public void test_probeRotatedYAndTranslatedRef() throws NoOverlapFoundException {
+		Pharmacophore reference = new Pharmacophore("someid", Arrays.asList(
+				new PharmacophorePoint("HDON", 7.5, -0.5, 0.0, 1),
+				new PharmacophorePoint("LIPO", -6.5, -0.5, 0.0, 1),
+				new PharmacophorePoint("NEGC", -0.5, 3.5, 0.0, 1),
+				new PharmacophorePoint("AROM", -0.5, -2.5, 0.0, 1)
+		));
+		// NEGC+AROM is rotated along y axis 90 degrees + x+2
+		Pharmacophore probe = new Pharmacophore("someid", Arrays.asList(
+				new PharmacophorePoint("HDON", 2.0, -0.5, -7.5, 1),
+				new PharmacophorePoint("LIPO", 2.0, -0.5, 6.5, 1),
+				new PharmacophorePoint("NEGC", 2.0, 3.5, 0.5, 1),
+				new PharmacophorePoint("AROM", 2.0, -2.5, 0.5, 1)
+		));
 		Aligner aligner = new Aligner(probe, reference);
 
 		// System.out.println(reference.getPointsMatrix());
 		// System.out.println(aligner.getAligned().getPointsMatrix());
 
+		Pharmacophore aligned = aligner.getAligned();
+//		assertEquals(reference.toString(), aligned.toString());
+		System.out.println(aligner.getAligned().getPointsMatrix());
+	
 		SimpleMatrix actual = aligner.getMatrix();
 
 		SimpleMatrix expected = new SimpleMatrix(
-				new double[][] { { 0, 0, 1, 0 }, { 1, 0, 0, 0 }, { 0, 1, 0, 0 }, { 0, 0, 0, 1 }, });
-		// System.out.println(actual);
+				new double[][] { 
+					{ 0, 0, 1, -2 }, 
+					{ 0, 1, 0, 0 }, 
+					{ -1, 0, 0, 0 }, 
+					{ 0, 0, 0, 1 }
+				});
+		 System.out.println(actual);
 		assertTrue(expected.isIdentical(actual, 0.00001));
+		
 	}
-
+	
 	@Test
 	public void test_scaled_identity() throws NoOverlapFoundException {
 		Pharmacophore reference = new Pharmacophore("someid",
@@ -179,6 +296,9 @@ public class AlignerTest {
 
 		SimpleMatrix actual = aligner.getMatrix();
 
+		
+		System.out.println(aligner.getAligned().getPointsMatrix());
+		
 		SimpleMatrix expected = SimpleMatrix.identity(4);
 		assertTrue(expected.isIdentical(actual, 0.001));
 	}
