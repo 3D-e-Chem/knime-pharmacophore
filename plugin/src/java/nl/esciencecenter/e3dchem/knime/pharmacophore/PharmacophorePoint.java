@@ -62,10 +62,8 @@ public class PharmacophorePoint {
 	}
 
 	public double distance(PharmacophorePoint other) {
-		double a = Math.sqrt(this.getPointAsMatrix().elementPower(2).elementSum());
-		double b = Math.sqrt(other.getPointAsMatrix().elementPower(2).elementSum());
-		double dist = Math.abs(a - b);
-		return dist;
+		return Math.sqrt(
+				Math.pow(this.cx - other.cx, 2) + Math.pow(this.cy - other.cy, 2) + Math.pow(this.cz - other.cz, 2));
 	}
 
 	public boolean hasNormal() {
@@ -105,5 +103,9 @@ public class PharmacophorePoint {
 		return Objects.equals(type, that.type) && Objects.equals(cx, that.cx) && Objects.equals(cy, that.cy)
 				&& Objects.equals(cz, that.cz) && Objects.equals(alpha, that.alpha) && Objects.equals(norm, that.norm)
 				&& Objects.equals(nx, that.nx) && Objects.equals(ny, that.ny) && Objects.equals(nz, that.nz);
+	}
+
+	public String getType() {
+		return type;
 	}
 }

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.ejml.data.DMatrixRMaj;
 import org.ejml.simple.SimpleMatrix;
 import org.ejml.simple.SimpleSVD;
 
@@ -108,6 +109,13 @@ public class Aligner {
 						// CALCULATE DISTANCE BETWEEN THE PPHORE B FEATURE PAIR
 						double distB = probeDistances.get(c, d);
 
+//						System.out.println(reference.get(a));
+//						System.out.println(reference.get(b));
+//						System.out.println(distA);
+//						System.out.println(probe.get(c));
+//						System.out.println(probe.get(d));
+//						System.out.println(distB);
+//						System.out.println(Math.abs(distA - distB) < cutoff);
 						// CHECK WHETHER DISTANCE MATCHES
 						if (Math.abs(distA - distB) < cutoff) {
 							// IF IT DOES, RECORD THE PAIR OF PAIRS AS BEING
@@ -275,6 +283,11 @@ public class Aligner {
 		return points;
 	}
 
+	public static SimpleMatrix centroid(SimpleMatrix points) {
+		DMatrixRMaj colSums = org.ejml.dense.row.CommonOps_DDRM.sumCols(points.matrix_F64(), null);
+		return SimpleMatrix.wrap(colSums).divide(points.numRows());
+	}
+
 	private void transformation() throws NoOverlapFoundException {
 		candidatePairs();
 		findBestClique();
@@ -283,48 +296,50 @@ public class Aligner {
 			throw new NoOverlapFoundException();
 		}
 
+//		 System.out.println(bestClique.size());
+
 		SimpleMatrix refCliquePoints = filterRefPointsByBestClique();
 		SimpleMatrix probeCliquePoints = filterProbePointsByBestClique();
 
 		// KABSCH algorithm to translate+rotate probe points on to ref points
 
-		SimpleMatrix refCentroid = reference.getCentroid();
-		SimpleMatrix probeCentroid = probe.getCentroid();
-
+		SimpleMatrix refCentroid = centroid(refCliquePoints);
+		SimpleMatrix probeCentroid = centroid(probeCliquePoints);
+//
 //		 System.out.println(refCliquePoints);
-		 System.out.println(refCentroid);
+//		 System.out.println(refCentroid);
 //		 System.out.println(probeCliquePoints);
-		 System.out.println(probeCentroid);
+//		 System.out.println(probeCentroid);
 
 		SimpleMatrix refCentered = move(refCliquePoints, refCentroid.negative());
 		SimpleMatrix probeCentered = move(probeCliquePoints, probeCentroid.negative());
 
-		// System.out.println(refCentered);
-		// System.out.println(probeCentered);
+//		 System.out.println(refCentered);
+//		 System.out.println(probeCentered);
 
 		SimpleMatrix cov = refCentered.transpose().mult(probeCentered);
 		SimpleSVD<SimpleMatrix> svd = cov.svd();
 
-		boolean d = (svd.getV().determinant() * svd.getU().determinant()) > 0.0;
-		System.out.println(d);
+		double d = svd.getV().mult(svd.getU().transpose()).determinant();
 		SimpleMatrix U = svd.getU();
-		if (d) {
-			U.setColumn(2, 0, U.extractVector(false, 2).negative().matrix_F64().getData());
+//		System.out.println(d);
+		if (d < 0) {
+//			U.setColumn(2, 0, U.extractVector(false, 2).scale(d).matrix_F64().getData());
 		}
-		
-		SimpleMatrix R = svd.getV().mult(U.transpose());
-//		 System.out.println(R);
+
+		SimpleMatrix R = U.mult(svd.getV().transpose());
+		// System.out.println(R);
 
 		// 4x4 matrix
 		SimpleMatrix translate = refCentroid.minus(probeCentroid).transpose();
-//		 System.out.println(translate);
+		// System.out.println(translate);
 		matrix = SimpleMatrix.identity(4);
 		matrix.setColumn(3, 0, translate.matrix_F64().getData());
 		matrix.setRow(0, 0, R.extractVector(true, 0).matrix_F64().getData());
 		matrix.setRow(1, 0, R.extractVector(true, 1).matrix_F64().getData());
 		matrix.setRow(2, 0, R.extractVector(true, 2).matrix_F64().getData());
 
-		 System.out.println(matrix);
+		// System.out.println(matrix);
 
 		rmsd = svd.quality();
 	}

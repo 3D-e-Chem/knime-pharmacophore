@@ -7,7 +7,6 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.ejml.data.DMatrixRMaj;
 import org.ejml.simple.SimpleMatrix;
 
 public class Pharmacophore {
@@ -86,11 +85,6 @@ public class Pharmacophore {
 			matrix.setRow(i, 0, point.cx, point.cy, point.cz);
 		}
 		return matrix;
-	}
-
-	public SimpleMatrix getCentroid() {
-		DMatrixRMaj colSums = org.ejml.dense.row.CommonOps_DDRM.sumCols(getPointsMatrix().matrix_F64(), null);
-		return SimpleMatrix.wrap(colSums).divide(points.size());
 	}
 
 	public Pharmacophore transform(SimpleMatrix matrix) {

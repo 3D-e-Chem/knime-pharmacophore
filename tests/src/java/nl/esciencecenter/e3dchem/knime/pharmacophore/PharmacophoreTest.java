@@ -95,16 +95,6 @@ public class PharmacophoreTest {
 	}
 
 	@Test
-	public void testGetCentroid() {
-		Pharmacophore p = aPharmacophore();
-
-		SimpleMatrix actual = p.getCentroid();
-
-		SimpleMatrix expected = new SimpleMatrix(new double[][] { { 1.500, 1.750, 1.750 } });
-		assertTrue(expected.isIdentical(actual, precision));
-	}
-
-	@Test
 	public void testTransform_identity_sameasin() {
 		SimpleMatrix matrix = SimpleMatrix.identity(4);
 		Pharmacophore p = aPharmacophore();
