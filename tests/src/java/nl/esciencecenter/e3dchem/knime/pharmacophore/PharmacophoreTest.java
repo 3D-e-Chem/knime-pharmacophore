@@ -62,8 +62,8 @@ public class PharmacophoreTest {
 
 		SimpleMatrix actual = p.getDistancesBetweenPoints();
 
-		SimpleMatrix expected = new SimpleMatrix(new double[][] { { 0.000, 2.010, 2.010, 1.585 },
-				{ 2.010, 0.000, 0.000, 0.425 }, { 2.010, 0.000, 0.000, 0.425 }, { 1.585, 0.425, 0.425, 0.000 } });
+		SimpleMatrix expected = new SimpleMatrix(new double[][] { { 0.000, 2.236, 2.236, 2.000 },
+				{ 2.236, 0.000, 2.449, 3.000 }, { 2.236, 2.449, 0.000, 2.236 }, { 2.000, 3.000, 2.236, 0.000 } });
 		assertTrue(expected.isIdentical(actual, precision));
 	}
 
