@@ -105,9 +105,6 @@ public class AlignerTest {
 				"LIPO 29.8237 19.7675 18.0064 0 0 0 0 0",
 				"$$$$", "" });
 		Pharmacophore aligned = aligner.getAligned();
-//		SimpleMatrix c = Aligner.centroid(aligned.getPointsMatrix());
-//		System.out.println("alp c");
-//		System.out.println(c);
 		assertEquals(expectedAligned, aligned.toString());
 
 		SimpleMatrix expectedMatrix = new SimpleMatrix(new double[][] { 
@@ -116,7 +113,6 @@ public class AlignerTest {
 			{-0.716, 0.466, 0.520, 2.006 },
 			{ 0.000, 0.000, 0.000, 1.000} });
 		SimpleMatrix matrix = aligner.getMatrix();
-//		System.out.println(matrix);
 		assertTrue(expectedMatrix.isIdentical(matrix, 0.001));
 	}
 

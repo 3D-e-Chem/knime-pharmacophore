@@ -88,8 +88,6 @@ public class Pharmacophore {
 	}
 
 	public Pharmacophore transform(SimpleMatrix matrix) {
-//		System.out.println("transform");
-//		System.out.println(matrix);
 		List<PharmacophorePoint> points2 = new ArrayList<>();
 		for (PharmacophorePoint point : points) {
 			points2.add(point.transform(matrix));
