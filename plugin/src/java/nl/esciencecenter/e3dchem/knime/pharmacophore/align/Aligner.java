@@ -39,6 +39,7 @@ public class Aligner {
 	private List<PointPair> bestClique;
 	private SimpleMatrix matrix;
 	private double rmsd;
+	private SimpleMatrix probeCentroid;
 
 	public Aligner(String probe, String reference, double cutoff, int cliqueBreak) throws NoOverlapFoundException {
 		this(new Pharmacophore(probe), new Pharmacophore(reference), cutoff, cliqueBreak);
@@ -295,7 +296,11 @@ public class Aligner {
 		// KABSCH algorithm to translate+rotate probe points on to ref points
 
 		SimpleMatrix refCentroid = centroid(refCliquePoints);
-		SimpleMatrix probeCentroid = centroid(probeCliquePoints);
+//		System.out.println("ref c");
+//		System.out.println(refCentroid);
+		probeCentroid = centroid(probeCliquePoints);
+//		System.out.println("probe c");
+//		System.out.println(probeCentroid);
 
 		SimpleMatrix refCentered = move(refCliquePoints, refCentroid.negative());
 		SimpleMatrix probeCentered = move(probeCliquePoints, probeCentroid.negative());
@@ -313,15 +318,26 @@ public class Aligner {
 		}
 
 		SimpleMatrix R = U.mult(svd.getV().transpose());
+//		System.out.println(R);
 
 		// 4x4 matrix
-		SimpleMatrix translate = refCentroid.minus(probeCentroid).transpose();
+//		SimpleMatrix translate = refCentroid.transpose();
+//		matrix = SimpleMatrix.identity(4);
+//		matrix.setColumn(3, 0, translate.matrix_F64().getData());
+//		matrix.setRow(0, 0, R.extractVector(true, 0).matrix_F64().getData());
+//		matrix.setRow(1, 0, R.extractVector(true, 1).matrix_F64().getData());
+//		matrix.setRow(2, 0, R.extractVector(true, 2).matrix_F64().getData());
+
 		matrix = SimpleMatrix.identity(4);
-		matrix.setColumn(3, 0, translate.matrix_F64().getData());
 		matrix.setRow(0, 0, R.extractVector(true, 0).matrix_F64().getData());
 		matrix.setRow(1, 0, R.extractVector(true, 1).matrix_F64().getData());
 		matrix.setRow(2, 0, R.extractVector(true, 2).matrix_F64().getData());
-
+		// the R is for rotating around origin, but probe and reference are offsetted
+		// so substract probe offset after rotation and add reference offset
+		matrix.set(0, 3, refCentroid.get(0, 0) - (R.get(0, 0) * probeCentroid.get(0, 0)) - (R.get(0, 1) * probeCentroid.get(0, 1)) - (R.get(0, 2) * probeCentroid.get(0, 2)));
+		matrix.set(1, 3, refCentroid.get(0, 1) - (R.get(1, 0) * probeCentroid.get(0, 0)) - (R.get(1, 1) * probeCentroid.get(0, 1)) - (R.get(1, 2) * probeCentroid.get(0, 2)));
+		matrix.set(2, 3, refCentroid.get(0, 2) - (R.get(2, 0) * probeCentroid.get(0, 0)) - (R.get(2, 1) * probeCentroid.get(0, 1)) - (R.get(2, 2) * probeCentroid.get(0, 2)));
+		
 		rmsd = svd.quality();
 	}
 
@@ -338,6 +354,13 @@ public class Aligner {
 	}
 
 	public Pharmacophore getAligned() {
+//		SimpleMatrix pmatrix = SimpleMatrix.identity(4);
+//		pmatrix.setColumn(3, 0, probeCentroid.negative().matrix_F64().getData());
+//		System.out.println("Aligne");
+//		System.out.println(pmatrix);
+//		System.out.println(matrix);
+//		System.out.println("Aligne end");
+//		return probe.transform(pmatrix).transform(matrix);
 		return probe.transform(matrix);
 	}
 }

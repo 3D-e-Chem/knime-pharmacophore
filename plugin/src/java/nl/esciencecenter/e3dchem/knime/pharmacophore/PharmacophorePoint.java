@@ -72,7 +72,6 @@ public class PharmacophorePoint {
 
 	public PharmacophorePoint transform(SimpleMatrix matrix) {
 		double cx2 = matrix.get(0, 0) * cx + matrix.get(0, 1) * cy + matrix.get(0, 2) * cz + matrix.get(0, 3);
-		;
 		double cy2 = matrix.get(1, 0) * cx + matrix.get(1, 1) * cy + matrix.get(1, 2) * cz + matrix.get(1, 3);
 		double cz2 = matrix.get(2, 0) * cx + matrix.get(2, 1) * cy + matrix.get(2, 2) * cz + matrix.get(2, 3);
 		double nx2 = nx;
