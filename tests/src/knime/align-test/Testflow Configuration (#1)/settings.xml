@@ -20,7 +20,11 @@
 <entry key="array-size" type="xint" value="0"/>
 </config>
 <config key="requiredNodeWarnings">
-<entry key="count" type="xint" value="0"/>
+<entry key="nodeID_0" type="xstring" value="11"/>
+<entry key="message_0" type="xstring" value="Some pharmacophore could not be aligned"/>
+<entry key="nodeID_1" type="xstring" value="17"/>
+<entry key="message_1" type="xstring" value="Some pharmacophore could not be aligned"/>
+<entry key="count" type="xint" value="2"/>
 </config>
 <config key="requiredNodeErrors">
 <entry key="count" type="xint" value="0"/>
