@@ -18,7 +18,7 @@ public class PharmacophoreTest {
 
 	@Test
 	public void testPharmacophoreString() {
-		String sep = System.getProperty("line.separator");
+		String sep = "\n";
 		String pharBlock = String.join(sep, new String[] { "someid", "HACC -1.7076 2.2682 22.7126 0 0 0 0 0", "$$$$" });
 
 		Pharmacophore actual = new Pharmacophore(pharBlock);
@@ -105,7 +105,7 @@ public class PharmacophoreTest {
 
 	@Test
 	public void test_fromStream() throws IOException {
-		String sep = System.getProperty("line.separator");
+		String sep = "\n";
 		String pharBlocks = String.join(sep,
 				new String[] { "someid1", "HACC -1.7076 2.2682 22.7126 0 0 0 0 0", "$$$$", "someid2",
 						"HACC -1.7076 2.2682 22.7126 0 0 0 0 0", "$$$$", "someid3",

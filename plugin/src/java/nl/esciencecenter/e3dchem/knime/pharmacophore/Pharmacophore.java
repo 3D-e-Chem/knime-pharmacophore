@@ -61,7 +61,7 @@ public class Pharmacophore {
 
 	public String toString() {
 		StringBuilder buf = new StringBuilder(512);
-		String sep = System.getProperty("line.separator");
+		String sep = "\n";
 		buf.append(identifier).append(sep);
 		for (PharmacophorePoint point : points) {
 			buf.append(point).append(sep);
@@ -104,7 +104,7 @@ public class Pharmacophore {
 	}
 
 	public static List<Pharmacophore> fromStream(InputStream input) throws IOException {
-		String sep = System.getProperty("line.separator");
+		String sep = "\n";
 		List<Pharmacophore> out = new ArrayList<>();
 		String bsep = "$$$$";
 		String pharBlock = "";

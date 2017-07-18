@@ -17,7 +17,7 @@ public class AlignerTest {
 
 	@Test
 	public void test_reallive() throws NoOverlapFoundException {
-		String sep = System.getProperty("line.separator");
+		String sep = "\n";
 		String reference = String.join(sep,
 				new String[] { "refid", "LIPO 26.0369 11.9800 4.3352 0 0 0 0 0 0",
 						"LIPO 25.4947 12.4949 2.8223 0 0 0 0 0 0", "HDON 19.5809 17.5262 6.2020 0 0 0 0 0 0",

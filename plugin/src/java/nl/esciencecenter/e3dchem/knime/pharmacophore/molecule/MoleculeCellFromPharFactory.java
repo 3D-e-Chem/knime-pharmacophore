@@ -33,7 +33,7 @@ public class MoleculeCellFromPharFactory extends SingleCellFactory {
 
 	public String phar2mol(String pharBlock) {
 		StringBuilder buf = new StringBuilder(512);
-		String sep = System.getProperty("line.separator");
+		String sep = "\n";
 		Pharmacophore phar = new Pharmacophore(pharBlock);
 		String atomTpl = "%10.4f%10.4f%10.4f %-3s 0  0  0  0  0  0  0  0  0  0  0  0";
 		String countTpl = "%3s  0  0  0  0  0  0  0  0  0999 V2000%s";

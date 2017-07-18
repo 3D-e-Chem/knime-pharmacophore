@@ -14,7 +14,7 @@ public class MoleculeCellFromPharFactoryTest {
 
 	@Test
 	public void phar2mol_nopoints_noatoms() {
-		String sep = System.getProperty("line.separator");
+		String sep = "\n";
 		String pharBlock = String.join(sep, new String[] { "id1", "$$$$" });
 		Map<String, String> elements = new PharMoleculeConfig().getPhar2elementMap();
 		DataColumnSpec spec = new DataColumnSpecCreator("Molecule", PharCell.TYPE).createSpec();
@@ -29,7 +29,7 @@ public class MoleculeCellFromPharFactoryTest {
 
 	@Test
 	public void phar2mol_singpointwithnormal_oneatom() {
-		String sep = System.getProperty("line.separator");
+		String sep = "\n";
 		String pharBlock = String.join(sep,
 				new String[] { "id1", "HDON 4.007 23.939 25.299 1 1 3.6554 24.6168 24.6533", "$$$$" });
 		Map<String, String> elements = new PharMoleculeConfig().getPhar2elementMap();
