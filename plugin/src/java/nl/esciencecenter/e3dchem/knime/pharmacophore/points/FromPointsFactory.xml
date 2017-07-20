@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<knimeNode icon="../PharValue.png" type="Other" xmlns="http://knime.org/node/v2.8" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://knime.org/node/v2.10 http://knime.org/node/v2.10.xsd">
+    <name>Pharmacophore from points</name>
+    
+    <shortDescription>
+        Generate pharmacophore from points 
+    </shortDescription>
+    
+    <fullDescription>
+        <intro>Generate pharmacophore from point with x, y, z coordinate, type, alpha and optional direction x,y, z coordinate.
+        </intro>
+        <option name="Pharmacophore identifier">The column containing the pharmacophore identifier</option>
+        <option name="Point coordinate">The column containing the coordinate of the pharmacophore point</option>
+        <option name="Pharmacophore type">The column containing the type of the pharmacophore point</option>
+        <option name="Alpha" optional="true">The column containing the alpha of the pharmacophore point</option> 
+        <option name="Direction coordinate" optional="true">The column containing the coordinate of the direction</option>
+    </fullDescription>
+    
+    <ports>
+        <outPort index="0" name="Pharmacophore points">Table with the phamacophore points</outPort>
+        <outPort index="0" name="Pharmacophores">Table with Pharmacophores</outPort>
+    </ports>    
+</knimeNode>

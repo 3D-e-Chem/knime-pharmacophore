@@ -11,6 +11,30 @@ import org.ejml.simple.SimpleMatrix;
 public class PharmacophorePoint {
 	public static final Set<String> VALID_TYPES = new HashSet<>(
 			Arrays.asList("AROM", "HDON", "HACC", "LIPO", "POSC", "NEGC", "HYBH", "HYBL", "EXCL"));
+	public static double getDefaultAlpha(String type) {
+		switch (type) {
+		case "AROM":
+			return 0.7;
+		case "HDON":
+			return 1.0;
+		case "HACC":
+			return 1.0;
+		case "LIPO":
+			return 0.7;
+		case "POSC":
+			return 1.0;
+		case "NEGC":
+			return 1.0;
+		case "HYBH":
+			return 1.0;
+		case "HYBL":
+			return 0.7;
+		case "EXCL":
+			return 1.7;
+		default:
+			throw new IllegalArgumentException("Unknown type, should be one of " + String.join(",", VALID_TYPES));
+		}
+	}
 	public String type;
 	public double cx;
 	public double cy;
@@ -45,6 +69,11 @@ public class PharmacophorePoint {
 
 	public PharmacophorePoint(String type, double cx, double cy, double cz, double alpha) {
 		this(type, cx, cy, cz, alpha, "0", 0, 0, 0);
+	}
+
+	public PharmacophorePoint(String type, double cx, double cy, double cz, double alpha, double nx,
+			double ny, double nz) {
+		this(type, cx, cy, cz, alpha, "1", nx, ny, nz);
 	}
 
 	public String toString() {
