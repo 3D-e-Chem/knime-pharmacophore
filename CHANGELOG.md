@@ -7,6 +7,7 @@ The file is formatted as described on http://keepachangelog.com/.
 
 ### Added
 
+- Node extract points from pharmacophore and node that does the reverse [#2]
 - Nodes to read/write phar formatted files
 - Nodes to convert between pharmacophore and molecule (sdf/mol) [#3]
-- Node to to align one pharmacophore to another [#4]
+- Node to align one pharmacophore to another [#4]
