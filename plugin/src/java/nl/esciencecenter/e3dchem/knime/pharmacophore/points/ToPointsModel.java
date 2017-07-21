@@ -128,10 +128,10 @@ public class ToPointsModel extends NodeModel {
 	protected DataTableSpec[] configure(DataTableSpec[] inSpecs) throws InvalidSettingsException {
 		DataTableSpec spec = inSpecs[0];
 		DataColumnSpec columnSpec = spec.getColumnSpec(pharColumn.getStringValue());
-		if (columnSpec == null || !columnSpec.getType().isAdaptableToAny(PharValue.class)) {
+		if (columnSpec == null || !columnSpec.getType().isCompatible(PharValue.class)) {
 			for (DataColumnSpec col : spec) {
-				if (col.getType().isAdaptableToAny(PharValue.class)) {
-					setWarningMessage("Column '" + spec.getName() + "' automatically chosen as phar column");
+				if (col.getType().isCompatible(PharValue.class)) {
+					setWarningMessage("Column '" + spec.getName() + "' automatically chosen as Pharmacophores column");
 					pharColumn.setStringValue(col.getName());
 					break;
 				}
@@ -148,7 +148,7 @@ public class ToPointsModel extends NodeModel {
 				new DataColumnSpecCreator("Pharmacophore identifier", StringCell.TYPE).createSpec(),
 				new DataColumnSpecCreator("Pharmacophore type", StringCell.TYPE).createSpec(),
 				new DataColumnSpecCreator("Coordinate", DoubleVectorCellFactory.TYPE).createSpec(),
-				new DataColumnSpecCreator("Alpha", StringCell.TYPE).createSpec(),
+				new DataColumnSpecCreator("Alpha", DoubleCell.TYPE).createSpec(),
 				new DataColumnSpecCreator("Direction", DoubleVectorCellFactory.TYPE).createSpec()
 		);
 	}
