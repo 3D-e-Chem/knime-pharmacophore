@@ -25,6 +25,7 @@
           point="org.knime.core.DataType">
        <DataType
              cellClass="nl.esciencecenter.e3dchem.knime.pharmacophore.PharCell"
+             factoryClass="nl.esciencecenter.e3dchem.knime.pharmacophore.PharCellFactory"
              >
           <serializer
                 cellClass="nl.esciencecenter.e3dchem.knime.pharmacophore.PharCell"

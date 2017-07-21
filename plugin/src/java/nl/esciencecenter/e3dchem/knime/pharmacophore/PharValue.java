@@ -8,6 +8,7 @@ import org.knime.core.data.DataValueComparator;
 import org.knime.core.data.ExtensibleUtilityFactory;
 import org.knime.core.data.StringValue;
 import org.knime.core.data.StringValueComparator;
+import org.knime.core.data.convert.DataValueAccessMethod;
 
 public interface PharValue extends StringValue {
 	public static final UtilityFactory UTILITY = new PharUtilityFactory();
@@ -49,5 +50,6 @@ public interface PharValue extends StringValue {
 		return Objects.hashCode(pharCell.getStringValue());
 	};
 
+	@DataValueAccessMethod(name = "String (Phar)")
 	Pharmacophore getPharmacophoreValue();
 }
