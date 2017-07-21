@@ -48,7 +48,7 @@ public interface PharValue extends StringValue {
 
 	public static int hashCode(PharCell pharCell) {
 		return Objects.hashCode(pharCell.getStringValue());
-	};
+	}
 
 	@DataValueAccessMethod(name = "String (Phar)")
 	Pharmacophore getPharmacophoreValue();

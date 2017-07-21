@@ -44,15 +44,15 @@ public class PharmacophorePoint {
 			throw new IllegalArgumentException("Unknown type, should be one of " + String.join(",", VALID_TYPES));
 		}
 	}
-	public String type;
-	public double cx;
-	public double cy;
-	public double cz;
-	public double alpha;
-	public String norm;
-	public double nx;
-	public double ny;
-	public double nz;
+	public final String type;
+	public final double cx;
+	public final double cy;
+	public final double cz;
+	public final double alpha;
+	public final String norm;
+	public final double nx;
+	public final double ny;
+	public final double nz;
 
 	/**
 	 * Construct point based on split on whitespace of a line in a phar formatted file.

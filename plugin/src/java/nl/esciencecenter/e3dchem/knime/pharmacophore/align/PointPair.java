@@ -1,8 +1,8 @@
 package nl.esciencecenter.e3dchem.knime.pharmacophore.align;
 
 public class PointPair {
-	public int first;
-	public int second;
+	public final int first;
+	public final int second;
 
 	public PointPair(int first, int second) {
 		super();
