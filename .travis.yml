@@ -19,4 +19,9 @@ cache:
   directories:
    - $HOME/.m2
    - $HOME/.sonar/cache
+before_cache:
+  - rm -f $HOME/.m2/repository/nl/esciencecenter/e3dchem/knime/pharmacophore/nl.esciencecenter.e3dchem.knime.pharmacophore.feature/*/nl.esciencecenter.e3dchem.knime.pharmacophore.feature-*.jar.lastUpdated
+  - rm -f $HOME/.m2/repository/nl/esciencecenter/e3dchem/knime/pharmacophore/nl.esciencecenter.e3dchem.knime.pharmacophore.feature/*/resolver-status.properties
+  - rm -f $HOME/.m2/repository/nl/esciencecenter/e3dchem/knime/pharmacophore/nl.esciencecenter.e3dchem.knime.pharmacophore.plugin/*/nl.esciencecenter.e3dchem.knime.pharmacophore.plugin-*.jar.lastUpdated
+  - rm -f $HOME/.m2/repository/nl/esciencecenter/e3dchem/knime/pharmacophore/nl.esciencecenter.e3dchem.knime.pharmacophore.plugin/*/resolver-status.properties
 install: mvn package -B
