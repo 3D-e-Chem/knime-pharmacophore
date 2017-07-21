@@ -136,23 +136,13 @@ public class AlignModel extends NodeModel {
 	 */
 	@Override
 	protected DataTableSpec[] configure(final DataTableSpec[] inSpecs) throws InvalidSettingsException {
+		configureQuery(inSpecs);
+		configureReference(inSpecs);
+		DataTableSpec outSpec = new DataTableSpecCreator(inSpecs[QUERY_PORT]).addColumns(outputSpec).createSpec();
+		return new DataTableSpec[] { outSpec };
+	}
 
-		DataTableSpec querySpec = inSpecs[QUERY_PORT];
-		DataColumnSpec queryColumnSpec = querySpec.getColumnSpec(queryColumn.getStringValue());
-		if (queryColumnSpec == null || !queryColumnSpec.getType().isCompatible(PharValue.class)) {
-			for (DataColumnSpec col : querySpec) {
-				if (col.getType().isCompatible(PharValue.class)) {
-					setWarningMessage("Column '" + col.getName()
-							+ "' automatically chosen as phar column as query pharmacophore");
-					queryColumn.setStringValue(col.getName());
-					break;
-				}
-			}
-			if (queryColumn.getStringValue() == "") {
-				throw new InvalidSettingsException("Table on first port contains no phar column");
-			}
-		}
-
+	private void configureReference(final DataTableSpec[] inSpecs) throws InvalidSettingsException {
 		DataTableSpec refSpec = inSpecs[REFERENCE_PORT];
 		DataColumnSpec refColumnSpec = refSpec.getColumnSpec(referenceColumn.getStringValue());
 		if (refColumnSpec == null || !refColumnSpec.getType().isCompatible(PharValue.class)) {
@@ -168,9 +158,24 @@ public class AlignModel extends NodeModel {
 				throw new InvalidSettingsException("Table on second port contains no phar column");
 			}
 		}
+	}
 
-		DataTableSpec outSpec = new DataTableSpecCreator(inSpecs[QUERY_PORT]).addColumns(outputSpec).createSpec();
-		return new DataTableSpec[] { outSpec };
+	private void configureQuery(final DataTableSpec[] inSpecs) throws InvalidSettingsException {
+		DataTableSpec querySpec = inSpecs[QUERY_PORT];
+		DataColumnSpec queryColumnSpec = querySpec.getColumnSpec(queryColumn.getStringValue());
+		if (queryColumnSpec == null || !queryColumnSpec.getType().isCompatible(PharValue.class)) {
+			for (DataColumnSpec col : querySpec) {
+				if (col.getType().isCompatible(PharValue.class)) {
+					setWarningMessage("Column '" + col.getName()
+							+ "' automatically chosen as phar column as query pharmacophore");
+					queryColumn.setStringValue(col.getName());
+					break;
+				}
+			}
+			if (queryColumn.getStringValue() == "") {
+				throw new InvalidSettingsException("Table on first port contains no phar column");
+			}
+		}
 	}
 
 	/**

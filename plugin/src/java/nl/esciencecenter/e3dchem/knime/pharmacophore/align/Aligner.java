@@ -111,51 +111,55 @@ public class Aligner {
 
 						// CHECK WHETHER DISTANCE MATCHES
 						if (Math.abs(distA - distB) < cutoff) {
-							// IF IT DOES, RECORD THE PAIR OF PAIRS AS BEING
-							// COMPATIBLE
-							PointPair pairAB = new PointPair(a, b);
-							PointPair pairBA = new PointPair(b, a);
-							PointPair pairCD = new PointPair(c, d);
-							PointPair pairDC = new PointPair(d, c);
-							PointPair pairAC = new PointPair(a, c);
-							PointPair pairBD = new PointPair(b, d);
-							PointPair pairAD = new PointPair(a, d);
-							PointPair pairBC = new PointPair(b, c);
-
-							// MAKE SURE YOU PAIR THE FEATURES THE RIGHT WAY
-							// ROUND
-							if (matchA == 1) {
-								if (!pairs.containsKey(pairAB)) {
-									pairs.put(pairAB, new ArrayList<PointPair>());
-									pairs.put(pairBA, new ArrayList<PointPair>());
-								}
-								// ADD PPHORE B PAIR TO THE COMPATIBLE PAIRS
-								// FOR PPHORE A PAIR
-								pairs.get(pairAB).add(pairCD);
-								pairs.get(pairBA).add(pairDC);
-								nodes.add(pairAC);
-								nodes.add(pairBD);
-								if (symmetrical) {
-									nodes.add(pairAD);
-									nodes.add(pairBC);
-								}
-								// FEATURES PAIRED THE OTHER WAY ROUND
-							} else if (matchA == 2) {
-								if (!pairs.containsKey(pairAB)) {
-									pairs.put(pairAB, new ArrayList<PointPair>());
-									pairs.put(pairBA, new ArrayList<PointPair>());
-								}
-								// ADD PPHORE B PAIR TO THE COMPATIBLE PAIRS
-								// FOR PPHORE A PAIR
-								pairs.get(pairAB).add(pairDC);
-								pairs.get(pairBA).add(pairCD);
-								nodes.add(pairAD);
-								nodes.add(pairBC);
-							}
+							storeCandidatePair(a, b, c, d, symmetrical, matchA);
 						}
 					}
 				}
 			}
+		}
+	}
+
+	private void storeCandidatePair(int a, int b, int c, int d, boolean symmetrical, int matchA) {
+		// IF IT DOES, RECORD THE PAIR OF PAIRS AS BEING
+		// COMPATIBLE
+		PointPair pairAB = new PointPair(a, b);
+		PointPair pairBA = new PointPair(b, a);
+		PointPair pairCD = new PointPair(c, d);
+		PointPair pairDC = new PointPair(d, c);
+		PointPair pairAC = new PointPair(a, c);
+		PointPair pairBD = new PointPair(b, d);
+		PointPair pairAD = new PointPair(a, d);
+		PointPair pairBC = new PointPair(b, c);
+
+		// MAKE SURE YOU PAIR THE FEATURES THE RIGHT WAY
+		// ROUND
+		if (matchA == 1) {
+			if (!pairs.containsKey(pairAB)) {
+				pairs.put(pairAB, new ArrayList<PointPair>());
+				pairs.put(pairBA, new ArrayList<PointPair>());
+			}
+			// ADD PPHORE B PAIR TO THE COMPATIBLE PAIRS
+			// FOR PPHORE A PAIR
+			pairs.get(pairAB).add(pairCD);
+			pairs.get(pairBA).add(pairDC);
+			nodes.add(pairAC);
+			nodes.add(pairBD);
+			if (symmetrical) {
+				nodes.add(pairAD);
+				nodes.add(pairBC);
+			}
+			// FEATURES PAIRED THE OTHER WAY ROUND
+		} else if (matchA == 2) {
+			if (!pairs.containsKey(pairAB)) {
+				pairs.put(pairAB, new ArrayList<PointPair>());
+				pairs.put(pairBA, new ArrayList<PointPair>());
+			}
+			// ADD PPHORE B PAIR TO THE COMPATIBLE PAIRS
+			// FOR PPHORE A PAIR
+			pairs.get(pairAB).add(pairDC);
+			pairs.get(pairBA).add(pairCD);
+			nodes.add(pairAD);
+			nodes.add(pairBC);
 		}
 	}
 
