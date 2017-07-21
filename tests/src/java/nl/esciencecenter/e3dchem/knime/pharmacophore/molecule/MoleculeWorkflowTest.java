@@ -24,6 +24,7 @@ public class MoleculeWorkflowTest {
 	public void setUp() {
 	    TestrunConfiguration runConfiguration = new TestrunConfiguration();
 	    runConfiguration.setLoadSaveLoad(false);
+		runConfiguration.setTestDialogs(true);
 	    runner = new TestFlowRunner(collector, runConfiguration);
 	}
 
