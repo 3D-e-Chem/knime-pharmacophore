@@ -5,13 +5,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.knime.core.data.DataCell;
 import org.knime.core.data.DataColumnSpecCreator;
 import org.knime.core.data.DataRow;
 import org.knime.core.data.DataTableSpec;
+import org.knime.core.data.DataType;
 import org.knime.core.data.DoubleValue;
-import org.knime.core.data.MissingCell;
 import org.knime.core.data.RowKey;
 import org.knime.core.data.StringValue;
+import org.knime.core.data.collection.ListDataValue;
 import org.knime.core.data.def.DefaultRow;
 import org.knime.core.data.vector.doublevector.DoubleVectorValue;
 import org.knime.core.node.BufferedDataContainer;
@@ -23,6 +25,7 @@ import org.knime.core.node.InvalidSettingsException;
 import org.knime.core.node.NodeModel;
 import org.knime.core.node.NodeSettingsRO;
 import org.knime.core.node.NodeSettingsWO;
+import org.knime.core.node.defaultnodesettings.SettingsModelColumnName;
 import org.knime.core.node.defaultnodesettings.SettingsModelString;
 
 import nl.esciencecenter.e3dchem.knime.pharmacophore.PharCell;
@@ -39,7 +42,7 @@ public class FromPointsModel extends NodeModel {
 	public static final String CFGKEY_ALPHA = "pharAlpha";
 	public static final String CFGKEY_DIRECTION = "pharDirection";
 
-	private final SettingsModelString pharId = new SettingsModelString(CFGKEY_IDENTIFIER, "");
+	private final SettingsModelColumnName pharId = new SettingsModelColumnName(CFGKEY_IDENTIFIER, "");
 	private final SettingsModelString pharCoordinate = new SettingsModelString(CFGKEY_COORDINATE, "");
 	private final SettingsModelString pharType = new SettingsModelString(CFGKEY_TYPE, "");
 	private final SettingsModelString pharAlpha = new SettingsModelString(CFGKEY_ALPHA, "");
@@ -106,53 +109,27 @@ public class FromPointsModel extends NodeModel {
 
 		String currentIdentifier = null;
 		List<PharmacophorePoint> currentPoints = new ArrayList<>();
-		RowKey currentKey = RowKey.createRowKey(0L);
+		long counter = 0L;
 		for (DataRow pointIn : pointsIn) {
-			currentKey = pointIn.getKey();
-			// check that id, coord, type columns are not missing
-			if (pointIn.getCell(idIndex).isMissing() || pointIn.getCell(typeIndex).isMissing() || pointIn.getCell(coordIndex).isMissing()) {
-				DataRow row = new DefaultRow(currentKey, new MissingCell("Point skipped due to missing identifier, type or coordinate value"));
-				setWarningMessage("Some points where skipped due to missing values");
-				container.addRowToTable(row);
-				continue;
-			}
-			String identifier = ((StringValue) pointIn.getCell(idIndex)).getStringValue();
-			String type = ((StringValue) pointIn.getCell(typeIndex)).getStringValue();
-			double alpha;
-			if (alphaIndex == -1 || pointIn.getCell(alphaIndex).isMissing()) {
-				alpha = PharmacophorePoint.getDefaultAlpha(type);
+			String identifier;
+			if (pharId.useRowID()) {
+				identifier = pointIn.getKey().getString();
 			} else {
-				alpha = ((DoubleValue) pointIn.getCell(alphaIndex)).getDoubleValue();
-			}
-			try {
-				PharmacophorePoint point;
-				if (dirIndex == -1 || pointIn.getCell(dirIndex).isMissing() || ((DoubleVectorValue) pointIn.getCell(coordIndex)).getLength() != 3) {
-					point = new PharmacophorePoint(type, ((DoubleVectorValue) pointIn.getCell(coordIndex)).getValue(0),
-							((DoubleVectorValue) pointIn.getCell(coordIndex)).getValue(1),
-							((DoubleVectorValue) pointIn.getCell(coordIndex)).getValue(2), alpha);
-				} else {
-					point = new PharmacophorePoint(type, ((DoubleVectorValue) pointIn.getCell(coordIndex)).getValue(0),
-							((DoubleVectorValue) pointIn.getCell(coordIndex)).getValue(1),
-							((DoubleVectorValue) pointIn.getCell(coordIndex)).getValue(2), alpha,
-							((DoubleVectorValue) pointIn.getCell(dirIndex)).getValue(0),
-							((DoubleVectorValue) pointIn.getCell(dirIndex)).getValue(1),
-							((DoubleVectorValue) pointIn.getCell(dirIndex)).getValue(2));
-				}
-				currentPoints.add(point);
-			} catch (IllegalArgumentException e) {
-				setWarningMessage("Some points where skipped due to invalid type");
+				identifier = ((StringValue) pointIn.getCell(idIndex)).getStringValue();
 			}
 			if (!identifier.equals(currentIdentifier) && currentIdentifier != null) {
 				Pharmacophore phar = new Pharmacophore(currentIdentifier, currentPoints);
-				DataRow row = new DefaultRow(currentKey, new PharCell(phar.toString()));
+				DataRow row = new DefaultRow(RowKey.createRowKey(counter++), new PharCell(phar));
 				container.addRowToTable(row);
 				currentPoints.clear();
 			}
+			addPoint(pointIn,typeIndex, alphaIndex, coordIndex, dirIndex, currentPoints);
 			currentIdentifier = identifier;
+			exec.checkCanceled();
 		}
 		if (!currentPoints.isEmpty()) {
 			Pharmacophore phar = new Pharmacophore(currentIdentifier, currentPoints);
-			DataRow row = new DefaultRow(currentKey, new PharCell(phar.toString()));
+			DataRow row = new DefaultRow(RowKey.createRowKey(counter++), new PharCell(phar));
 			container.addRowToTable(row);
 		}
 
@@ -161,10 +138,87 @@ public class FromPointsModel extends NodeModel {
 		return new BufferedDataTable[] { out };
 	}
 
+	private void addPoint(DataRow pointIn, int typeIndex, int alphaIndex, int coordIndex, int dirIndex, List<PharmacophorePoint> currentPoints) throws InvalidSettingsException {
+		String type = ((StringValue) pointIn.getCell(typeIndex)).getStringValue();
+		double alpha = extractAlpha(pointIn, alphaIndex, type);
+		try {
+			PharmacophorePoint point;
+			DataCell coordCell = pointIn.getCell(coordIndex);
+			double[] coordOut = extractDoubleArray(coordCell);
+			if (dirIndex == -1 || pointIn.getCell(dirIndex).isMissing()) {
+				point = new PharmacophorePoint(type, coordOut[0], coordOut[1], coordOut[2], alpha);
+			} else {
+				double[] dirOut = extractDoubleArray(pointIn.getCell(dirIndex));
+				point = new PharmacophorePoint(type, coordOut[0], coordOut[1], coordOut[2], alpha, dirOut[0],
+						dirOut[1], dirOut[2]);
+			}
+			currentPoints.add(point);
+		} catch (IllegalArgumentException e) {
+			setWarningMessage(e.getMessage());
+		}
+	}
+	
+	private double extractAlpha(DataRow pointIn, int alphaIndex, String type) {
+		double alpha;
+		if (alphaIndex == -1 || pointIn.getCell(alphaIndex).isMissing()) {
+			alpha = PharmacophorePoint.getDefaultAlpha(type);
+		} else {
+			alpha = ((DoubleValue) pointIn.getCell(alphaIndex)).getDoubleValue();
+		}
+		return alpha;
+	}
+
+	private double[] extractDoubleArray(DataCell coordCell) throws InvalidSettingsException {
+		double[] coordOut;
+		DataType coordType = coordCell.getType();
+		InvalidSettingsException wrongCoordException = new InvalidSettingsException(
+				"Coordinate should be DoubleVector or List column type with 3 doubles");
+		if (coordType.isCompatible(ListDataValue.class)) {
+			ListDataValue coordIn = (ListDataValue) coordCell;
+			if (coordIn.getElementType().isCompatible(DoubleValue.class) && coordIn.size() == 3) {
+				if (coordIn.get(0).isMissing() || coordIn.get(1).isMissing() || coordIn.get(2).isMissing()) {
+					throw wrongCoordException;
+				}
+				coordOut = new double[] { ((DoubleValue) coordIn.get(0)).getDoubleValue(),
+						((DoubleValue) coordIn.get(1)).getDoubleValue(),
+						((DoubleValue) coordIn.get(2)).getDoubleValue() };
+			} else {
+				throw wrongCoordException;
+			}
+		} else if (coordType.isCompatible(DoubleVectorValue.class)) {
+			DoubleVectorValue coordIn = (DoubleVectorValue) coordCell;
+			if (coordIn.getLength() == 3) {
+				coordOut = new double[] { coordIn.getValue(0), coordIn.getValue(1), coordIn.getValue(2) };
+			} else {
+				throw wrongCoordException;
+			}
+		} else {
+			throw wrongCoordException;
+		}
+		return coordOut;
+	}
+
 	@Override
 	protected DataTableSpec[] configure(DataTableSpec[] inSpecs) throws InvalidSettingsException {
 		// TODO auto select input columns
+		// if (!coordIn.getElementType().isAdaptable(DoubleValue.class)) {
+		// throw new IllegalArgumentException("Coordinate column is wrong");
+		// }
+		DataTableSpec inSpec = inSpecs[0];
+		verifyCoordinateColumn(inSpec, pharCoordinate.getStringValue(), "Point coordinate");
+		verifyCoordinateColumn(inSpec, pharDirection.getStringValue(), "Direction coordinate");
+
 		return new DataTableSpec[] { SPEC };
+	}
+
+	private void verifyCoordinateColumn(DataTableSpec inSpec, String columnName, String what)
+			throws InvalidSettingsException {
+		if (columnName != null && !columnName.isEmpty() && inSpec.findColumnIndex(columnName) != -1) {
+			DataType coordType = inSpec.getColumnSpec(columnName).getType();
+			if (coordType.isCollectionType() && !coordType.getCollectionElementType().isCompatible(DoubleValue.class)) {
+				throw new InvalidSettingsException(what + " should be DoubleVector or List column type with 3 doubles");
+			}
+		}
 	}
 
 }

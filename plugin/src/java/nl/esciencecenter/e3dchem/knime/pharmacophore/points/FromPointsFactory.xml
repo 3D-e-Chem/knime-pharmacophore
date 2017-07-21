@@ -9,6 +9,7 @@
     <fullDescription>
         <intro>Create pharmacophores from points with x, y, z coordinate, type, alpha and optional direction x,y, z coordinate.
         </intro>
+        The coordinate columns must be a List of 3 doubles or a DoubleVector of size 3, filed with the x, y, z values.
         <option name="Pharmacophore identifier">The column containing the pharmacophore identifier</option>
         <option name="Point coordinate">The column containing the coordinate of the pharmacophore point</option>
         <option name="Pharmacophore type">The column containing the type of the pharmacophore point</option>
@@ -17,7 +18,7 @@
     </fullDescription>
     
     <ports>
-        <inPort index="0" name="Pharmacophore points">Table with the phamacophore points</inPort>
+        <inPort index="0" name="Pharmacophore points">Table with the pharmacophore points</inPort>
         <outPort index="0" name="Pharmacophores">Table with Pharmacophores</outPort>
     </ports>    
 </knimeNode>
