@@ -17,7 +17,7 @@
     </fullDescription>
     
     <ports>
-        <outPort index="0" name="Pharmacophore points">Table with the phamacophore points</outPort>
+        <inPort index="0" name="Pharmacophore points">Table with the phamacophore points</inPort>
         <outPort index="0" name="Pharmacophores">Table with Pharmacophores</outPort>
     </ports>    
 </knimeNode>
