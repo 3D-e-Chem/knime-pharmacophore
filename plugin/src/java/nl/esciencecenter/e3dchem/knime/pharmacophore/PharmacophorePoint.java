@@ -9,8 +9,17 @@ import java.util.Set;
 import org.ejml.simple.SimpleMatrix;
 
 public class PharmacophorePoint {
+	/**
+	 * Set of valid pharmacophore types
+	 */
 	public static final Set<String> VALID_TYPES = new HashSet<>(
 			Arrays.asList("AROM", "HDON", "HACC", "LIPO", "POSC", "NEGC", "HYBH", "HYBL", "EXCL"));
+	/**
+	 * The default alpha for each type
+	 * 
+	 * @param type
+	 * @return alpha value
+	 */
 	public static double getDefaultAlpha(String type) {
 		switch (type) {
 		case "AROM":
@@ -45,6 +54,10 @@ public class PharmacophorePoint {
 	public double ny;
 	public double nz;
 
+	/**
+	 * Construct point based on split on whitespace of a line in a phar formatted file.
+	 * @param cols
+	 */
 	public PharmacophorePoint(String[] cols) {
 		this(cols[0], Double.parseDouble(cols[1]), Double.parseDouble(cols[2]), Double.parseDouble(cols[3]),
 				Double.parseDouble(cols[4]), cols[5], Double.parseDouble(cols[6]), Double.parseDouble(cols[7]),
@@ -67,10 +80,31 @@ public class PharmacophorePoint {
 		this.nz = nz;
 	}
 
+	/**
+	 * Create point without direction
+	 * 
+	 * @param type
+	 * @param cx
+	 * @param cy
+	 * @param cz
+	 * @param alpha
+	 */
 	public PharmacophorePoint(String type, double cx, double cy, double cz, double alpha) {
 		this(type, cx, cy, cz, alpha, "0", 0, 0, 0);
 	}
 
+	/**
+	 * Create point with direction
+	 * 
+	 * @param type
+	 * @param cx
+	 * @param cy
+	 * @param cz
+	 * @param alpha
+	 * @param nx Direction x
+	 * @param ny Direction y
+	 * @param nz Direction z
+	 */
 	public PharmacophorePoint(String type, double cx, double cy, double cz, double alpha, double nx,
 			double ny, double nz) {
 		this(type, cx, cy, cz, alpha, "1", nx, ny, nz);
@@ -80,16 +114,28 @@ public class PharmacophorePoint {
 		return String.join(" ", toArray());
 	}
 
+	/**
+	 * @return Point as string according to Phar file format
+	 */
 	private String[] toArray() {
 		DecimalFormat df = new DecimalFormat("0.####");
 		return new String[] { type, df.format(cx), df.format(cy), df.format(cz), df.format(alpha), norm, df.format(nx),
 				df.format(ny), df.format(nz) };
 	}
 
+	/**
+	 * @return Point coordinate as a 3x1 matrix
+	 */
 	public SimpleMatrix getPointAsMatrix() {
 		return new SimpleMatrix(new double[][] { { cx, cy, cz } });
 	}
 
+	/**
+	 * Euclidean distance between this point and a other point
+	 * 
+	 * @param other
+	 * @return distance
+	 */
 	public double distance(PharmacophorePoint other) {
 		return Math.sqrt(
 				Math.pow(this.cx - other.cx, 2) + Math.pow(this.cy - other.cy, 2) + Math.pow(this.cz - other.cz, 2));
@@ -99,6 +145,12 @@ public class PharmacophorePoint {
 		return norm.equals("1");
 	}
 
+	/**
+	 * Transform by a transformation matrix
+	 * 
+	 * @param matrix 4x4 transformation matrix
+	 * @return new point with transformed coordinates for center and normal
+	 */
 	public PharmacophorePoint transform(SimpleMatrix matrix) {
 		double cx2 = matrix.get(0, 0) * cx + matrix.get(0, 1) * cy + matrix.get(0, 2) * cz + matrix.get(0, 3);
 		double cy2 = matrix.get(1, 0) * cx + matrix.get(1, 1) * cy + matrix.get(1, 2) * cz + matrix.get(1, 3);

@@ -13,6 +13,11 @@ public class Pharmacophore {
 	private String identifier;
 	private List<PharmacophorePoint> points = new ArrayList<>();
 
+	/**
+	 * Construct a pharmacophore based on a block of a phar formatted string
+	 * 
+	 * @param pharBlock
+	 */
 	public Pharmacophore(String pharBlock) {
 		for (String line : pharBlock.split("\\r?\\n")) {
 			if (line.startsWith("$$$$")) {
@@ -35,6 +40,10 @@ public class Pharmacophore {
 		this.points = points;
 	}
 
+	/**
+	 * 
+	 * @return Coordinates of points as a 3xN matrix
+	 */
 	public SimpleMatrix getPointsMatrix() {
 		SimpleMatrix matrix = new SimpleMatrix(points.size(), 3);
 		int i = 0;
@@ -44,6 +53,10 @@ public class Pharmacophore {
 		return matrix;
 	}
 
+	/**
+	 * 
+	 * @return euclidean distance matrix between the points. Matrix size is NxN, where N is the number of points
+	 */
 	public SimpleMatrix getDistancesBetweenPoints() {
 		int nrPoints = points.size();
 		SimpleMatrix distances = new SimpleMatrix(nrPoints, nrPoints);
@@ -59,6 +72,9 @@ public class Pharmacophore {
 		return distances;
 	}
 
+	/**
+	 * Returns pharmacophore as phar formatted block
+	 */
 	public String toString() {
 		StringBuilder buf = new StringBuilder(512);
 		String sep = "\n";
@@ -70,14 +86,26 @@ public class Pharmacophore {
 		return buf.toString();
 	}
 
+	/**
+	 * 
+	 * @return Number of points
+	 */
 	public int size() {
 		return points.size();
 	}
 
+	/**
+	 * @param index
+	 * @return point on index
+	 */
 	public PharmacophorePoint get(int index) {
 		return points.get(index);
 	}
 
+	/**
+	 * @param indexes
+	 * @return Coordinates of points which are in indexes 
+	 */
 	public SimpleMatrix getFilteredPoints(int[] indexes) {
 		SimpleMatrix matrix = new SimpleMatrix(indexes.length, 3);
 		for (int i = 0; i < indexes.length; i++) {
@@ -87,6 +115,11 @@ public class Pharmacophore {
 		return matrix;
 	}
 
+	/**
+	 * 
+	 * @param matrix 4x4 transformation matrix
+	 * @return new Pharmacophore which has all it's points transformed by the matrix
+	 */
 	public Pharmacophore transform(SimpleMatrix matrix) {
 		List<PharmacophorePoint> points2 = new ArrayList<>();
 		for (PharmacophorePoint point : points) {
@@ -103,6 +136,13 @@ public class Pharmacophore {
 		return points;
 	}
 
+	/**
+	 * Reads a phar formatted stream and outputs a list of pharmacophores
+	 * 
+	 * @param input
+	 * @return
+	 * @throws IOException
+	 */
 	public static List<Pharmacophore> fromStream(InputStream input) throws IOException {
 		String sep = "\n";
 		List<Pharmacophore> out = new ArrayList<>();
