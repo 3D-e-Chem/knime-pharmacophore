@@ -116,6 +116,7 @@ public class ToPointsModel extends NodeModel {
 				);
 				container.addRowToTable(row);
 			}
+			exec.checkCanceled();
 		}
 		
 		container.close();
@@ -123,7 +124,6 @@ public class ToPointsModel extends NodeModel {
 		return new BufferedDataTable[] { out };
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	protected DataTableSpec[] configure(DataTableSpec[] inSpecs) throws InvalidSettingsException {
 		DataTableSpec spec = inSpecs[0];
