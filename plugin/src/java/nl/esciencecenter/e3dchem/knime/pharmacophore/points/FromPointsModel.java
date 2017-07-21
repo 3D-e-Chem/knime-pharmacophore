@@ -9,6 +9,7 @@ import org.knime.core.data.DataColumnSpecCreator;
 import org.knime.core.data.DataRow;
 import org.knime.core.data.DataTableSpec;
 import org.knime.core.data.DoubleValue;
+import org.knime.core.data.MissingCell;
 import org.knime.core.data.RowKey;
 import org.knime.core.data.StringValue;
 import org.knime.core.data.def.DefaultRow;
@@ -107,29 +108,40 @@ public class FromPointsModel extends NodeModel {
 		List<PharmacophorePoint> currentPoints = new ArrayList<>();
 		RowKey currentKey = RowKey.createRowKey(0L);
 		for (DataRow pointIn : pointsIn) {
+			currentKey = pointIn.getKey();
+			// check that id, coord, type columns are not missing
+			if (pointIn.getCell(idIndex).isMissing() || pointIn.getCell(typeIndex).isMissing() || pointIn.getCell(coordIndex).isMissing()) {
+				DataRow row = new DefaultRow(currentKey, new MissingCell("Point skipped due to missing identifier, type or coordinate value"));
+				setWarningMessage("Some points where skipped due to missing values");
+				container.addRowToTable(row);
+				continue;
+			}
 			String identifier = ((StringValue) pointIn.getCell(idIndex)).getStringValue();
 			String type = ((StringValue) pointIn.getCell(typeIndex)).getStringValue();
 			double alpha;
-			if (alphaIndex == -1) {
+			if (alphaIndex == -1 || pointIn.getCell(alphaIndex).isMissing()) {
 				alpha = PharmacophorePoint.getDefaultAlpha(type);
 			} else {
 				alpha = ((DoubleValue) pointIn.getCell(alphaIndex)).getDoubleValue();
 			}
-			PharmacophorePoint point;
-			if (dirIndex == -1) {
-				point = new PharmacophorePoint(type, ((DoubleVectorValue) pointIn.getCell(coordIndex)).getValue(0),
-						((DoubleVectorValue) pointIn.getCell(coordIndex)).getValue(1),
-						((DoubleVectorValue) pointIn.getCell(coordIndex)).getValue(2), alpha);
-			} else {
-				point = new PharmacophorePoint(type, ((DoubleVectorValue) pointIn.getCell(coordIndex)).getValue(0),
-						((DoubleVectorValue) pointIn.getCell(coordIndex)).getValue(1),
-						((DoubleVectorValue) pointIn.getCell(coordIndex)).getValue(2), alpha,
-						((DoubleVectorValue) pointIn.getCell(dirIndex)).getValue(0),
-						((DoubleVectorValue) pointIn.getCell(dirIndex)).getValue(1),
-						((DoubleVectorValue) pointIn.getCell(dirIndex)).getValue(2));
+			try {
+				PharmacophorePoint point;
+				if (dirIndex == -1 || pointIn.getCell(dirIndex).isMissing() || ((DoubleVectorValue) pointIn.getCell(coordIndex)).getLength() != 3) {
+					point = new PharmacophorePoint(type, ((DoubleVectorValue) pointIn.getCell(coordIndex)).getValue(0),
+							((DoubleVectorValue) pointIn.getCell(coordIndex)).getValue(1),
+							((DoubleVectorValue) pointIn.getCell(coordIndex)).getValue(2), alpha);
+				} else {
+					point = new PharmacophorePoint(type, ((DoubleVectorValue) pointIn.getCell(coordIndex)).getValue(0),
+							((DoubleVectorValue) pointIn.getCell(coordIndex)).getValue(1),
+							((DoubleVectorValue) pointIn.getCell(coordIndex)).getValue(2), alpha,
+							((DoubleVectorValue) pointIn.getCell(dirIndex)).getValue(0),
+							((DoubleVectorValue) pointIn.getCell(dirIndex)).getValue(1),
+							((DoubleVectorValue) pointIn.getCell(dirIndex)).getValue(2));
+				}
+				currentPoints.add(point);
+			} catch (IllegalArgumentException e) {
+				setWarningMessage("Some points where skipped due to invalid type");
 			}
-			currentPoints.add(point);
-			currentKey = pointIn.getKey();
 			if (!identifier.equals(currentIdentifier) && currentIdentifier != null) {
 				Pharmacophore phar = new Pharmacophore(currentIdentifier, currentPoints);
 				DataRow row = new DefaultRow(currentKey, new PharCell(phar.toString()));
