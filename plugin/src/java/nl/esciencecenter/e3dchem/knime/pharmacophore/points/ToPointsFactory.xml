@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<knimeNode icon="../PharValue.png" type="Other" xmlns="http://knime.org/node/v2.8" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://knime.org/node/v2.10 http://knime.org/node/v2.10.xsd">
+    <name>Pharmacophore to points</name>
+    
+    <shortDescription>
+        Split pharmacophore into points 
+    </shortDescription>
+    
+    <fullDescription>
+        <intro>Return the points of a pharmacophore as rows.
+        </intro>
+        <option name="Pharmacophores">The column containing the pharmacophores</option>
+    </fullDescription>
+    
+    <ports>
+        <inPort index="0" name="Pharmacophores">Table with Pharmacophores</inPort>
+        <outPort index="0" name="Pharmacophore points">Table with the phamacophore points</outPort>
+    </ports>    
+</knimeNode>

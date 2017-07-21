@@ -19,6 +19,7 @@
         <node category-path="/community/3d-e-chem/pharmacophore" factory-class="nl.esciencecenter.e3dchem.knime.pharmacophore.molecule.ToMoleculeFactory"/>
         <node category-path="/community/3d-e-chem/pharmacophore" factory-class="nl.esciencecenter.e3dchem.knime.pharmacophore.molecule.FromMoleculeFactory"/>
         <node category-path="/community/3d-e-chem/pharmacophore" factory-class="nl.esciencecenter.e3dchem.knime.pharmacophore.points.FromPointsFactory"/>
+        <node category-path="/community/3d-e-chem/pharmacophore" factory-class="nl.esciencecenter.e3dchem.knime.pharmacophore.points.ToPointsFactory"/>
     </extension>
     <extension
           point="org.knime.core.DataType">
