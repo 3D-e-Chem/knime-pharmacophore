@@ -7,7 +7,7 @@
 <entry key="authored-by" type="xstring" value="stefanv"/>
 <entry key="authored-when" type="xstring" value="2017-07-10 11:11:49 +0200"/>
 <entry key="lastEdited-by" type="xstring" value="stefanv"/>
-<entry key="lastEdited-when" type="xstring" value="2017-07-18 10:37:05 +0200"/>
+<entry key="lastEdited-when" type="xstring" value="2017-07-24 11:37:28 +0200"/>
 </config>
 <entry key="customDescription" type="xstring" isnull="true" value=""/>
 <entry key="state" type="xstring" value="IDLE"/>
@@ -68,7 +68,7 @@
 <entry key="array-size" type="xint" value="4"/>
 <entry key="0" type="xint" value="44"/>
 <entry key="1" type="xint" value="37"/>
-<entry key="2" type="xint" value="112"/>
+<entry key="2" type="xint" value="84"/>
 <entry key="3" type="xint" value="95"/>
 </config>
 </config>
@@ -100,7 +100,7 @@
 <entry key="array-size" type="xint" value="4"/>
 <entry key="0" type="xint" value="464"/>
 <entry key="1" type="xint" value="237"/>
-<entry key="2" type="xint" value="135"/>
+<entry key="2" type="xint" value="107"/>
 <entry key="3" type="xint" value="95"/>
 </config>
 </config>
@@ -148,7 +148,7 @@
 <entry key="array-size" type="xint" value="4"/>
 <entry key="0" type="xint" value="464"/>
 <entry key="1" type="xint" value="457"/>
-<entry key="2" type="xint" value="111"/>
+<entry key="2" type="xint" value="83"/>
 <entry key="3" type="xint" value="79"/>
 </config>
 </config>
@@ -180,7 +180,7 @@
 <entry key="array-size" type="xint" value="4"/>
 <entry key="0" type="xint" value="464"/>
 <entry key="1" type="xint" value="657"/>
-<entry key="2" type="xint" value="143"/>
+<entry key="2" type="xint" value="107"/>
 <entry key="3" type="xint" value="95"/>
 </config>
 </config>
@@ -212,7 +212,7 @@
 <entry key="array-size" type="xint" value="4"/>
 <entry key="0" type="xint" value="684"/>
 <entry key="1" type="xint" value="657"/>
-<entry key="2" type="xint" value="118"/>
+<entry key="2" type="xint" value="86"/>
 <entry key="3" type="xint" value="95"/>
 </config>
 </config>
@@ -260,7 +260,7 @@
 <entry key="array-size" type="xint" value="4"/>
 <entry key="0" type="xint" value="464"/>
 <entry key="1" type="xint" value="957"/>
-<entry key="2" type="xint" value="143"/>
+<entry key="2" type="xint" value="107"/>
 <entry key="3" type="xint" value="95"/>
 </config>
 </config>
@@ -276,7 +276,7 @@
 <entry key="array-size" type="xint" value="4"/>
 <entry key="0" type="xint" value="684"/>
 <entry key="1" type="xint" value="957"/>
-<entry key="2" type="xint" value="118"/>
+<entry key="2" type="xint" value="86"/>
 <entry key="3" type="xint" value="95"/>
 </config>
 </config>
