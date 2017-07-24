@@ -62,56 +62,33 @@ public class AlignerTest {
 						"LIPO 6.1775 0.2833 16.1111 0 0 0 0 0", "LIPO -4.4496 -1.8999 26.3564 0 0 0 0 0", "$$$$" });
 		Aligner aligner = new Aligner(probe, reference);
 
-		double expectedRmsd = 8.11258E-16;
-		assertEquals(expectedRmsd, aligner.getRMSD(), 1E-18);
+		double expectedRmsd = 30.98161;
+		assertEquals(expectedRmsd, aligner.getRMSD(), 1E-4);
 
-		String expectedAligned = String.join(sep, new String[] { "probid",
-				"HACC 24.9321 16.5151 16.0923 0 0 0 0 0",
-				"HDON 22.0441 16.3028 15.8813 0 0 0 0 0",
-				"HDON 27.224 18.1132 7.3131 0 0 0 0 0",
-				"AROM 23.5524 16.9172 21.6431 0 0 0 0 0",
-				"HDON 20.2362 19.689 14.0491 0 0 0 0 0",
-				"NEGC 21.0908 20.1062 13.3741 0 0 0 0 0",
-				"HDON 20.5791 20.1798 17.6433 0 0 0 0 0",
-				"NEGC 20.1223 19.3594 18.3349 0 0 0 0 0",
-				"NEGC 21.5338 20.739 18.0118 0 0 0 0 0",
-				"NEGC 20.6893 19.619 15.894 0 0 0 0 0",
-				"LIPO 26.8778 19.9622 15.4955 0 0 0 0 0",
-				"LIPO 24.9664 19.0113 13.2544 0 0 0 0 0",
-				"LIPO 25.7709 18.9296 14.7494 0 0 0 0 0",
-				"LIPO 28.257 19.308 16.2151 0 0 0 0 0",
-				"LIPO 28.7857 17.0562 18.7574 0 0 0 0 0",
-				"LIPO 22.509 21.3498 21.5617 0 0 0 0 0",
-				"LIPO 26.0476 21.5289 19.7472 0 0 0 0 0",
-				"LIPO 23.321 21.1715 18.7935 0 0 0 0 0",
-				"LIPO 21.6189 20.9143 13.6914 0 0 0 0 0",
-				"LIPO 23.8462 20.5054 14.8532 0 0 0 0 0",
-				"LIPO 20.5524 22.1848 12.4642 0 0 0 0 0",
-				"LIPO 25.6721 15.199 4.6941 0 0 0 0 0",
-				"LIPO 24.9882 14.7472 12.7943 0 0 0 0 0",
-				"LIPO 25.3962 16.5052 14.3811 0 0 0 0 0",
-				"LIPO 19.7304 19.278 10.6662 0 0 0 0 0",
-				"LIPO 28.0863 22.4383 20.8241 0 0 0 0 0",
-				"HACC 27.2919 15.2989 6.4078 0 0 0 0 0",
-				"HDON 27.3011 12.0854 5.1141 0 0 0 0 0",
-				"LIPO 26.7077 13.5262 7.8931 0 0 0 0 0",
-				"LIPO 25.6669 11.5329 8.765 0 0 0 0 0",
-				"LIPO 22.712 13.8465 9.7334 0 0 0 0 0",
-				"LIPO 26.2766 18.8928 8.3546 0 0 0 0 0",
-				"LIPO 25.1142 18.2713 9.4084 0 0 0 0 0",
-				"LIPO 22.3669 11.8257 4.8136 0 0 0 0 0",
-				"LIPO 20.8282 14.4834 7.9936 0 0 0 0 0",
-				"LIPO 22.3444 14.7932 6.0907 0 0 0 0 0",
-				"LIPO 29.8237 19.7675 18.0064 0 0 0 0 0",
-				"$$$$", "" });
+		String expectedAligned = String.join(sep, new String[] { "probid", "HACC 24.9321 16.5151 16.0923 0 0 0 0 0",
+				"HDON 22.0441 16.3028 15.8813 0 0 0 0 0", "HDON 27.224 18.1132 7.3131 0 0 0 0 0",
+				"AROM 23.5524 16.9172 21.6431 0 0 0 0 0", "HDON 20.2362 19.689 14.0491 0 0 0 0 0",
+				"NEGC 21.0908 20.1062 13.3741 0 0 0 0 0", "HDON 20.5791 20.1798 17.6433 0 0 0 0 0",
+				"NEGC 20.1223 19.3594 18.3349 0 0 0 0 0", "NEGC 21.5338 20.739 18.0118 0 0 0 0 0",
+				"NEGC 20.6893 19.619 15.894 0 0 0 0 0", "LIPO 26.8778 19.9622 15.4955 0 0 0 0 0",
+				"LIPO 24.9664 19.0113 13.2544 0 0 0 0 0", "LIPO 25.7709 18.9296 14.7494 0 0 0 0 0",
+				"LIPO 28.257 19.308 16.2151 0 0 0 0 0", "LIPO 28.7857 17.0562 18.7574 0 0 0 0 0",
+				"LIPO 22.509 21.3498 21.5617 0 0 0 0 0", "LIPO 26.0476 21.5289 19.7472 0 0 0 0 0",
+				"LIPO 23.321 21.1715 18.7935 0 0 0 0 0", "LIPO 21.6189 20.9143 13.6914 0 0 0 0 0",
+				"LIPO 23.8462 20.5054 14.8532 0 0 0 0 0", "LIPO 20.5524 22.1848 12.4642 0 0 0 0 0",
+				"LIPO 25.6721 15.199 4.6941 0 0 0 0 0", "LIPO 24.9882 14.7472 12.7943 0 0 0 0 0",
+				"LIPO 25.3962 16.5052 14.3811 0 0 0 0 0", "LIPO 19.7304 19.278 10.6662 0 0 0 0 0",
+				"LIPO 28.0863 22.4383 20.8241 0 0 0 0 0", "HACC 27.2919 15.2989 6.4078 0 0 0 0 0",
+				"HDON 27.3011 12.0854 5.1141 0 0 0 0 0", "LIPO 26.7077 13.5262 7.8931 0 0 0 0 0",
+				"LIPO 25.6669 11.5329 8.765 0 0 0 0 0", "LIPO 22.712 13.8465 9.7334 0 0 0 0 0",
+				"LIPO 26.2766 18.8928 8.3546 0 0 0 0 0", "LIPO 25.1142 18.2713 9.4084 0 0 0 0 0",
+				"LIPO 22.3669 11.8257 4.8136 0 0 0 0 0", "LIPO 20.8282 14.4834 7.9936 0 0 0 0 0",
+				"LIPO 22.3444 14.7932 6.0907 0 0 0 0 0", "LIPO 29.8237 19.7675 18.0064 0 0 0 0 0", "$$$$", "" });
 		Pharmacophore aligned = aligner.getAligned();
 		assertEquals(expectedAligned, aligned.toString());
 
-		SimpleMatrix expectedMatrix = new SimpleMatrix(new double[][] { 
-			{-0.559, -0.829, -0.026, 26.454 },
-			{0.419, -0.309, 0.854, -1.462 },
-			{-0.716, 0.466, 0.520, 2.006 },
-			{ 0.000, 0.000, 0.000, 1.000} });
+		SimpleMatrix expectedMatrix = new SimpleMatrix(new double[][] { { -0.559, -0.829, -0.026, 26.454 },
+				{ 0.419, -0.309, 0.854, -1.462 }, { -0.716, 0.466, 0.520, 2.006 }, { 0.000, 0.000, 0.000, 1.000 } });
 		SimpleMatrix matrix = aligner.getMatrix();
 		assertTrue(expectedMatrix.isIdentical(matrix, 0.001));
 	}
@@ -142,6 +119,7 @@ public class AlignerTest {
 
 		Pharmacophore aligned = aligner.getAligned();
 		assertPharmacophoreEquals(probe, aligned, 0.001);
+		assertEquals(0.0, aligner.getRMSD(), 0.0001);
 	}
 
 	@Test
@@ -161,6 +139,7 @@ public class AlignerTest {
 
 		Pharmacophore aligned = aligner.getAligned();
 		assertPharmacophoreEquals(reference, aligned, 0.001);
+		assertEquals(2.23606, aligner.getRMSD(), 0.0001);
 	}
 
 	@Test
@@ -178,6 +157,7 @@ public class AlignerTest {
 
 		Pharmacophore aligned = aligner.getAligned();
 		assertPharmacophoreEquals(reference, aligned, 0.001);
+		assertEquals(2.7175356, aligner.getRMSD(), 0.0001);
 	}
 
 	@Test
@@ -198,6 +178,7 @@ public class AlignerTest {
 
 		Pharmacophore aligned = aligner.getAligned();
 		assertPharmacophoreEquals(reference, aligned, 0.001);
+		assertEquals(2.71753, aligner.getRMSD(), 0.0001);
 	}
 
 	@Test
@@ -215,6 +196,7 @@ public class AlignerTest {
 
 		Pharmacophore aligned = aligner.getAligned();
 		assertPharmacophoreEquals(reference, aligned, 0.001);
+		assertEquals(2.89568, aligner.getRMSD(), 0.0001);
 	}
 
 	@Test
@@ -236,6 +218,7 @@ public class AlignerTest {
 
 		Pharmacophore aligned = aligner.getAligned();
 		assertPharmacophoreEquals(reference, aligned, 0.001);
+		assertEquals(6.00430, aligner.getRMSD(), 0.0001);
 	}
 
 	public void assertPharmacophoreEquals(Pharmacophore expected, Pharmacophore actual, double tol) {
@@ -307,6 +290,7 @@ public class AlignerTest {
 		actual.setColumn(3, 0, 0, 0, 0);
 		SimpleMatrix expected = SimpleMatrix.identity(4);
 		assertTrue("No rotation and ignore translate", expected.isIdentical(actual, 0.001));
+		assertEquals(0.0, aligner.getRMSD(), 0.0001);
 	}
 
 	@Test
@@ -317,6 +301,24 @@ public class AlignerTest {
 
 		SimpleMatrix expected = new SimpleMatrix(new double[][] { { 1.500, 1.750, 1.750 } });
 		assertTrue(expected.isIdentical(actual, 0.001));
+	}
+
+	@Test
+	public void testGetRMSD() throws NoOverlapFoundException {
+		Pharmacophore reference = new Pharmacophore("someid", Arrays.asList(
+				new PharmacophorePoint("HDON", 7.5, -0.5, 0.0, 1), new PharmacophorePoint("LIPO", -6.5, -0.5, 0.0, 1),
+				new PharmacophorePoint("NEGC", -0.5, 3.5, 0.0, 1), new PharmacophorePoint("AROM", -0.5, -2.5, 0.0, 1),
+				new PharmacophorePoint("HYBL", 0.0, 0.0, 1.35, 1), new PharmacophorePoint("HYBH", 0.0, 0.0, -1.35, 1)));
+		Pharmacophore probe = new Pharmacophore("someid", Arrays.asList(
+				new PharmacophorePoint("HDON", 7.5, -0.5, 0.0, 1), new PharmacophorePoint("LIPO", -6.5, -0.5, 0.0, 1),
+				new PharmacophorePoint("NEGC", -0.5, 3.5, 0.0, 1), new PharmacophorePoint("AROM", -0.5, -2.5, 0.0, 1),
+				new PharmacophorePoint("HYBL", 0.0, 0.0, 1.35, 1), new PharmacophorePoint("HYBH", 0.0, 0.0, -1.35, 1)));
+
+		Aligner aligner = new Aligner(probe, reference);
+		double rmsd = aligner.getRMSD();
+
+		double expected = 0.0;
+		assertEquals(expected, rmsd, 0.0001);
 	}
 
 }

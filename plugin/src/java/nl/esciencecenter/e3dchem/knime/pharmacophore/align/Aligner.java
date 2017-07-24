@@ -323,13 +323,47 @@ public class Aligner {
 		matrix.setRow(0, 0, R.extractVector(true, 0).matrix_F64().getData());
 		matrix.setRow(1, 0, R.extractVector(true, 1).matrix_F64().getData());
 		matrix.setRow(2, 0, R.extractVector(true, 2).matrix_F64().getData());
-		// the R is for rotating around origin, but probe and reference are offsetted
+		// the R is for rotating around origin, but probe and reference are
+		// offsetted
 		// so substract probe offset after rotation and add reference offset
-		matrix.set(0, 3, refCentroid.get(0, 0) - (R.get(0, 0) * probeCentroid.get(0, 0)) - (R.get(0, 1) * probeCentroid.get(0, 1)) - (R.get(0, 2) * probeCentroid.get(0, 2)));
-		matrix.set(1, 3, refCentroid.get(0, 1) - (R.get(1, 0) * probeCentroid.get(0, 0)) - (R.get(1, 1) * probeCentroid.get(0, 1)) - (R.get(1, 2) * probeCentroid.get(0, 2)));
-		matrix.set(2, 3, refCentroid.get(0, 2) - (R.get(2, 0) * probeCentroid.get(0, 0)) - (R.get(2, 1) * probeCentroid.get(0, 1)) - (R.get(2, 2) * probeCentroid.get(0, 2)));
-		
-		rmsd = svd.quality();
+		matrix.set(0, 3, refCentroid.get(0, 0) - (R.get(0, 0) * probeCentroid.get(0, 0))
+				- (R.get(0, 1) * probeCentroid.get(0, 1)) - (R.get(0, 2) * probeCentroid.get(0, 2)));
+		matrix.set(1, 3, refCentroid.get(0, 1) - (R.get(1, 0) * probeCentroid.get(0, 0))
+				- (R.get(1, 1) * probeCentroid.get(0, 1)) - (R.get(1, 2) * probeCentroid.get(0, 2)));
+		matrix.set(2, 3, refCentroid.get(0, 2) - (R.get(2, 0) * probeCentroid.get(0, 0))
+				- (R.get(2, 1) * probeCentroid.get(0, 1)) - (R.get(2, 2) * probeCentroid.get(0, 2)));
+
+		rmsd = computeRMSD();
+	}
+
+	private SimpleMatrix alignPoints(SimpleMatrix unaligned) {
+		SimpleMatrix aligned = new SimpleMatrix(unaligned.numRows(), 3);
+		int nrRows = unaligned.numRows();
+		for (int i = 0; i < nrRows; i++) {
+			double cx = unaligned.get(i, 0);
+			double cy = unaligned.get(i, 1);
+			double cz = unaligned.get(i, 2);
+			double cx2 = matrix.get(0, 0) * cx + matrix.get(0, 1) * cy + matrix.get(0, 2) * cz + matrix.get(0, 3);
+			double cy2 = matrix.get(1, 0) * cx + matrix.get(1, 1) * cy + matrix.get(1, 2) * cz + matrix.get(1, 3);
+			double cz2 = matrix.get(2, 0) * cx + matrix.get(2, 1) * cy + matrix.get(2, 2) * cz + matrix.get(2, 3);
+			aligned.set(i, 0, cx2);
+			aligned.set(i, 1, cy2);
+			aligned.set(i, 2, cz2);
+		}
+		return aligned;
+	}
+
+	private double computeRMSD() {
+		SimpleMatrix unaligned = filterRefPointsByBestClique();
+		SimpleMatrix ref = filterRefPointsByBestClique();
+		SimpleMatrix aligned = alignPoints(unaligned);
+		double delta = 0;
+		int nrRows = aligned.numRows();
+		for (int i = 0; i < nrRows; i++) {
+			delta += Math.pow(ref.get(i, 0) - aligned.get(i, 0), 2) + Math.pow(ref.get(i, 1) - aligned.get(i, 1), 2)
+					+ Math.pow(ref.get(i, 2) - aligned.get(i, 2), 2);
+		}
+		return Math.sqrt((1.0 / nrRows) * delta);
 	}
 
 	public double[] getMatrixAsArray() {
@@ -338,6 +372,10 @@ public class Aligner {
 
 	public SimpleMatrix getMatrix() {
 		return matrix;
+	}
+
+	public void setMatrix(SimpleMatrix matrix) {
+		this.matrix = matrix;
 	}
 
 	public double getRMSD() {
