@@ -1,24 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<knimeNode icon="../PharValue.png" type="Other" xmlns="http://knime.org/node/v2.8" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://knime.org/node/v2.10 http://knime.org/node/v2.10.xsd">
-    <name>Merge pharmacophore points</name>
-    
-    <shortDescription>
-        Merge pharmacophore points to pharmacophores 
-    </shortDescription>
-    
-    <fullDescription>
-        <intro>Create pharmacophores from points with x, y, z coordinate, type, alpha and optional direction x,y, z coordinate.
-        </intro>
-        The coordinate columns must be a List of 3 doubles or a DoubleVector of size 3, filed with the x, y, z values.
-        <option name="Pharmacophore identifier">The column containing the pharmacophore identifier</option>
-        <option name="Point coordinate">The column containing the coordinate of the pharmacophore point</option>
-        <option name="Pharmacophore type">The column containing the type of the pharmacophore point</option>
-        <option name="Alpha" optional="true">The column containing the alpha of the pharmacophore point</option> 
-        <option name="Direction coordinate" optional="true">The column containing the coordinate of the direction</option>
-    </fullDescription>
-    
-    <ports>
-        <inPort index="0" name="Pharmacophore points">Table with the pharmacophore points</inPort>
-        <outPort index="0" name="Pharmacophores">Table with Pharmacophores</outPort>
-    </ports>    
+<knimeNode icon="../PharValue.png" type="Other"
+	xmlns="http://knime.org/node/v2.8" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://knime.org/node/v2.10 http://knime.org/node/v2.10.xsd">
+	<name>Merge pharmacophore points</name>
+
+	<shortDescription>
+		Merge pharmacophore points to pharmacophores
+	</shortDescription>
+
+	<fullDescription>
+		<intro>
+			<p>Create pharmacophores from points with x, y, z coordinate, type,
+				alpha and optional direction x,y, z coordinate.
+			</p>
+			<p>The coordinate columns must be a List of 3 doubles or a
+				DoubleVector of size 3, filed with the x, y, z values.</p>
+		</intro>
+
+		<option name="Pharmacophore identifier">The column containing the pharmacophore identifier
+		</option>
+		<option name="Point coordinate">The column containing the coordinate of the
+			pharmacophore point</option>
+		<option name="Pharmacophore type">The column containing the type of the
+			pharmacophore point</option>
+		<option name="Alpha" optional="true">The column containing the alpha
+			of the pharmacophore point</option>
+		<option name="Direction coordinate" optional="true">The column
+			containing the coordinate of the direction</option>
+	</fullDescription>
+
+	<ports>
+		<inPort index="0" name="Pharmacophore points">Table with the pharmacophore points
+		</inPort>
+		<outPort index="0" name="Pharmacophores">Table with Pharmacophores</outPort>
+	</ports>
 </knimeNode>

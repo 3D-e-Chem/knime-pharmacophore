@@ -6,31 +6,34 @@
 
 	<shortDescription>
 		Align query pharmacophores to reference
-		pharmacophore(s).
+		pharmacophore.
 	</shortDescription>
 
 	<fullDescription>
-		<intro>Align the query pharmacophore to the reference pharmacophore.
-			This node computes the aligned query pharmacophore, the
-			transformation matrix and Root-mean-square deviation (RMSD).
+		<intro>
+			<p>Align the query pharmacophores to the reference pharmacophore.
+				This node computes the aligned query pharmacophore, the
+				transformation matrix and Root-mean-square deviation (RMSD).
+			</p>
+			<p>
+				Algorithm:
+				<ol>
+					<li>Find candidate pairs points between probe and reference</li>
+					<li>
+						Find biggest network of pairs, using
+						<a href="https://en.wikipedia.org/wiki/Bron%E2%80%93Kerbosch_algorithm">BronKerbosch
+							clique detection algorithm
+						</a>
+					</li>
+					<li>
+						Calculate optimal translation and rotation using
+						<a href="https://en.wikipedia.org/wiki/Kabsch_algorithm">Kabsch algorithm
+						</a>
+						.
+					</li>
+				</ol>
+			</p>
 		</intro>
-
-		Algorithm:
-		<ol>
-			<li>Find candidate pairs points between probe and reference</li>
-			<li>
-				Find biggest network of pairs, using
-				<a href="https://en.wikipedia.org/wiki/Bron%E2%80%93Kerbosch_algorithm">BronKerbosch
-					clique detection algorithm
-				</a>
-			</li>
-			<li>
-				Calculate optimal translation and rotation using
-				<a href="https://en.wikipedia.org/wiki/Kabsch_algorithm">Kabsch algorithm
-				</a>
-				.
-			</li>
-		</ol>
 
 		<option name="Query Pharmacophore column (table 1)">The input column of table 1 with Query
 			Pharmacophores to be aligned.
