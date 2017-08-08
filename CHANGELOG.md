@@ -11,3 +11,7 @@ The file is formatted as described on http://keepachangelog.com/.
 - Nodes to read/write phar formatted files
 - Nodes to convert between pharmacophore and molecule (sdf/mol) [#3]
 - Node to align one pharmacophore to another [#4]
+
+### Fixed
+
+- RMSD very high for a good fit [#6]
