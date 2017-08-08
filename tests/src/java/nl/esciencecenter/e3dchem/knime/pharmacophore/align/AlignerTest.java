@@ -62,7 +62,7 @@ public class AlignerTest {
 						"LIPO 6.1775 0.2833 16.1111 0 0 0 0 0", "LIPO -4.4496 -1.8999 26.3564 0 0 0 0 0", "$$$$" });
 		Aligner aligner = new Aligner(probe, reference);
 
-		double expectedRmsd = 30.98161;
+		double expectedRmsd = 1.4402836;
 		assertEquals(expectedRmsd, aligner.getRMSD(), 1E-4);
 
 		String expectedAligned = String.join(sep, new String[] { "probid", "HACC 24.9321 16.5151 16.0923 0 0 0 0 0",
@@ -139,7 +139,7 @@ public class AlignerTest {
 
 		Pharmacophore aligned = aligner.getAligned();
 		assertPharmacophoreEquals(reference, aligned, 0.001);
-		assertEquals(2.23606, aligner.getRMSD(), 0.0001);
+		assertEquals(8.133220e-16, aligner.getRMSD(), 1e-21);
 	}
 
 	@Test
@@ -157,7 +157,7 @@ public class AlignerTest {
 
 		Pharmacophore aligned = aligner.getAligned();
 		assertPharmacophoreEquals(reference, aligned, 0.001);
-		assertEquals(2.7175356, aligner.getRMSD(), 0.0001);
+		assertEquals(1.0275812e-15, aligner.getRMSD(), 1e-20);
 	}
 
 	@Test
@@ -178,7 +178,7 @@ public class AlignerTest {
 
 		Pharmacophore aligned = aligner.getAligned();
 		assertPharmacophoreEquals(reference, aligned, 0.001);
-		assertEquals(2.71753, aligner.getRMSD(), 0.0001);
+		assertEquals(1.02758e-15, aligner.getRMSD(), 1e-19);
 	}
 
 	@Test
@@ -196,7 +196,7 @@ public class AlignerTest {
 
 		Pharmacophore aligned = aligner.getAligned();
 		assertPharmacophoreEquals(reference, aligned, 0.001);
-		assertEquals(2.89568, aligner.getRMSD(), 0.0001);
+		assertEquals(8.133220e-16, aligner.getRMSD(), 1e-20);
 	}
 
 	@Test
@@ -218,7 +218,7 @@ public class AlignerTest {
 
 		Pharmacophore aligned = aligner.getAligned();
 		assertPharmacophoreEquals(reference, aligned, 0.001);
-		assertEquals(6.00430, aligner.getRMSD(), 0.0001);
+		assertEquals(1.066394e-15, aligner.getRMSD(), 1e-20);
 	}
 
 	public void assertPharmacophoreEquals(Pharmacophore expected, Pharmacophore actual, double tol) {

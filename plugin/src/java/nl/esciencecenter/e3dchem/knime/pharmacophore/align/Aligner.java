@@ -354,8 +354,8 @@ public class Aligner {
 	}
 
 	private double computeRMSD() {
-		SimpleMatrix unaligned = filterRefPointsByBestClique();
 		SimpleMatrix ref = filterRefPointsByBestClique();
+		SimpleMatrix unaligned = filterProbePointsByBestClique();
 		SimpleMatrix aligned = alignPoints(unaligned);
 		double delta = 0;
 		int nrRows = aligned.numRows();
