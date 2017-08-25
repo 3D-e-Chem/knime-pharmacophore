@@ -88,7 +88,7 @@ public class AlignModel extends NodeModel {
 		for (DataRow queryRow : queryData) {
 			current = ((PharValue) queryRow.getCell(queryIndex)).getPharmacophoreValue();
 			try {
-				Aligner aligner = new Aligner(current, referencePharmacophore, cutoff, cliqueBreak);
+				CliqueAligner aligner = Aligner.align(current, referencePharmacophore, cutoff, cliqueBreak);
 				aligned = aligner.getAligned();
 
 				container.addRowToTable(new AppendedColumnRow(queryRow, new PharCell(aligned),
