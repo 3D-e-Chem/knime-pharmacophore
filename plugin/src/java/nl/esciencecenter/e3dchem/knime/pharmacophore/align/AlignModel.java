@@ -40,16 +40,16 @@ public class AlignModel extends NodeModel {
 	static final int REFERENCE_PORT = 1;
 
 	static final String CFGKEY_QUERY = "queryColumn";
-	private final SettingsModelString queryColumn = new SettingsModelString(CFGKEY_QUERY, "");
+	protected final SettingsModelString queryColumn = new SettingsModelString(CFGKEY_QUERY, "");
 
 	static final String CFGKEY_REFERENCE = "referenceColumn";
-	private final SettingsModelString referenceColumn = new SettingsModelString(CFGKEY_REFERENCE, "");
+	protected final SettingsModelString referenceColumn = new SettingsModelString(CFGKEY_REFERENCE, "");
 
 	static final String CFGKEY_CUTOFF = "cutoff";
-	private final SettingsModelDouble cutoff = new SettingsModelDoubleBounded(CFGKEY_CUTOFF, 1.0, 0.0, 1000.0);
+	protected final SettingsModelDouble cutoff = new SettingsModelDoubleBounded(CFGKEY_CUTOFF, 1.0, 0.0, 1000.0);
 
 	static final String CFGKEY_BREAKNUMCLIQUES = "cliqueBreak";
-	private final SettingsModelInteger cliqueBreak = new SettingsModelIntegerBounded(CFGKEY_BREAKNUMCLIQUES, 3000, 0,
+	protected final SettingsModelInteger cliqueBreak = new SettingsModelIntegerBounded(CFGKEY_BREAKNUMCLIQUES, 3000, 0,
 			5000);
 
 	private static final DataTableSpec outputSpec = new DataTableSpec(
@@ -110,7 +110,7 @@ public class AlignModel extends NodeModel {
 		return new BufferedDataTable[] { out };
 	}
 
-	private Pharmacophore getReferencePharmacophore(final BufferedDataTable[] inData) {
+	protected Pharmacophore getReferencePharmacophore(final BufferedDataTable[] inData) {
 		Pharmacophore referencePharmacophore = null;
 		BufferedDataTable referenceData = inData[REFERENCE_PORT];
 		int referenceIndex = referenceData.getSpec().findColumnIndex(referenceColumn.getStringValue());

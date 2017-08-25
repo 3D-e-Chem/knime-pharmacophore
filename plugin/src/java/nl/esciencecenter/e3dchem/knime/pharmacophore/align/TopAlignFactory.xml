@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<knimeNode icon="./default.png" type="Predictor"
+	xmlns="http://knime.org/node/v2.8" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://knime.org/node/v2.10 http://knime.org/node/v2.10.xsd">
+	<name>Top Align pharmacophores</name>
+
+	<shortDescription>
+		Align query pharmacophores to reference
+		pharmacophore, returns multiple alignments for each query
+	</shortDescription>
+
+	<fullDescription>
+		<intro>
+			<p>Align the query pharmacophores to the reference pharmacophore.
+				This node computes the aligned query pharmacophore, the
+				transformation matrix and Root-mean-square deviation (RMSD).
+			</p>
+			<p>Each pair of query and reference pharmacophore can result in multiple alignments.
+			</p>
+			<p>
+				Algorithm:
+				<ol>
+					<li>Find candidate pairs points between probe and reference</li>
+					<li>
+						Find biggest network of pairs, using
+						<a href="https://en.wikipedia.org/wiki/Bron%E2%80%93Kerbosch_algorithm">BronKerbosch
+							clique detection algorithm
+						</a>
+					</li>
+					<li>
+						Calculate optimal translation and rotation using
+						<a href="https://en.wikipedia.org/wiki/Kabsch_algorithm">Kabsch algorithm
+						</a>
+						.
+					</li>
+				</ol>
+			</p>
+		</intro>
+
+		<option name="Maximum number of alignments per query pharmacophore">Number of alignments to return for each query pharmacophore.</option>
+		<option name="Query Pharmacophore column (table 1)">The input column of table 1 with Query
+			Pharmacophores to be aligned.
+		</option>
+		<option name="Reference Pharmacophore column (table 2)">The input column of table 2 with Reference
+			Pharmacophore to base the alignment on.
+		</option>
+		<tab name="Advanced Options">
+			<option name="Cutoff">Tolerance threshold for considering two
+				distances
+				to be equivalent
+			</option>
+			<option name="Break num cliques">Break when set number of cliques is found
+			</option>
+		</tab>
+	</fullDescription>
+
+	<ports>
+		<inPort index="0" name="Query pharmacophores">The table with pharmacophores to be
+			aligned.
+		</inPort>
+		<inPort index="1" name="Reference pharmacophores">The table with the reference
+			pharmacophore to base the alignment on.
+		</inPort>
+		<outPort index="0" name="Aligned pharmacophores">Query and aligned pharmacophores with
+			transformation matrix and RMSD. 
+		</outPort>
+	</ports>
+	<views>
+	</views>
+</knimeNode>
