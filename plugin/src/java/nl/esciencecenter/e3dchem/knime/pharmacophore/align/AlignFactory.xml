@@ -11,7 +11,7 @@
 
 	<fullDescription>
 		<intro>
-			<p>Align the query pharmacophores to the reference pharmacophore.
+			<p>Align the query pharmacophores to the reference pharmacophores.
 				This node computes the aligned query pharmacophore, the
 				transformation matrix and Root-mean-square deviation (RMSD).
 			</p>
@@ -48,8 +48,13 @@
 			</option>
 			<option name="Break num cliques">Break when set number of cliques is found
 			</option>
-			<option name="Cliques to align">Number of cliques of each query pharmacophore to align</option>
-			<option name="All alignments">By default the only the best alignment of each query pharmacophore is returned. By turning this option on the alignments of all cliques will be returned.</option>
+			<option name="Cliques to align">Number of cliques of each query pharmacophore to
+				align</option>
+			<option name="All alignments of cliques">By default the only the best alignment of each
+				query pharmacophore is returned. By turning this option on the
+				alignments of all cliques will be returned.</option>
+			<option name="Include reference">Include the reference pharmacophore in output.
+				Usefull when multiple reference pharmacophores are given.</option>
 		</tab>
 	</fullDescription>
 

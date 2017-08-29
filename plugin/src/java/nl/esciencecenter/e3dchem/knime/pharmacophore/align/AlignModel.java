@@ -2,14 +2,18 @@ package nl.esciencecenter.e3dchem.knime.pharmacophore.align;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
+import org.knime.core.data.DataCell;
 import org.knime.core.data.DataColumnSpec;
 import org.knime.core.data.DataColumnSpecCreator;
 import org.knime.core.data.DataRow;
 import org.knime.core.data.DataTableSpec;
 import org.knime.core.data.DataTableSpecCreator;
 import org.knime.core.data.MissingCell;
+import org.knime.core.data.RowKey;
 import org.knime.core.data.append.AppendedColumnRow;
+import org.knime.core.data.def.DefaultRow;
 import org.knime.core.data.def.DoubleCell;
 import org.knime.core.data.vector.doublevector.DoubleVectorCellFactory;
 import org.knime.core.node.BufferedDataContainer;
@@ -21,12 +25,6 @@ import org.knime.core.node.InvalidSettingsException;
 import org.knime.core.node.NodeModel;
 import org.knime.core.node.NodeSettingsRO;
 import org.knime.core.node.NodeSettingsWO;
-import org.knime.core.node.defaultnodesettings.SettingsModelBoolean;
-import org.knime.core.node.defaultnodesettings.SettingsModelDouble;
-import org.knime.core.node.defaultnodesettings.SettingsModelDoubleBounded;
-import org.knime.core.node.defaultnodesettings.SettingsModelInteger;
-import org.knime.core.node.defaultnodesettings.SettingsModelIntegerBounded;
-import org.knime.core.node.defaultnodesettings.SettingsModelString;
 
 import nl.esciencecenter.e3dchem.knime.pharmacophore.PharCell;
 import nl.esciencecenter.e3dchem.knime.pharmacophore.PharValue;
@@ -37,206 +35,239 @@ import nl.esciencecenter.e3dchem.knime.pharmacophore.Pharmacophore;
  *
  */
 public class AlignModel extends NodeModel {
-	static final int QUERY_PORT = 0;
-	static final int REFERENCE_PORT = 1;
+    static final int QUERY_PORT = 0;
+    static final int REFERENCE_PORT = 1;
 
-	static final String CFGKEY_QUERY = "queryColumn";
-	protected final SettingsModelString queryColumn = new SettingsModelString(CFGKEY_QUERY, "");
+    private final AlignConfig config = new AlignConfig();
 
-	static final String CFGKEY_REFERENCE = "referenceColumn";
-	protected final SettingsModelString referenceColumn = new SettingsModelString(CFGKEY_REFERENCE, "");
+    /**
+     * Constructor for the node model.
+     */
+    protected AlignModel() {
+        super(2, 1);
+    }
 
-	static final String CFGKEY_CUTOFF = "cutoff";
-	protected final SettingsModelDouble cutoff = new SettingsModelDoubleBounded(CFGKEY_CUTOFF, 1.0, 0.0, 1000.0);
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected BufferedDataTable[] execute(final BufferedDataTable[] inData, final ExecutionContext exec) throws Exception {
 
-	static final String CFGKEY_BREAKNUMCLIQUES = "cliqueBreak";
-	protected final SettingsModelInteger cliqueBreak = new SettingsModelIntegerBounded(CFGKEY_BREAKNUMCLIQUES, 3000, 0,
-			5000);
+        BufferedDataTable queryData = inData[QUERY_PORT];
+        BufferedDataTable refData = inData[REFERENCE_PORT];
+        DataTableSpec outSpec = tableSpec(queryData.getSpec());
+        BufferedDataContainer container = exec.createDataContainer(outSpec);
+        int queryIndex = queryData.getSpec().findColumnIndex(config.getQueryColumn().getStringValue());
+        int referenceIndex = refData.getSpec().findColumnIndex(config.getReferenceColumn().getStringValue());
 
-	static final String CFGKEY_CLIQUES2ALIGN = "cliques2align";
-	private final SettingsModelInteger cliques2align = new SettingsModelIntegerBounded(CFGKEY_CLIQUES2ALIGN, 3, 1,
-			100);
+        long currentInRow = 0L;
+        long size = refData.size() * queryData.size();
+        long currentOutRow = 0L;
+        for (DataRow refRow : refData) {
+            DataCell refCell = refRow.getCell(referenceIndex);
+            for (DataRow queryRow : queryData) {
+                currentOutRow = align(container, queryIndex, currentOutRow, refCell, queryRow);
 
-	static final String CFGKEY_ALLALIGNMENTS = "allalignments";
-	private final SettingsModelBoolean allalignments = new SettingsModelBoolean(AlignModel.CFGKEY_ALLALIGNMENTS, false);
+                exec.setProgress((double) currentInRow++ / size);
+                exec.checkCanceled();
+            }
+        }
 
-	private static final DataTableSpec outputSpec = new DataTableSpec(
-			new DataColumnSpecCreator("Aligned pharmacophore", PharCell.TYPE).createSpec(),
-			new DataColumnSpecCreator("Transformation matrix", DoubleVectorCellFactory.TYPE).createSpec(),
-			new DataColumnSpecCreator("RMSD", DoubleCell.TYPE).createSpec());
-	
+        // once we are done, we close the container and return its table
+        container.close();
+        BufferedDataTable out = container.getTable();
+        return new BufferedDataTable[] { out };
+    }
 
-	/**
-	 * Constructor for the node model.
-	 */
-	protected AlignModel() {
-		super(2, 1);
-	}
+    private long align(BufferedDataContainer container, int queryIndex, long currentOutRow, DataCell refCell, DataRow queryRow) {
+        Pharmacophore referencePharmacophore = ((PharValue) refCell).getPharmacophoreValue();
+        double cutoff = config.getCutoff().getDoubleValue();
+        int cliqueBreak = config.getCliqueBreak().getIntValue();
+        boolean all = config.getAllalignments().getBooleanValue();
+        int cliques2align = config.getCliques2align().getIntValue();
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	protected BufferedDataTable[] execute(final BufferedDataTable[] inData, final ExecutionContext exec)
-			throws Exception {
+        DataCell queryCell = queryRow.getCell(queryIndex);
+        Pharmacophore queryPhar = ((PharValue) queryCell).getPharmacophoreValue();
+        try {
+            List<CliqueAligner> alignments = Aligner.align(queryPhar, referencePharmacophore, cutoff, cliqueBreak, cliques2align);
+            if (all) {
+                currentOutRow = addAllAlignments(container, currentOutRow, refCell, queryCell, alignments);
+            } else {
+                addBestAlignment(container, refCell, queryRow, alignments);
+            }
+        } catch (NoOverlapFoundException e) {
+            currentOutRow = handleNoOverlap(container, currentOutRow, refCell, queryRow, queryCell, e);
+        }
+        return currentOutRow;
+    }
 
-		Pharmacophore referencePharmacophore = getReferencePharmacophore(inData);
+    private void addBestAlignment(BufferedDataContainer container, DataCell refCell, DataRow queryRow,
+            List<CliqueAligner> alignments) {
+        boolean includeRef = config.getIncludeReference().getBooleanValue();
+        CliqueAligner alignment = alignments.get(0);
+        Pharmacophore alignedPhar = alignment.getAligned();
+        if (includeRef) {
+            container.addRowToTable(new AppendedColumnRow(queryRow, new PharCell(alignedPhar),
+                    DoubleVectorCellFactory.createCell(alignment.getMatrixAsArray()), new DoubleCell(alignment.getRMSD()),
+                    refCell));
+        } else {
+            container.addRowToTable(new AppendedColumnRow(queryRow, new PharCell(alignedPhar),
+                    DoubleVectorCellFactory.createCell(alignment.getMatrixAsArray()),
+                    new DoubleCell(alignment.getRMSD())));
+        }
+    }
 
-		BufferedDataTable queryData = inData[QUERY_PORT];
-		DataTableSpec outSpec = new DataTableSpecCreator(queryData.getSpec()).addColumns(outputSpec).createSpec();
-		BufferedDataContainer container = exec.createDataContainer(outSpec);
-		int queryIndex = queryData.getSpec().findColumnIndex(queryColumn.getStringValue());
+    private long addAllAlignments(BufferedDataContainer container, long currentOutRow, DataCell refCell,
+            DataCell queryCell, List<CliqueAligner> alignments) {
+        boolean includeRef = config.getIncludeReference().getBooleanValue();
+        for (CliqueAligner alignment : alignments) {
+            if (includeRef) {
+                container.addRowToTable(new DefaultRow(RowKey.createRowKey(currentOutRow++), queryCell,
+                        new PharCell(alignment.getAligned()),
+                        DoubleVectorCellFactory.createCell(alignment.getMatrixAsArray()),
+                        new DoubleCell(alignment.getRMSD()), refCell));
+            } else {
+                container.addRowToTable(new DefaultRow(RowKey.createRowKey(currentOutRow++), queryCell,
+                        new PharCell(alignment.getAligned()),
+                        DoubleVectorCellFactory.createCell(alignment.getMatrixAsArray()),
+                        new DoubleCell(alignment.getRMSD())));
+            }
+        }
+        return currentOutRow;
+    }
 
-		double cutoff = this.cutoff.getDoubleValue();
-		int cliqueBreak = this.cliqueBreak.getIntValue();
+    private long handleNoOverlap(BufferedDataContainer container, long currentOutRow, DataCell refCell, DataRow queryRow,
+            DataCell queryCell, NoOverlapFoundException e) {
+        MissingCell miss = new MissingCell(e.getMessage());
+        boolean includeRef = config.getIncludeReference().getBooleanValue();
+        boolean all = config.getAllalignments().getBooleanValue();
+        if (all) {
+            if (includeRef) {
+                container.addRowToTable(
+                        new DefaultRow(RowKey.createRowKey(currentOutRow++), queryCell, miss, miss, miss, refCell));
+            } else {
+                container.addRowToTable(new DefaultRow(RowKey.createRowKey(currentOutRow++), queryCell, miss, miss, miss));
+            }
+        } else {
+            if (includeRef) {
+                container.addRowToTable(new AppendedColumnRow(queryRow, miss, miss, miss, refCell));
+            } else {
+                container.addRowToTable(new AppendedColumnRow(queryRow, miss, miss, miss));
+            }
+        }
+        setWarningMessage("Some pharmacophore could not be aligned");
+        return currentOutRow;
+    }
 
-		Pharmacophore current;
-		Pharmacophore aligned;
-		long currentRow = 0;
-		long size = queryData.size();
-		for (DataRow queryRow : queryData) {
-			current = ((PharValue) queryRow.getCell(queryIndex)).getPharmacophoreValue();
-			try {
-				CliqueAligner aligner = Aligner.align(current, referencePharmacophore, cutoff, cliqueBreak);
-				aligned = aligner.getAligned();
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void reset() {
+        // nothing to do
+    }
 
-				container.addRowToTable(new AppendedColumnRow(queryRow, new PharCell(aligned),
-						DoubleVectorCellFactory.createCell(aligner.getMatrixAsArray()),
-						new DoubleCell(aligner.getRMSD())));
-			} catch (NoOverlapFoundException e) {
-				MissingCell miss = new MissingCell(e.getMessage());
-				container.addRowToTable(new AppendedColumnRow(queryRow, miss, miss, miss));
-				setWarningMessage("Some pharmacophore could not be aligned");
-			}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected DataTableSpec[] configure(final DataTableSpec[] inSpecs) throws InvalidSettingsException {
+        configureQuery(inSpecs);
+        configureReference(inSpecs);
+        DataTableSpec outSpec = tableSpec(inSpecs[QUERY_PORT]);
+        return new DataTableSpec[] { outSpec };
+    }
 
-			exec.setProgress((double) currentRow++ / size);
-			exec.checkCanceled();
-		}
+    private void configureReference(final DataTableSpec[] inSpecs) throws InvalidSettingsException {
+        DataTableSpec refSpec = inSpecs[REFERENCE_PORT];
+        DataColumnSpec refColumnSpec = refSpec.getColumnSpec(config.getReferenceColumn().getStringValue());
+        if (refColumnSpec == null || !refColumnSpec.getType().isCompatible(PharValue.class)) {
+            for (DataColumnSpec col : refSpec) {
+                if (col.getType().isCompatible(PharValue.class)) {
+                    setWarningMessage(
+                            "Column '" + col.getName() + "' automatically chosen as phar column as reference pharmacophore");
+                    config.getReferenceColumn().setStringValue(col.getName());
+                    break;
+                }
+            }
+            if (config.getReferenceColumn().getStringValue() == "") {
+                throw new InvalidSettingsException("Table on second port contains no phar column");
+            }
+        }
+    }
 
-		// once we are done, we close the container and return its table
-		container.close();
-		BufferedDataTable out = container.getTable();
-		return new BufferedDataTable[] { out };
-	}
+    private void configureQuery(final DataTableSpec[] inSpecs) throws InvalidSettingsException {
+        DataTableSpec querySpec = inSpecs[QUERY_PORT];
+        DataColumnSpec queryColumnSpec = querySpec.getColumnSpec(config.getQueryColumn().getStringValue());
+        if (queryColumnSpec == null || !queryColumnSpec.getType().isCompatible(PharValue.class)) {
+            for (DataColumnSpec col : querySpec) {
+                if (col.getType().isCompatible(PharValue.class)) {
+                    setWarningMessage(
+                            "Column '" + col.getName() + "' automatically chosen as phar column as query pharmacophore");
+                    config.getQueryColumn().setStringValue(col.getName());
+                    break;
+                }
+            }
+            if (config.getQueryColumn().getStringValue() == "") {
+                throw new InvalidSettingsException("Table on first port contains no phar column");
+            }
+        }
+    }
 
-	protected Pharmacophore getReferencePharmacophore(final BufferedDataTable[] inData) {
-		Pharmacophore referencePharmacophore = null;
-		BufferedDataTable referenceData = inData[REFERENCE_PORT];
-		int referenceIndex = referenceData.getSpec().findColumnIndex(referenceColumn.getStringValue());
-		for (DataRow referenceRow : referenceData) {
-			referencePharmacophore = ((PharValue) referenceRow.getCell(referenceIndex)).getPharmacophoreValue();
-		}
-		if (referencePharmacophore == null) {
-			throw new IllegalArgumentException("No reference pharmacophore found");
-		}
-		return referencePharmacophore;
-	}
+    private DataTableSpec tableSpec(DataTableSpec inSpec) {
+        DataTableSpec commonSpec = new DataTableSpec(
+                new DataColumnSpecCreator("Aligned pharmacophore", PharCell.TYPE).createSpec(),
+                new DataColumnSpecCreator("Transformation matrix", DoubleVectorCellFactory.TYPE).createSpec(),
+                new DataColumnSpecCreator("RMSD", DoubleCell.TYPE).createSpec());
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	protected void reset() {
-		// nothing to do
-	}
+        boolean includeRef = config.getIncludeReference().getBooleanValue();
+        if (includeRef) {
+            DataColumnSpec refSpec = new DataColumnSpecCreator("Reference pharmacophore", PharCell.TYPE).createSpec();
+            commonSpec = new DataTableSpecCreator(commonSpec).addColumns(refSpec).createSpec();
+        }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	protected DataTableSpec[] configure(final DataTableSpec[] inSpecs) throws InvalidSettingsException {
-		configureQuery(inSpecs);
-		configureReference(inSpecs);
-		DataTableSpec outSpec = new DataTableSpecCreator(inSpecs[QUERY_PORT]).addColumns(outputSpec).createSpec();
-		return new DataTableSpec[] { outSpec };
-	}
+        boolean all = config.getAllalignments().getBooleanValue();
+        if (all) {
+            DataTableSpec querySpec = new DataTableSpec(
+                    new DataColumnSpecCreator("Query pharmacophore", PharCell.TYPE).createSpec());
+            return new DataTableSpecCreator(querySpec).addColumns(commonSpec).createSpec();
+        } else {
+            return new DataTableSpecCreator(inSpec).addColumns(commonSpec).createSpec();
+        }
+    }
 
-	private void configureReference(final DataTableSpec[] inSpecs) throws InvalidSettingsException {
-		DataTableSpec refSpec = inSpecs[REFERENCE_PORT];
-		DataColumnSpec refColumnSpec = refSpec.getColumnSpec(referenceColumn.getStringValue());
-		if (refColumnSpec == null || !refColumnSpec.getType().isCompatible(PharValue.class)) {
-			for (DataColumnSpec col : refSpec) {
-				if (col.getType().isCompatible(PharValue.class)) {
-					setWarningMessage("Column '" + col.getName()
-							+ "' automatically chosen as phar column as reference pharmacophore");
-					referenceColumn.setStringValue(col.getName());
-					break;
-				}
-			}
-			if (referenceColumn.getStringValue() == "") {
-				throw new InvalidSettingsException("Table on second port contains no phar column");
-			}
-		}
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void saveSettingsTo(final NodeSettingsWO settings) {
+        config.saveSettingsTo(settings);
+    }
 
-	private void configureQuery(final DataTableSpec[] inSpecs) throws InvalidSettingsException {
-		DataTableSpec querySpec = inSpecs[QUERY_PORT];
-		DataColumnSpec queryColumnSpec = querySpec.getColumnSpec(queryColumn.getStringValue());
-		if (queryColumnSpec == null || !queryColumnSpec.getType().isCompatible(PharValue.class)) {
-			for (DataColumnSpec col : querySpec) {
-				if (col.getType().isCompatible(PharValue.class)) {
-					setWarningMessage("Column '" + col.getName()
-							+ "' automatically chosen as phar column as query pharmacophore");
-					queryColumn.setStringValue(col.getName());
-					break;
-				}
-			}
-			if (queryColumn.getStringValue() == "") {
-				throw new InvalidSettingsException("Table on first port contains no phar column");
-			}
-		}
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void loadValidatedSettingsFrom(final NodeSettingsRO settings) throws InvalidSettingsException {
+        config.loadSettingsFrom(settings);
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	protected void saveSettingsTo(final NodeSettingsWO settings) {
-		queryColumn.saveSettingsTo(settings);
-		referenceColumn.saveSettingsTo(settings);
-		cutoff.saveSettingsTo(settings);
-		cliqueBreak.saveSettingsTo(settings);
-		cliques2align.saveSettingsTo(settings);
-		allalignments.saveSettingsTo(settings);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void validateSettings(final NodeSettingsRO settings) throws InvalidSettingsException {
+        config.validateSettings(settings);
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	protected void loadValidatedSettingsFrom(final NodeSettingsRO settings) throws InvalidSettingsException {
-		queryColumn.loadSettingsFrom(settings);
-		referenceColumn.loadSettingsFrom(settings);
-		cutoff.loadSettingsFrom(settings);
-		;
-		cliqueBreak.loadSettingsFrom(settings);
-		cliques2align.loadSettingsFrom(settings);
-		allalignments.loadSettingsFrom(settings);
-	}
+    @Override
+    protected void loadInternals(File nodeInternDir, ExecutionMonitor exec) throws IOException, CanceledExecutionException {
+        // no internals to load
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	protected void validateSettings(final NodeSettingsRO settings) throws InvalidSettingsException {
-		queryColumn.validateSettings(settings);
-		referenceColumn.validateSettings(settings);
-		cutoff.validateSettings(settings);
-		cliqueBreak.validateSettings(settings);
-		cliques2align.validateSettings(settings);
-		allalignments.validateSettings(settings);
-	}
-
-	@Override
-	protected void loadInternals(File nodeInternDir, ExecutionMonitor exec)
-			throws IOException, CanceledExecutionException {
-		// no internals to load
-	}
-
-	@Override
-	protected void saveInternals(File nodeInternDir, ExecutionMonitor exec)
-			throws IOException, CanceledExecutionException {
-		// no internals to save
-	}
+    @Override
+    protected void saveInternals(File nodeInternDir, ExecutionMonitor exec) throws IOException, CanceledExecutionException {
+        // no internals to save
+    }
 
 }
