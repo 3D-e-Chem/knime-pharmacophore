@@ -1,8 +1,8 @@
 package nl.esciencecenter.e3dchem.knime.pharmacophore.align;
 
 import org.knime.core.node.defaultnodesettings.DefaultNodeSettingsPane;
-import org.knime.core.node.defaultnodesettings.DialogComponentBoolean;
 import org.knime.core.node.defaultnodesettings.DialogComponentColumnNameSelection;
+import org.knime.core.node.defaultnodesettings.DialogComponentMultiLineString;
 import org.knime.core.node.defaultnodesettings.DialogComponentNumber;
 
 import nl.esciencecenter.e3dchem.knime.pharmacophore.PharValue;
@@ -25,11 +25,11 @@ public class AlignDialog extends DefaultNodeSettingsPane {
 
         AlignConfig config = new AlignConfig();
 
-        addDialogComponent(new DialogComponentColumnNameSelection(config.getQueryColumn(), "Query Pharmacophore column (table 1)",
+        addDialogComponent(new DialogComponentColumnNameSelection(config.getQueryColumn(), "Query Pharmacophore column",
                 AlignModel.QUERY_PORT, PharValue.class));
 
-        addDialogComponent(new DialogComponentColumnNameSelection(config.getReferenceColumn(),
-                "Reference Pharmacophore column (table 2)", AlignModel.REFERENCE_PORT, PharValue.class));
+        addDialogComponent(
+                new DialogComponentMultiLineString(config.getReferencePharmacophore(), "Reference Pharmacophore", true, 40, 10));
 
         createNewTab("Advanced");
 
@@ -40,9 +40,5 @@ public class AlignDialog extends DefaultNodeSettingsPane {
 
         addDialogComponent(new DialogComponentNumber(config.getCliques2align(),
                 "Number of cliques of each query pharmacophore to align", 1));
-
-        addDialogComponent(new DialogComponentBoolean(config.getAllalignments(), "All alignments of cliques"));
-
-        addDialogComponent(new DialogComponentBoolean(config.getIncludeReference(), "Include reference pharmacophore in output"));
     }
 }

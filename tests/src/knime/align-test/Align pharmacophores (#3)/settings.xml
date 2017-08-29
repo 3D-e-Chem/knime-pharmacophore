@@ -11,11 +11,11 @@
 <entry key="EnabledStatus" type="xboolean" value="true"/>
 </config>
 <entry key="queryColumn" type="xstring" value="Pharmacophore"/>
-<config key="referenceColumn_Internals">
+<config key="referencePharmacophore_Internals">
 <entry key="SettingsModelID" type="xstring" value="SMID_string"/>
 <entry key="EnabledStatus" type="xboolean" value="true"/>
 </config>
-<entry key="referenceColumn" type="xstring" value="Pharmacophore"/>
+<entry key="referencePharmacophore" type="xstring" value="3heg_BAX_frag1%%00010HACC -1.7076 2.2682 22.7126 0 0 0 0 0%%00010HDON -0.0317 4.6294 22.4973 0 0 0 0 0%%00010HDON 3.9657 -4.2182 19.4535 0 0 0 0 0%%00010AROM -4.742 5.8751 25.9774 0 0 0 0 0%%00010HDON 3.7079 4.2267 24.4837 0 0 0 0 0%%00010NEGC 3.8882 3.0747 24.4667 0 0 0 0 0%%00010HDON 1.1487 5.4662 26.7621 0 0 0 0 0%%00010NEGC 0.5654 6.4209 26.4331 0 0 0 0 0%%00010NEGC 0.5855 4.6737 27.4061 0 0 0 0 0%%00010NEGC 2.1046 4.7328 25.3711 0 0 0 0 0%%00010LIPO -0.9244 -0.6887 25.2947 0 0 0 0 0%%00010LIPO 1.3499 0.145 23.3679 0 0 0 0 0%%00010LIPO -0.2041 0.2003 24.0542 0 0 0 0 0%%00010LIPO -2.4841 -1.2942 25.074 0 0 0 0 0%%00010LIPO -5.5423 0.149 24.4589 0 0 0 0 0%%00010LIPO -2.245 5.3313 29.7474 0 0 0 0 0%%00010LIPO -2.8484 1.4969 28.8643 0 0 0 0 0%%00010LIPO -0.7917 3.4229 28.1349 0 0 0 0 0%%00010LIPO 3.7043 2.5349 25.3078 0 0 0 0 0%%00010LIPO 1.4568 1.3568 25.5041 0 0 0 0 0%%00010LIPO 5.7106 2.454 25.7827 0 0 0 0 0%%00010LIPO 5.4877 -3.2515 15.6444 0 0 0 0 0%%00010LIPO -0.1181 1.231 19.4872 0 0 0 0 0%%00010LIPO -0.746 1.0889 21.8024 0 0 0 0 0%%00010LIPO 6.2402 3.1961 22.3875 0 0 0 0 0%%00010LIPO -4.3778 0.0278 30.1472 0 0 0 0 0%%00010HACC 3.3976 -3.8262 16.5781 0 0 0 0 0%%00010HDON 2.9732 -3.4432 13.1614 0 0 0 0 0%%00010LIPO 1.9186 -2.1014 15.8518 0 0 0 0 0%%00010LIPO 1.0415 -0.2159 14.6303 0 0 0 0 0%%00010LIPO 2.968 1.9694 17.1866 0 0 0 0 0%%00010LIPO 4.0759 -3.1885 20.6854 0 0 0 0 0%%00010LIPO 3.7108 -1.5415 20.733 0 0 0 0 0%%00010LIPO 5.8368 0.587 12.9128 0 0 0 0 0%%00010LIPO 5.5328 2.5229 16.8755 0 0 0 0 0%%00010LIPO 6.1775 0.2833 16.1111 0 0 0 0 0%%00010LIPO -4.4496 -1.8999 26.3564 0 0 0 0 0%%00010$$$$%%00010"/>
 <config key="cutoff_Internals">
 <entry key="SettingsModelID" type="xstring" value="SMID_double"/>
 <entry key="EnabledStatus" type="xboolean" value="true"/>
@@ -26,6 +26,11 @@
 <entry key="EnabledStatus" type="xboolean" value="true"/>
 </config>
 <entry key="cliqueBreak" type="xint" value="3000"/>
+<config key="cliques2align_Internals">
+<entry key="SettingsModelID" type="xstring" value="SMID_integer"/>
+<entry key="EnabledStatus" type="xboolean" value="true"/>
+</config>
+<entry key="cliques2align" type="xint" value="3"/>
 </config>
 <config key="nodeAnnotation">
 <entry key="text" type="xstring" value="Node under test"/>
@@ -33,7 +38,7 @@
 <entry key="x-coordinate" type="xint" value="423"/>
 <entry key="y-coordinate" type="xint" value="299"/>
 <entry key="width" type="xint" value="115"/>
-<entry key="height" type="xint" value="14"/>
+<entry key="height" type="xint" value="16"/>
 <entry key="alignment" type="xstring" value="CENTER"/>
 <entry key="borderSize" type="xint" value="0"/>
 <entry key="borderColor" type="xint" value="16777215"/>
@@ -48,11 +53,11 @@
 <entry key="node-bundle-name" type="xstring" value="KNIME nodes to read/write pharmacophore files and align them"/>
 <entry key="node-bundle-symbolic-name" type="xstring" value="nl.esciencecenter.e3dchem.knime.pharmacophore.plugin"/>
 <entry key="node-bundle-vendor" type="xstring" value="Netherlands eScience Center"/>
-<entry key="node-bundle-version" type="xstring" value="1.0.0.v201708080606"/>
+<entry key="node-bundle-version" type="xstring" value="1.0.0.v201708291337"/>
 <entry key="node-feature-name" type="xstring" value="Pharmacophore KNIME nodes"/>
 <entry key="node-feature-symbolic-name" type="xstring" value="nl.esciencecenter.e3dchem.knime.pharmacophore.feature.feature.group"/>
 <entry key="node-feature-vendor" type="xstring" value="Netherlands eScience Center"/>
-<entry key="node-feature-version" type="xstring" value="1.0.0.v201708080606"/>
+<entry key="node-feature-version" type="xstring" value="1.0.0.v201708291337"/>
 <config key="factory_settings"/>
 <entry key="name" type="xstring" value="Align pharmacophores"/>
 <entry key="hasContent" type="xboolean" value="false"/>

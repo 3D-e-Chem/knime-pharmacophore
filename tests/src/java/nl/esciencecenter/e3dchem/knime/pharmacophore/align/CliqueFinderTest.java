@@ -254,7 +254,7 @@ public class CliqueFinderTest {
 		Pharmacophore reference = sampleReference();
 		Pharmacophore probe = sampleProbe();
 
-		CliqueFinder finder = new CliqueFinder(probe, reference, 1.0, 3000, 3);
+        CliqueFinder finder = new CliqueFinder(probe, reference, 1.0, 3000, 3);
 		Queue<List<PointPair>> cliques = finder.getBestCliques();
 		
 		assertEquals(3, cliques.size());

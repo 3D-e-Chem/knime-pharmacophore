@@ -11,11 +11,11 @@
 <entry key="EnabledStatus" type="xboolean" value="true"/>
 </config>
 <entry key="queryColumn" type="xstring" value="Pharmacophore"/>
-<config key="referenceColumn_Internals">
+<config key="referencePharmacophore_Internals">
 <entry key="SettingsModelID" type="xstring" value="SMID_string"/>
 <entry key="EnabledStatus" type="xboolean" value="true"/>
 </config>
-<entry key="referenceColumn" type="xstring" value="Pharmacophore"/>
+<entry key="referencePharmacophore" type="xstring" value="3heg_BAX_frag1%%00010HACC -1.7076 2.2682 22.7126 0 0 0 0 0%%00010HDON -0.0317 4.6294 22.4973 0 0 0 0 0%%00010$$$$%%00010"/>
 <config key="cutoff_Internals">
 <entry key="SettingsModelID" type="xstring" value="SMID_double"/>
 <entry key="EnabledStatus" type="xboolean" value="true"/>
@@ -26,6 +26,11 @@
 <entry key="EnabledStatus" type="xboolean" value="true"/>
 </config>
 <entry key="cliqueBreak" type="xint" value="3000"/>
+<config key="cliques2align_Internals">
+<entry key="SettingsModelID" type="xstring" value="SMID_integer"/>
+<entry key="EnabledStatus" type="xboolean" value="true"/>
+</config>
+<entry key="cliques2align" type="xint" value="3"/>
 </config>
 <config key="nodeAnnotation">
 <entry key="text" type="xstring" value="Node under test"/>
@@ -48,11 +53,11 @@
 <entry key="node-bundle-name" type="xstring" value="KNIME nodes to read/write pharmacophore files and align them"/>
 <entry key="node-bundle-symbolic-name" type="xstring" value="nl.esciencecenter.e3dchem.knime.pharmacophore.plugin"/>
 <entry key="node-bundle-vendor" type="xstring" value="Netherlands eScience Center"/>
-<entry key="node-bundle-version" type="xstring" value="1.0.0.v201707130608"/>
+<entry key="node-bundle-version" type="xstring" value="1.0.0.v201708291337"/>
 <entry key="node-feature-name" type="xstring" value="Pharmacophore KNIME nodes"/>
 <entry key="node-feature-symbolic-name" type="xstring" value="nl.esciencecenter.e3dchem.knime.pharmacophore.feature.feature.group"/>
 <entry key="node-feature-vendor" type="xstring" value="Netherlands eScience Center"/>
-<entry key="node-feature-version" type="xstring" value="1.0.0.v201707130608"/>
+<entry key="node-feature-version" type="xstring" value="1.0.0.v201708291337"/>
 <config key="factory_settings"/>
 <entry key="name" type="xstring" value="Align pharmacophores"/>
 <entry key="hasContent" type="xboolean" value="false"/>

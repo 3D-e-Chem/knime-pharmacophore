@@ -26,13 +26,6 @@ public class Aligner {
 		throw new IllegalStateException("Utility class");
 	}
 
-	public static CliqueAligner align(Pharmacophore probe, Pharmacophore reference, double cutoff, int cliqueBreak)
-			throws NoOverlapFoundException {
-		CliqueFinder cliqueFinder = new CliqueFinder(probe, reference, cutoff, cliqueBreak, 1);
-		List<PointPair> clique = cliqueFinder.getBestCliques().poll();
-		return new CliqueAligner(probe, reference, clique);
-	}
-
 	public static List<CliqueAligner> align(Pharmacophore probe, Pharmacophore reference, double cutoff,
 			int cliqueBreak, int bestCliqueCount) throws NoOverlapFoundException {
 		CliqueFinder cliqueFinder = new CliqueFinder(probe, reference, cutoff, cliqueBreak, bestCliqueCount);
@@ -42,8 +35,15 @@ public class Aligner {
 		while ((clique = cliques.poll()) != null) {
 			alignments.add(new CliqueAligner(probe, reference, clique));
 		}
-		// lowest rmsd first
-		Collections.sort(alignments, (a, b) -> Double.compare(a.getRMSD(), b.getRMSD()));
+        // first should be biggest clique with lowest rmsd
+        Collections.sort(alignments, (a, b) -> {
+            int cliqueSize = Integer.compare(b.getCliqueSize(), a.getCliqueSize());
+            if (cliqueSize == 0) {
+                return Double.compare(a.getRMSD(), b.getRMSD());
+            } else {
+                return cliqueSize;
+            }
+        });
 		return alignments;
 	}
 }

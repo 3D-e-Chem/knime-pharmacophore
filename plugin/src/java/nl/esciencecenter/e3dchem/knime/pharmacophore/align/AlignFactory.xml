@@ -11,25 +11,28 @@
 
 	<fullDescription>
 		<intro>
-			<p>Align the query pharmacophores to the reference pharmacophores.
+			<p>Align the query pharmacophores to the reference pharmacophore.
 				This node computes the aligned query pharmacophore, the
 				transformation matrix and Root-mean-square deviation (RMSD).
 			</p>
 			<p>
 				Algorithm:
 				<ol>
-					<li>Find candidate pairs points between probe and reference</li>
+					<li>Find pairs probe and reference points that are same type and are not too far apart.</li>
 					<li>
-						Find biggest network of pairs, using
+						Find biggest clique of pairs, using
 						<a href="https://en.wikipedia.org/wiki/Bron%E2%80%93Kerbosch_algorithm">BronKerbosch
 							clique detection algorithm
-						</a>
+						</a>.
 					</li>
 					<li>
 						Calculate optimal translation and rotation using
 						<a href="https://en.wikipedia.org/wiki/Kabsch_algorithm">Kabsch algorithm
 						</a>
-						.
+						for all the found cliques.
+					</li>
+					<li>
+						Calculate RMSD and aligned pharmacophore based on points in each clique.
 					</li>
 				</ol>
 			</p>
@@ -38,7 +41,7 @@
 		<option name="Query Pharmacophore column (table 1)">The input column of table 1 with Query
 			Pharmacophores to be aligned.
 		</option>
-		<option name="Reference Pharmacophore column (table 2)">The input column of table 2 with Reference
+		<option name="Reference Pharmacophore">The reference
 			Pharmacophore to base the alignment on.
 		</option>
 		<tab name="Advanced Options">
@@ -49,12 +52,7 @@
 			<option name="Break num cliques">Break when set number of cliques is found
 			</option>
 			<option name="Cliques to align">Number of cliques of each query pharmacophore to
-				align</option>
-			<option name="All alignments of cliques">By default the only the best alignment of each
-				query pharmacophore is returned. By turning this option on the
-				alignments of all cliques will be returned.</option>
-			<option name="Include reference">Include the reference pharmacophore in output.
-				Usefull when multiple reference pharmacophores are given.</option>
+				align. Increasing this number will produce alignments of smaller cliques and cliques with less types.</option>
 		</tab>
 	</fullDescription>
 
@@ -62,11 +60,8 @@
 		<inPort index="0" name="Query pharmacophores">The table with pharmacophores to be
 			aligned.
 		</inPort>
-		<inPort index="1" name="Reference pharmacophores">The table with the reference
-			pharmacophore to base the alignment on.
-		</inPort>
 		<outPort index="0" name="Aligned pharmacophores">Aligned pharmacophores with
-			transformation matrix and RMSD.
+			transformation matrix, RMSD, clique index and size of clique.
 		</outPort>
 	</ports>
 	<views>

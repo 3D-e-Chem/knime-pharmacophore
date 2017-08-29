@@ -120,7 +120,7 @@ public class CliqueAligner {
 			delta += Math.pow(ref.get(i, 0) - aligned.get(i, 0), 2) + Math.pow(ref.get(i, 1) - aligned.get(i, 1), 2)
 					+ Math.pow(ref.get(i, 2) - aligned.get(i, 2), 2);
 		}
-		return Math.sqrt((1.0 / nrRows) * delta);
+        return Math.sqrt((1.0 / nrRows) * delta);
 	}
 	
 	public double[] getMatrixAsArray() {
@@ -138,4 +138,8 @@ public class CliqueAligner {
 	public Pharmacophore getAligned() {
 		return probe.transform(matrix);
 	}
+
+    public int getCliqueSize() {
+        return clique.size();
+    }
 }

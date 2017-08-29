@@ -21,19 +21,15 @@ public class AlignerTest {
 	}
 
 	@Test
-	public void test_align_bestonly() throws NoOverlapFoundException {
-		CliqueAligner alignment = Aligner.align(probe, reference, 1.0, 300);
-
-		assertEquals(1.44028, alignment.getRMSD(), 0.0001);
-	}
-
-	@Test
 	public void test_align_best3() throws NoOverlapFoundException {
 		List<CliqueAligner> alignments = Aligner.align(probe, reference, 1.0, 300, 3);
 
 		assertEquals(3, alignments.size());
 		double[] rmsds = alignments.stream().map(CliqueAligner::getRMSD).mapToDouble(c -> c).toArray();
-		double[] expected = new double[] { 0.60851, 1.41477, 1.44028 };
-		assertArrayEquals(expected, rmsds, 0.0001);
+        double[] expectedRmsds = new double[] { 1.44028, 1.41477, 0.60851 };
+        assertArrayEquals(expectedRmsds, rmsds, 0.0001);
+        int[] cliqueSizes = alignments.stream().map(CliqueAligner::getCliqueSize).mapToInt(c -> c).toArray();
+        int[] expectedCliqueSizes = new int[] { 6, 5, 4 };
+        assertArrayEquals(expectedCliqueSizes, cliqueSizes);
 	}
 }

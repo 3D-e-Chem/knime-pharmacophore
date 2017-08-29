@@ -24,7 +24,9 @@
 <entry key="message_0" type="xstring" value="Some pharmacophore could not be aligned"/>
 <entry key="nodeID_1" type="xstring" value="17"/>
 <entry key="message_1" type="xstring" value="Some pharmacophore could not be aligned"/>
-<entry key="count" type="xint" value="2"/>
+<entry key="nodeID_2" type="xstring" value="20"/>
+<entry key="message_2" type="xstring" value="Some pharmacophore could not be aligned"/>
+<entry key="count" type="xint" value="3"/>
 </config>
 <config key="requiredNodeErrors">
 <entry key="count" type="xint" value="0"/>
@@ -38,7 +40,7 @@
 <entry key="requiredLoadVersion" type="xstring" value="&lt;future&gt;"/>
 </config>
 <entry key="customDescription" type="xstring" isnull="true" value=""/>
-<entry key="state" type="xstring" value="CONFIGURED"/>
+<entry key="state" type="xstring" value="EXECUTED"/>
 <entry key="factory" type="xstring" value="org.knime.testing.node.config.TestConfigNodeFactory"/>
 <entry key="node-name" type="xstring" value="Testflow Configuration"/>
 <entry key="node-bundle-name" type="xstring" value="Test-Node extension for KNIME Workbench"/>
@@ -51,11 +53,11 @@
 <entry key="node-feature-version" type="xstring" value="3.3.1.v201612192115"/>
 <config key="factory_settings"/>
 <entry key="name" type="xstring" value="Testflow Configuration"/>
-<entry key="hasContent" type="xboolean" value="false"/>
+<entry key="hasContent" type="xboolean" value="true"/>
 <entry key="isInactive" type="xboolean" value="false"/>
 <config key="ports"/>
 <config key="filestores">
 <entry key="file_store_location" type="xstring" isnull="true" value=""/>
-<entry key="file_store_id" type="xstring" isnull="true" value=""/>
+<entry key="file_store_id" type="xstring" value="6e4a32dc-0652-46f9-8627-8f245f4f825b"/>
 </config>
 </config>
