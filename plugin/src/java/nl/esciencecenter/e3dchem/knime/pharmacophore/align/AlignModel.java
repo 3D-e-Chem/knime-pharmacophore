@@ -21,6 +21,7 @@ import org.knime.core.node.InvalidSettingsException;
 import org.knime.core.node.NodeModel;
 import org.knime.core.node.NodeSettingsRO;
 import org.knime.core.node.NodeSettingsWO;
+import org.knime.core.node.defaultnodesettings.SettingsModelBoolean;
 import org.knime.core.node.defaultnodesettings.SettingsModelDouble;
 import org.knime.core.node.defaultnodesettings.SettingsModelDoubleBounded;
 import org.knime.core.node.defaultnodesettings.SettingsModelInteger;
@@ -52,10 +53,18 @@ public class AlignModel extends NodeModel {
 	protected final SettingsModelInteger cliqueBreak = new SettingsModelIntegerBounded(CFGKEY_BREAKNUMCLIQUES, 3000, 0,
 			5000);
 
+	static final String CFGKEY_CLIQUES2ALIGN = "cliques2align";
+	private final SettingsModelInteger cliques2align = new SettingsModelIntegerBounded(CFGKEY_CLIQUES2ALIGN, 3, 1,
+			100);
+
+	static final String CFGKEY_ALLALIGNMENTS = "allalignments";
+	private final SettingsModelBoolean allalignments = new SettingsModelBoolean(AlignModel.CFGKEY_ALLALIGNMENTS, false);
+
 	private static final DataTableSpec outputSpec = new DataTableSpec(
 			new DataColumnSpecCreator("Aligned pharmacophore", PharCell.TYPE).createSpec(),
 			new DataColumnSpecCreator("Transformation matrix", DoubleVectorCellFactory.TYPE).createSpec(),
 			new DataColumnSpecCreator("RMSD", DoubleCell.TYPE).createSpec());
+	
 
 	/**
 	 * Constructor for the node model.
@@ -187,6 +196,8 @@ public class AlignModel extends NodeModel {
 		referenceColumn.saveSettingsTo(settings);
 		cutoff.saveSettingsTo(settings);
 		cliqueBreak.saveSettingsTo(settings);
+		cliques2align.saveSettingsTo(settings);
+		allalignments.saveSettingsTo(settings);
 	}
 
 	/**
@@ -199,6 +210,8 @@ public class AlignModel extends NodeModel {
 		cutoff.loadSettingsFrom(settings);
 		;
 		cliqueBreak.loadSettingsFrom(settings);
+		cliques2align.loadSettingsFrom(settings);
+		allalignments.loadSettingsFrom(settings);
 	}
 
 	/**
@@ -210,6 +223,8 @@ public class AlignModel extends NodeModel {
 		referenceColumn.validateSettings(settings);
 		cutoff.validateSettings(settings);
 		cliqueBreak.validateSettings(settings);
+		cliques2align.validateSettings(settings);
+		allalignments.validateSettings(settings);
 	}
 
 	@Override

@@ -14,7 +14,6 @@
 
     <extension point="org.knime.workbench.repository.nodes">
         <node category-path="/community/3d-e-chem/pharmacophore" factory-class="nl.esciencecenter.e3dchem.knime.pharmacophore.align.AlignFactory"/>
-        <node category-path="/community/3d-e-chem/pharmacophore" factory-class="nl.esciencecenter.e3dchem.knime.pharmacophore.align.TopAlignFactory"/>
         <node category-path="/community/3d-e-chem/pharmacophore" factory-class="nl.esciencecenter.e3dchem.knime.pharmacophore.reader.ReaderFactory"/>
         <node category-path="/community/3d-e-chem/pharmacophore" factory-class="nl.esciencecenter.e3dchem.knime.pharmacophore.writer.WriterFactory"/>
         <node category-path="/community/3d-e-chem/pharmacophore" factory-class="nl.esciencecenter.e3dchem.knime.pharmacophore.molecule.ToMoleculeFactory"/>

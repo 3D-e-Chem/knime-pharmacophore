@@ -1,8 +1,10 @@
 package nl.esciencecenter.e3dchem.knime.pharmacophore.align;
 
 import org.knime.core.node.defaultnodesettings.DefaultNodeSettingsPane;
+import org.knime.core.node.defaultnodesettings.DialogComponentBoolean;
 import org.knime.core.node.defaultnodesettings.DialogComponentColumnNameSelection;
 import org.knime.core.node.defaultnodesettings.DialogComponentNumber;
+import org.knime.core.node.defaultnodesettings.SettingsModelBoolean;
 import org.knime.core.node.defaultnodesettings.SettingsModelDoubleBounded;
 import org.knime.core.node.defaultnodesettings.SettingsModelIntegerBounded;
 import org.knime.core.node.defaultnodesettings.SettingsModelString;
@@ -47,5 +49,15 @@ public class AlignDialog extends DefaultNodeSettingsPane {
 		addDialogComponent(new DialogComponentNumber(
 				new SettingsModelIntegerBounded(AlignModel.CFGKEY_BREAKNUMCLIQUES, 3000, 0, 5000),
 				"Break when set number of cliques is found", 1));
+		
+		addDialogComponent(new DialogComponentNumber(
+				new SettingsModelIntegerBounded(AlignModel.CFGKEY_CLIQUES2ALIGN, 3, 1, 100),
+				"Number of cliques of each query pharmacophore to align", 1
+		));
+		
+		addDialogComponent(new DialogComponentBoolean(
+				new SettingsModelBoolean(AlignModel.CFGKEY_ALLALIGNMENTS, false), "All alignments of cliques"
+				)
+		);
 	}
 }
