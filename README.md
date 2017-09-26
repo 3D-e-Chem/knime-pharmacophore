@@ -1,11 +1,13 @@
-KNIME nodes to read/write pharmacophore files.
+[KNIME](https://www.knime.com) plugin with nodes to convert and align pharmacophores.
 
 [![Travis-CI Build Status](https://travis-ci.org/3D-e-Chem/knime-pharmacophore.svg?branch=master)](https://travis-ci.org/3D-e-Chem/knime-pharmacophore)
 [![AppVeyor Build status](https://ci.appveyor.com/api/projects/status/0d27c4nhkjopy69r/branch/master?svg=true)](https://ci.appveyor.com/project/3D-e-Chem/knime-pharmacophore/branch/master)
 [![SonarCloud Gate](https://sonarcloud.io/api/badges/gate?key=nl.esciencecenter.e3dchem.knime.pharmacophore:nl.esciencecenter.e3dchem.knime.pharmacophore)](https://sonarcloud.io/dashboard?id=nl.esciencecenter.e3dchem.knime.pharmacophore:nl.esciencecenter.e3dchem.knime.pharmacophore)
 [![SonarCloud Coverage](https://sonarcloud.io/api/badges/measure?key=nl.esciencecenter.e3dchem.knime.pharmacophore:nl.esciencecenter.e3dchem.knime.pharmacophore&metric=coverage)](https://sonarcloud.io/component_measures/domain/Coverage?id=nl.esciencecenter.e3dchem.knime.pharmacophore:nl.esciencecenter.e3dchem.knime.pharmacophore)
 
-Currently only the phar file format used by the [Silicos IT align-it tool](http://silicos-it.be.s3-website-eu-west-1.amazonaws.com/software/align-it/1.0.4/align-it.html#pharmacophores) is supported.
+A pharmacophore is an abstract description of molecular features that are necessary for molecular recognition of a ligand by a biological macromolecule.
+Nodes in this plugin allow for converting pharmacophores, from and to molecules, by mapping elements to pharmacophore type and, reading from or writing to the phar file format used by the [Silicos IT align-it tool](http://silicos-it.be.s3-website-eu-west-1.amazonaws.com/software/align-it/1.0.4/align-it.html#pharmacophores).
+This plugin adds the Pharmacophore (Phar) data type to KNIME, allowing nodes to read/write/manipulate pharmacophores inside KNIME like the [Silicos-it align-it](https://github.com/3D-e-Chem/knime-silicos-it), [Kripo pharmacophore retrieval](https://github.com/3D-e-Chem/knime-kripodb) and [molviewer pharmacophore viewer](https://github.com/3D-e-Chem/knime-molviewer) nodes.
 
 This project uses [Eclipse Tycho](https://www.eclipse.org/tycho/) to perform build steps.
 
@@ -15,13 +17,13 @@ Requirements:
 
 * KNIME, https://www.knime.org, version 3.3 or higher
 
-Steps to get the AlignmentTransform KNIME node inside KNIME:
+Steps to get the Pharmacophore KNIME nodes inside KNIME:
 
 1. Goto Help > Install new software ... menu
 2. Press add button
-3. Fill text fields with url of update site which contains this node.
+3. Fill text fields with `https://3d-e-chem.github.io/updates`
 4. Select --all sites-- in `work with` pulldown
-5. Select the node
+5. Select the `Pharmacophore KNIME nodes`
 6. Install software
 7. Restart KNIME
 
@@ -30,6 +32,10 @@ Steps to get the AlignmentTransform KNIME node inside KNIME:
 1. Create a new KNIME workflow.
 2. Find node in Node navigator panel.
 3. Drag node to workflow canvas.
+
+# Examples
+
+The `examples/` folder contains example KNIME workflow.
 
 # Build
 
