@@ -197,28 +197,57 @@ public class CliqueAlignerTest {
 		assertEquals(8.133220e-16, aligner.getRMSD(), 1e-20);
 	}
 
+    @Test
+    public void test_translatedXZAndRotatedXCW() throws NoOverlapFoundException {
+        Pharmacophore reference = new Pharmacophore("someid",
+                Arrays.asList(new PharmacophorePoint("HDON", 7.5, -0.5, -0.05, 1),
+                        new PharmacophorePoint("LIPO", -6.5, -0.5, -0.05, 1), new PharmacophorePoint("NEGC", -0.5, 3.5, -0.05, 1),
+                        new PharmacophorePoint("AROM", -0.5, -2.5, -0.05, 1), new PharmacophorePoint("HYBL", 0.0, 0.0, -1.15, 1),
+                        new PharmacophorePoint("HYBH", 0.0, 0.0, 1.35, 1)));
+
+        // translated by x+1, y+2,z-1 and rotated along y axis 90 degrees
+        // clockwise
+        Pharmacophore probe = new Pharmacophore("someid",
+                Arrays.asList(new PharmacophorePoint("HDON", -1.05, -0.5, -6.5, 1),
+                        new PharmacophorePoint("LIPO", -1.05, -0.5, 7.5, 1), new PharmacophorePoint("NEGC", -1.05, 3.5, 1.5, 1),
+                        new PharmacophorePoint("AROM", -1.05, -2.5, 1.5, 1), new PharmacophorePoint("HYBL", -2.15, 0, 1, 1),
+                        new PharmacophorePoint("HYBH", 0.35, 0, 1, 1)));
+        List<PointPair> clique = buildClique(6);
+
+        CliqueAligner aligner = new CliqueAligner(probe, reference, clique);
+
+        Pharmacophore aligned = aligner.getAligned();
+        assertPharmacophoreEquals(reference, aligned, 0.001);
+        assertEquals(1.066394e-15, aligner.getRMSD(), 1e-20);
+    }
+
 	@Test
-	public void test_translatedXZAndRotatedXCW() throws NoOverlapFoundException {
+    public void test_translatedXZAndRotatedXCW_reflected() throws NoOverlapFoundException {
 		Pharmacophore reference = new Pharmacophore("someid", Arrays.asList(
-				new PharmacophorePoint("HDON", 7.5, -0.5, 0.05, 1), new PharmacophorePoint("LIPO", -6.5, -0.5, 0.05, 1),
-				new PharmacophorePoint("NEGC", -0.5, 3.5, 0.05, 1), new PharmacophorePoint("AROM", -0.5, -2.5, 0.05, 1),
-				new PharmacophorePoint("HYBL", 0.0, 0.0, 1.15, 1), new PharmacophorePoint("HYBH", 0.0, 0.0, -1.35, 1)));
+                new PharmacophorePoint("HDON", 7.5, -0.5, 0.05, 1), new PharmacophorePoint("LIPO", -6.5, -0.5, 0.05, 1),
+                new PharmacophorePoint("NEGC", -0.5, 3.5, 0.05, 1), new PharmacophorePoint("AROM", -0.5, -2.5, 0.05, 1),
+                new PharmacophorePoint("HYBL", 0.0, 0.0, 1.15, 1), new PharmacophorePoint("HYBH", 0.0, 0.0, -1.35, 1)));
 
 		// translated by x+1, y+2,z-1 and rotated along y axis 90 degrees
 		// clockwise
-		Pharmacophore probe = new Pharmacophore("someid",
-				Arrays.asList(new PharmacophorePoint("HDON", -1.05, -0.5, -6.5, 1),
+        Pharmacophore probe = new Pharmacophore("someid",
+                Arrays.asList(new PharmacophorePoint("HDON", -1.05, -0.5, -6.5, 1),
 						new PharmacophorePoint("LIPO", -1.05, -0.5, 7.5, 1),
 						new PharmacophorePoint("NEGC", -1.05, 3.5, 1.5, 1),
 						new PharmacophorePoint("AROM", -1.05, -2.5, 1.5, 1),
-						new PharmacophorePoint("HYBL", -2.15, 0, 1, 1), new PharmacophorePoint("HYBH", 0.35, 0, 1, 1)));
+                        new PharmacophorePoint("HYBL", -2.15, 0, 1, 1), new PharmacophorePoint("HYBH", 0.35, 0, 1, 1)));
 		List<PointPair> clique = buildClique(6);
 
 		CliqueAligner aligner = new CliqueAligner(probe, reference, clique);
 
 		Pharmacophore aligned = aligner.getAligned();
-		assertPharmacophoreEquals(reference, aligned, 0.001);
-		assertEquals(1.066394e-15, aligner.getRMSD(), 1e-20);
+        Pharmacophore expected = new Pharmacophore("someid",
+                Arrays.asList(new PharmacophorePoint("HDON", 7.5, -0.5, -0.05, 1),
+                        new PharmacophorePoint("LIPO", -6.5, -0.5, -0.05, 1), new PharmacophorePoint("NEGC", -0.5, 3.5, -0.05, 1),
+                        new PharmacophorePoint("AROM", -0.5, -2.5, -0.05, 1), new PharmacophorePoint("HYBL", 0.0, 0.0, -1.15, 1),
+                        new PharmacophorePoint("HYBH", 0.0, 0.0, 1.35, 1)));
+        assertPharmacophoreEquals(expected, aligned, 0.001);
+        assertEquals(1.450287327, aligner.getRMSD(), 1e-5);
 	}
 	
 	@Test

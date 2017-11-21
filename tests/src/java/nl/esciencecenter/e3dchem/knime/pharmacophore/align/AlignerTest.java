@@ -26,7 +26,7 @@ public class AlignerTest {
 
 		assertEquals(3, alignments.size());
 		double[] rmsds = alignments.stream().map(CliqueAligner::getRMSD).mapToDouble(c -> c).toArray();
-        double[] expectedRmsds = new double[] { 1.44028, 1.41477, 0.60851 };
+        double[] expectedRmsds = new double[] { 1.44028, 1.41477, 1.7240467 };
         assertArrayEquals(expectedRmsds, rmsds, 0.0001);
         int[] cliqueSizes = alignments.stream().map(CliqueAligner::getCliqueSize).mapToInt(c -> c).toArray();
         int[] expectedCliqueSizes = new int[] { 6, 5, 4 };

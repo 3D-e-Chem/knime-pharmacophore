@@ -68,10 +68,8 @@ public class CliqueAligner {
 		double d = svd.getV().mult(svd.getU().transpose()).determinant();
 		SimpleMatrix U = svd.getU();
 		if (d < 0) {
-			// enabling breaks tests, so expect ejml is already doing this for
-			// us
-			// U.setColumn(2, 0, U.extractVector(false,
-			// 2).scale(d).matrix_F64().getData());
+            // correct our rotation matrix to ensure a right-handed coordinate system
+            U.setColumn(2, 0, U.extractVector(false, 2).scale(d).matrix_F64().getData());
 		}
 
 		SimpleMatrix R = U.mult(svd.getV().transpose());
