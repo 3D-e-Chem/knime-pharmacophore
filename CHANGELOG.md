@@ -5,6 +5,14 @@ The file is formatted as described on http://keepachangelog.com/.
 
 ## [Unreleased]
 
+## [1.0.1] 2017-11-21
+
+### Fixed
+
+- Transformation matrix performs mirroring [#8]
+
+## [1.0.0] 2017-09-26
+
 ### Added
 
 - Node extract points from pharmacophore and node that does the reverse [#2]
