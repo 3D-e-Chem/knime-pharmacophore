@@ -36,7 +36,7 @@ Steps to get the Pharmacophore KNIME nodes inside KNIME:
 
 # Examples
 
-The `examples/` folder contains example KNIME workflow.
+The `examples/` folder contains example KNIME workflows.
 
 # Build
 
