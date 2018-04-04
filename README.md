@@ -60,22 +60,11 @@ See `./appveyor.yml` file how to run on https://www.appveyor.com .
 
 Steps to get development environment setup:
 
-1. Download KNIME SDK from https://www.knime.org/downloads/overview
-2. Install/Extract/start KNIME SDK
-3. Start SDK
-4. Install m2e (Maven integration for Eclipse) + Test workflows in JUnit
-
-    1. Goto Help > Install new software ...
-    2. Make sure Update site http://update.knime.org/analytics-platform/3.3 and https://3d-e-chem.github.io/updates are in the pull down list otherwise add them
-    3. Select --all sites-- in work with pulldown
-    4. Select m2e (Maven integration for Eclipse)
-    5. Select `Test Knime workflows from a Junit test`
-    6. Select `Splash & node category for 3D-e-Chem KNIME nodes`
-    7. Install software & restart
-
-5. Import this repo as an Existing Maven project
-
-During import the Tycho Eclipse providers must be installed.
+1. Download `Eclipse for RCP and RAP Developers` from http://www.eclipse.org/downloads/eclipse-packages
+2. Start Eclipse
+2. Import a clone of this repository as an Existing Maven project. During import the Tycho Eclipse providers must be installed.
+3. Open platform/platform.target file
+4. Press `Set as target platform` button and wait for rebuild
 
 ## Tests
 

@@ -38,18 +38,6 @@
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 		<sonar.organization>3d-e-chem</sonar.organization>
 	</properties>
-	<repositories>
-		<repository>
-			<id>knime</id>
-			<layout>p2</layout>
-			<url>${knime.update.site}</url>
-		</repository>
-		<repository>
-			<id>3d-e-chem</id>
-			<layout>p2</layout>
-			<url>https://3d-e-chem.github.io/updates</url>
-		</repository>
-	</repositories>
 	<build>
 		<plugins>
 			<plugin>
@@ -63,10 +51,13 @@
 				<artifactId>target-platform-configuration</artifactId>
 				<version>${tycho.version}</version>
 				<configuration>
-					<resolver>p2</resolver>
-					<pomDependencies>consider</pomDependencies>
-					<ignoreTychoRepositories>true</ignoreTychoRepositories>
-					<environments>
+					<target>
+						<artifact>
+							<groupId>nl.esciencecenter.e3dchem.knime.pharmacophore</groupId>
+							<artifactId>platform</artifactId>
+							<version>1.0.1-SNAPSHOT</version>
+						</artifact>
+						<environments>
 						<environment>
 							<os>linux</os>
 							<ws>gtk</ws>
@@ -93,6 +84,7 @@
 							<arch>x86_64</arch>
 						</environment>
 					</environments>
+					</target>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -156,5 +148,6 @@
 		<module>feature</module>
 		<module>p2</module>
 		<module>tests</module>
+		<module>platform</module>
 	</modules>
 </project>
