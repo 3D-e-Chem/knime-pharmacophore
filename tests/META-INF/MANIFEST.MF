@@ -15,3 +15,4 @@ Require-Bundle: org.junit;bundle-version="4.12.0",
  nl.esciencecenter.e3dchem.knime.pharmacophore.plugin
 Bundle-Vendor: Netherlands eScience Center
 Bundle-ClassPath: .
+Automatic-Module-Name: nl.esciencecenter.e3dchem.knime.pharmacophore.tests

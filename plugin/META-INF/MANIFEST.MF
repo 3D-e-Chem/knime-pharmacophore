@@ -23,3 +23,4 @@ Export-Package: nl.esciencecenter.e3dchem.knime.pharmacophore,
  nl.esciencecenter.e3dchem.knime.pharmacophore.reader,
  org.ejml.data,
  org.ejml.simple
+Automatic-Module-Name: nl.esciencecenter.e3dchem.knime.pharmacophore.plugin
