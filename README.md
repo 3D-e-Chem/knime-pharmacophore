@@ -62,9 +62,13 @@ Steps to get development environment setup:
 
 1. Download `Eclipse for RCP and RAP Developers` from http://www.eclipse.org/downloads/eclipse-packages
 2. Start Eclipse
-2. Import a clone of this repository as an Existing Maven project. During import the Tycho Eclipse providers must be installed.
+2. Import a clone of this repository as an Existing Maven project. During import the Tycho Eclipse providers must be installed
 3. Open platform/platform.target file
-4. Press `Set as target platform` button and wait for rebuild
+4. Press `Set as target platform` button and wait for the rebuild to complete
+
+When switching to an other project make sure to update the target platform. The target platform can be reset by going to Window > Preferences > Plug-in Development > Target Platform, and select Running Platform.
+
+Adding a bundle to Require-Bundle field in */META-INF/MANIFEST.MF files will also require the bundle to be added to locations in platform/platform.target file followed by a reload, to allow Eclipse to resolve the bundle and for Tycho/Maven to resolve the bundle if it is in a new update site.
 
 ## Tests
 
