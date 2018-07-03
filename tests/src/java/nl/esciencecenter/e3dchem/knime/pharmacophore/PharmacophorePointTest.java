@@ -4,11 +4,12 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Locale;
+
 import org.ejml.simple.SimpleMatrix;
 import org.junit.Test;
 
 public class PharmacophorePointTest {
-
 	private PharmacophorePoint aPoint() {
 		return new PharmacophorePoint("LIPO", 12.3971, 28.8415, 21.9387, 1.0);
 	}

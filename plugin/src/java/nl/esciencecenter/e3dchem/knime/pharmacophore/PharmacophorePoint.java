@@ -1,8 +1,9 @@
 package nl.esciencecenter.e3dchem.knime.pharmacophore;
 
-import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.Set;
 
@@ -118,9 +119,19 @@ public class PharmacophorePoint {
 	 * @return Point as string according to Phar file format
 	 */
 	private String[] toArray() {
-		DecimalFormat df = new DecimalFormat("0.####");
-		return new String[] { type, df.format(cx), df.format(cy), df.format(cz), df.format(alpha), norm, df.format(nx),
-				df.format(ny), df.format(nz) };
+		NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
+		nf.setMaximumFractionDigits(4);
+		return new String[] {
+				type,
+				nf.format(cx),		
+				nf.format(cy),		
+				nf.format(cz),		
+				nf.format(alpha),
+				norm,
+				nf.format(nx),		
+				nf.format(ny),		
+				nf.format(nz),		
+		};
 	}
 
 	/**
