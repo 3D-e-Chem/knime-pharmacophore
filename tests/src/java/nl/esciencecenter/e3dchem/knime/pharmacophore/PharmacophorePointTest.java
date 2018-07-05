@@ -4,8 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import java.util.Locale;
-
 import org.ejml.simple.SimpleMatrix;
 import org.junit.Test;
 
