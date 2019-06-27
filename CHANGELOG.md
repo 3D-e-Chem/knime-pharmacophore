@@ -5,6 +5,12 @@ The file is formatted as described on http://keepachangelog.com/.
 
 ## [Unreleased]
 
+## [1.0.3] 2019-06-27
+
+### Changed
+
+- Compatible with KNIME 4 [#10](https://github.com/3D-e-Chem/knime-pharmacophore/issues/10)
+
 ## [1.0.2] 2018-07-05
 
 ### Fixed

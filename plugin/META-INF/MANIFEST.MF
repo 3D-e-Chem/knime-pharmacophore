@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: KNIME nodes to read/write pharmacophore files and align them
 Bundle-SymbolicName: nl.esciencecenter.e3dchem.knime.pharmacophore.plugin;singleton:=true
-Bundle-Version: 1.0.2.qualifier
+Bundle-Version: 1.0.3.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-Vendor: Netherlands eScience Center
 Require-Bundle: org.eclipse.core.runtime,
