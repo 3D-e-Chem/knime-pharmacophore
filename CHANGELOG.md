@@ -5,6 +5,12 @@ The file is formatted as described on http://keepachangelog.com/.
 
 ## [Unreleased]
 
+## [1.0.4] 2019-09-24
+
+### Fixed
+
+- Pharmacophore from molecule node parsed SDF incorrectly ([#12](https://github.com/3D-e-Chem/knime-pharmacophore/issues/12))
+
 ## [1.0.3] 2019-06-27
 
 ### Changed

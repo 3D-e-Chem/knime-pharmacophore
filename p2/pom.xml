@@ -4,7 +4,7 @@
     <parent>
         <artifactId>nl.esciencecenter.e3dchem.knime.pharmacophore</artifactId>
         <groupId>nl.esciencecenter.e3dchem.knime.pharmacophore</groupId>
-        <version>1.0.3-SNAPSHOT</version>
+        <version>1.0.4-SNAPSHOT</version>
     </parent>
     <artifactId>nl.esciencecenter.e3dchem.knime.pharmacophore.p2</artifactId>
     <packaging>eclipse-repository</packaging>
