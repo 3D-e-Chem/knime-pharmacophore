@@ -41,4 +41,24 @@ public class MoleculeCellToPharFactoryTest {
 		String expected = String.join(sep, new String[] { "someid", "HYBH 6.692 24.491 24.991 1 0 0 0 0", "$$$$", "" });
 		assertEquals(expected, pharBlock);
 	}
+	
+	@Test
+	public void test_mol2phar_2atom1bond_2point() {
+		String sep = "\n";
+		String sdfBlock = String.join(sep,
+				new String[] { "someid", "progname", "somecomment", "  2  1  0  0  0  0  0  0  0  0999 V2000",
+						"    4.0244    4.0756    0.0000 C   0  0", 
+						"    3.6500    2.9355    0.0000 C   0  0", 
+						"  1  2  1  0",
+						"M  END", "$$$$" });
+		Map<String, String> elements = new PharMoleculeConfig().getElement2PharMap();
+		DataColumnSpec spec = new DataColumnSpecCreator("Pharmacophore", PharCell.TYPE).createSpec();
+		MoleculeCellToPharFactory fact = new MoleculeCellToPharFactory(spec, 0, elements);
+
+		String pharBlock = fact.mol2phar(sdfBlock);
+
+		String expected = String.join(sep, new String[] { "someid", "EXCL 4.0244 4.0756 0 1 0 0 0 0", 
+				"EXCL 3.65 2.9355 0 1 0 0 0 0", "$$$$", "" });
+		assertEquals(expected, pharBlock);
+	}
 }
