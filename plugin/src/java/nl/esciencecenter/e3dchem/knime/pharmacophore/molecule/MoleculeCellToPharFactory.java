@@ -36,6 +36,10 @@ public class MoleculeCellToPharFactory extends SingleCellFactory {
 		Pharmacophore phar = new Pharmacophore(lines[0], points);
 		for (int i = 4; i < lines.length - 2; i++) {
 			String[] cols = lines[i].trim().split("\\s+");
+			if (cols.length != 6 && cols.length != 10  && cols.length != 16 ) {
+				// Skip all non atom sections of molblock
+				continue;
+			}
 			String phartype = elements.get(cols[3]);
 			points.add(new PharmacophorePoint(phartype, Float.parseFloat(cols[0]), Float.parseFloat(cols[1]),
 					Float.parseFloat(cols[2]), 1.0));

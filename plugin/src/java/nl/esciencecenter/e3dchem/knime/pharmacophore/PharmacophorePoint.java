@@ -68,7 +68,7 @@ public class PharmacophorePoint {
 	public PharmacophorePoint(String type, double cx, double cy, double cz, double alpha, String norm, double nx,
 			double ny, double nz) {
 		if (!VALID_TYPES.contains(type)) {
-			throw new IllegalArgumentException("Unknown type, should be one of " + String.join(",", VALID_TYPES));
+			throw new IllegalArgumentException("Unknown \"" + type + "\" type, should be one of " + String.join(",", VALID_TYPES));
 		}
 		this.type = type;
 		this.cx = cx;
