@@ -38,12 +38,14 @@
 			</p>
 		</intro>
 
-		<option name="Query Pharmacophore column (table 1)">The input column of table 1 with Query
-			Pharmacophores to be aligned.
-		</option>
-		<option name="Reference Pharmacophore">The reference
-			Pharmacophore to base the alignment on.
-		</option>
+		<tab name="Options">
+			<option name="Query Pharmacophore column (table 1)">The input column of table 1 with Query
+				Pharmacophores to be aligned.
+			</option>
+			<option name="Reference Pharmacophore">The reference
+				Pharmacophore to base the alignment on.
+			</option>
+		</tab>
 		<tab name="Advanced Options">
 			<option name="Cutoff">Tolerance threshold for considering two
 				distances
@@ -64,6 +66,4 @@
 			transformation matrix, RMSD, clique index and size of clique.
 		</outPort>
 	</ports>
-	<views>
-	</views>
 </knimeNode>
