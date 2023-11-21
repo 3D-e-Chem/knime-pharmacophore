@@ -1,11 +1,9 @@
 [KNIME](https://www.knime.com) plugin with nodes to convert and align pharmacophores.
 
-[![Travis-CI Build Status](https://travis-ci.org/3D-e-Chem/knime-pharmacophore.svg?branch=master)](https://travis-ci.org/3D-e-Chem/knime-pharmacophore)
-[![AppVeyor Build status](https://ci.appveyor.com/api/projects/status/0d27c4nhkjopy69r/branch/master?svg=true)](https://ci.appveyor.com/project/3D-e-Chem/knime-pharmacohore)
-[![SonarCloud Gate](https://sonarcloud.io/api/project_badges/measure?project=nl.esciencecenter.e3dchem.knime.pharmacophore%3Anl.esciencecenter.e3dchem.knime.pharmacophore&metric=alert_status)](https://sonarcloud.io/dashboard?id=nl.esciencecenter.e3dchem.knime.pharmacophore:nl.esciencecenter.e3dchem.knime.pharmacophore)
-[![SonarCloud Coverage](https://sonarcloud.io/api/project_badges/measure?project=nl.esciencecenter.e3dchem.knime.pharmacophore%3Anl.esciencecenter.e3dchem.knime.pharmacophore&metric=coverage)](https://sonarcloud.io/component_measures/domain/Coverage?id=nl.esciencecenter.e3dchem.knime.pharmacophore:nl.esciencecenter.e3dchem.knime.pharmacophore)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.997332.svg)](https://doi.org/10.5281/zenodo.997332)
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.997332.svg)](https://doi.org/10.5281/zenodo.997332)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=3D-e-Chem_knime-pharmacophore&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=3D-e-Chem_knime-pharmacophore)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=3D-e-Chem_knime-pharmacophore&metric=coverage)](https://sonarcloud.io/summary/new_code?id=3D-e-Chem_knime-pharmacophore)
 A pharmacophore is an abstract description of molecular features that are necessary for molecular recognition of a ligand by a biological macromolecule.
 Nodes in this plugin allow for converting pharmacophores, from and to molecules, by mapping elements to pharmacophore type and, reading from or writing to the phar file format used by the [Silicos IT align-it tool](http://silicos-it.be.s3-website-eu-west-1.amazonaws.com/software/align-it/1.0.4/align-it.html#pharmacophores).
 This plugin adds the Pharmacophore (Phar) data type to KNIME, allowing nodes to read/write/manipulate pharmacophores inside KNIME like the [Silicos-it align-it](https://github.com/3D-e-Chem/knime-silicos-it), [Kripo pharmacophore retrieval](https://github.com/3D-e-Chem/knime-kripodb) and [molviewer pharmacophore viewer](https://github.com/3D-e-Chem/knime-molviewer) nodes.
@@ -16,13 +14,13 @@ This project uses [Eclipse Tycho](https://www.eclipse.org/tycho/) to perform bui
 
 Requirements:
 
-* KNIME, https://www.knime.org, version 4.0 or higher
+* KNIME, https://www.knime.org, version 5.1 or higher
 
 Steps to get the Pharmacophore KNIME nodes inside KNIME:
 
 1. Goto Help > Install new software ... menu
 2. Press add button
-3. Fill text fields with `https://3d-e-chem.github.io/updates`
+3. Fill text fields with `https://3d-e-chem.github.io/updates/5.1`
 4. Select --all sites-- in `work with` pulldown
 5. Select the `Pharmacophore KNIME nodes`
 6. Install software
@@ -49,22 +47,17 @@ The update site can be used to perform a local installation.
 
 ## Continuous Integration
 
-Configuration files to run Continuous Integration builds on Linux (Travis-CI), OS X (Travis-CI) and Windows (AppVeyor) are present.
-
-See `./.travis.yml` file how to trigger a Travis-CI build for every push or pull request.
-Also see `./.travis.yml` file how to upload coverage to https://www.codacy.com .
-
-See `./appveyor.yml` file how to run on https://www.appveyor.com .
+Configuration files to run Continuous Integration builds on GitHub actions are present in `.github/workflows`.
 
 # Development
 
 Steps to get development environment setup based on https://github.com/knime/knime-sdk-setup#sdk-setup:
 
-1. Install Java 8
-2. Install Eclipse for [RCP and RAP developers](https://www.eclipse.org/downloads/packages/release/2018-12/r/eclipse-ide-rcp-and-rap-developers)
-3. Configure Java 8 inside Eclipse Window > Preferences > Java > Installed JREs
+1. Install Java 17
+2. Install Eclipse for [RCP and RAP developers](https://www.eclipse.org/downloads/packages/installer)
+3. Configure Java 17 inside Eclipse Window > Preferences > Java > Installed JREs
 4. Import this repo as an Existing Maven project
-5. Activate target platform by going to Window > Preferences > Plug-in Development > Target Platform and check the `KNIME Analytics Platform (4.0) - nl.esciencecenter.e3dchem.knime.pharmacophore.targetplatform/KNIME-AP-4.0.target` target definition.
+5. Activate target platform by going to Window > Preferences > Plug-in Development > Target Platform and check the `KNIME Analytics Platform (5.1) - nl.esciencecenter.e3dchem.knime.pharmacophore.targetplatform/KNIME-AP-5..10.target` target definition.
 6. A KNIME Analytics Platform instance can be started by right clicking on the `targetplatform/KNIME\ Analytics\ Platform.launch` file and selecting `Run As → KNIME Analytics Platform`. The KNIME instance will contain the target platform together with all extensions defined in the workspace.
 
 During import the Tycho Eclipse providers must be installed.
