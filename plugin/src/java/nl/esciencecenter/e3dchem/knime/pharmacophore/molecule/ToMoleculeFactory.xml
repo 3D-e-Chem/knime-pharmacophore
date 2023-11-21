@@ -15,7 +15,7 @@
     </fullDescription>
     
     <ports>
-        <outPort index="0" name="Pharmacophores">Table with the pharmacophores</outPort>
+        <inPort index="0" name="Pharmacophores">Table with the pharmacophores</inPort>
         <outPort index="0" name="Pharmacophores as molecules">Table with Pharmacophore as molecule as extra column</outPort>
     </ports>    
 </knimeNode>
