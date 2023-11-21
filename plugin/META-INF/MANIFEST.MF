@@ -2,15 +2,15 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: KNIME nodes to read/write pharmacophore files and align them
 Bundle-SymbolicName: nl.esciencecenter.e3dchem.knime.pharmacophore.plugin;singleton:=true
-Bundle-Version: 1.0.4.qualifier
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-Version: 1.0.5.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-Vendor: Netherlands eScience Center
 Require-Bundle: org.eclipse.core.runtime,
- org.knime.workbench.core;bundle-version="[4.0.0,5.0.0)",
- org.knime.workbench.repository;bundle-version="[4.0.0,5.0.0)",
- org.knime.core;bundle-version="[4.0.0,5.0.0)",
- org.knime.base;bundle-version="[4.0.0,5.0.0)",
- org.knime.chem.types;bundle-version="[4.0.0,5.0.0)",
+ org.knime.workbench.core;bundle-version="[4.0.0,6.0.0)",
+ org.knime.workbench.repository;bundle-version="[4.0.0,6.0.0)",
+ org.knime.core;bundle-version="[4.0.0,6.0.0)",
+ org.knime.base;bundle-version="[4.0.0,6.0.0)",
+ org.knime.chem.types;bundle-version="[4.0.0,6.0.0)",
  nl.esciencecenter.e3dchem.plugin
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: libs/ejml-v0.31-libs/ejml-core-0.31.jar,

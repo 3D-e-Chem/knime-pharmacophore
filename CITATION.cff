@@ -26,7 +26,5 @@ authors:
   family-names: de Graaf
   affiliation: Vrije Universiteit Amsterdam
   orcid: https://orcid.org/0000-0002-1226-2150
-version: 1.0.4
-date-released: 2019-09-24
 repository-code: https://github.com/3D-e-Chem/knime-pharmacophore
 license: Apache-2.0

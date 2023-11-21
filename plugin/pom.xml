@@ -5,12 +5,12 @@
 	<parent>
 		<groupId>nl.esciencecenter.e3dchem.knime.pharmacophore</groupId>
 		<artifactId>nl.esciencecenter.e3dchem.knime.pharmacophore</artifactId>
-		<version>1.0.4-SNAPSHOT</version>
+		<version>1.0.5-SNAPSHOT</version>
 	</parent>
 	<artifactId>nl.esciencecenter.e3dchem.knime.pharmacophore.plugin</artifactId>
 	<packaging>eclipse-plugin</packaging>
 	<properties>
-		<sonar.jacoco.reportPaths>../tests/target/jacoco.exec</sonar.jacoco.reportPaths>
+		<sonar.coverage.jacoco.xmlReportPaths>../tests/target/jacoco/report/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
 		<sonar.junit.reportsPath>../tests/target/surefire-reports</sonar.junit.reportsPath>
 	</properties>
 </project>
