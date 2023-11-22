@@ -4,6 +4,8 @@
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.997332.svg)](https://doi.org/10.5281/zenodo.997332)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=3D-e-Chem_knime-pharmacophore&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=3D-e-Chem_knime-pharmacophore)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=3D-e-Chem_knime-pharmacophore&metric=coverage)](https://sonarcloud.io/summary/new_code?id=3D-e-Chem_knime-pharmacophore)
+[![Java CI with Maven](https://github.com/3D-e-Chem/knime-pharmacophore/actions/workflows/ci.yml/badge.svg)](https://github.com/3D-e-Chem/knime-pharmacophore/actions/workflows/ci.yml)
+
 A pharmacophore is an abstract description of molecular features that are necessary for molecular recognition of a ligand by a biological macromolecule.
 Nodes in this plugin allow for converting pharmacophores, from and to molecules, by mapping elements to pharmacophore type and, reading from or writing to the phar file format used by the [Silicos IT align-it tool](http://silicos-it.be.s3-website-eu-west-1.amazonaws.com/software/align-it/1.0.4/align-it.html#pharmacophores).
 This plugin adds the Pharmacophore (Phar) data type to KNIME, allowing nodes to read/write/manipulate pharmacophores inside KNIME like the [Silicos-it align-it](https://github.com/3D-e-Chem/knime-silicos-it), [Kripo pharmacophore retrieval](https://github.com/3D-e-Chem/knime-kripodb) and [molviewer pharmacophore viewer](https://github.com/3D-e-Chem/knime-molviewer) nodes.
